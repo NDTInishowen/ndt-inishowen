@@ -282,3 +282,72 @@ ul {
     text-transform: uppercase;
     color: #8f897e !important;
 }
+
+
+
+/************************************/
+/*                                  */
+/* --------- Media queries -------- */
+/*                                  */
+/************************************/
+
+/* ---------- for responsive design ----------- */
+
+/* for larger screens, wider than 820 pixels */
+
+@media screen and (min-width: 820px) {
+
+/* header navigation menu */
+#main-menu-btn {
+display: none;
+}
+}
+
+/* for medium-sized screens, up to 820 pixels wide */
+
+@media screen and (max-width: 820px) {
+
+/* main header */
+
+#main-header {
+justify-content: space-between;
+}
+
+/* header navigation menu */
+
+.main-menu-responsive {
+left: auto;
+right: 0;
+width: 100%;
+/* width: 50%; */
+height: 0;
+border-radius: 0 0 5px 5px;
+/* background-color: rgba(0, 0, 0, 0.9); */
+background-color: #222f63;
+overflow: hidden;
+transition: all 0.25s;
+}
+
+.main-menu-responsive ul {
+/* align-items: center; */
+padding: 5px 0;
+margin-bottom: 0;
+}
+
+.main-menu-responsive li {
+display: block;
+padding: 5px;
+}
+
+.main-menu-open {
+height: auto;
+}
+
+/* navigation dropdown menus */
+
+.navbar-dropdown-menu {
+position: relative;
+top: 5px;
+width: 100%;
+}
+}
