@@ -347,6 +347,94 @@ footer {
 
 /************************************/
 /*                                  */
+/* --------- Landing page --------- */
+/*                                  */
+/************************************/
+
+/* general styles */
+
+.banner-container {
+height: calc(100vh - 140px);
+/* overflow: hidden; */
+/* margin-top: 140px ; */
+
+background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center;
+-webkit-background-size: cover;
+-moz-background-size: cover;
+-o-background-size: cover;
+background-size: cover;
+
+display: flex;
+align-items: center;
+justify-content: center;
+
+position: relative;
+}
+
+.opaque-overlay {
+position: absolute;
+top: 0;
+left: 0;
+height: 100%;
+width: 100%;
+background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Jumbotron */
+
+.jumbotron {
+background-color: transparent;
+}
+
+.jumbotron h1 {
+color: #fff;
+font-weight: bold;
+margin-bottom: 30px;
+}
+
+/* Buttons */
+
+.btn-cta {
+font-weight: bold;
+border-radius: 23px;
+width: 160px;
+}
+
+.btn-blugrey {
+color: #fff;
+background-color: #222f63;
+border-color: #222f63;
+}
+
+@media(hover: hover) and (pointer: fine) {
+.btn-blugrey:hover {
+color: #8f897e;
+}
+}
+
+.btn-blugrey:focus {
+border: 2px solid #fff;
+}
+
+/* .btn--red:hover,
+.btn--red:active,
+.btn--red:focus,
+.btn--red:active:focus {
+background-color: #df4929;
+border-color: #df4929;
+color: white;
+} */
+
+/* About section */
+
+.about-section .section-content {
+background: url('../images/inishowen_outline.jpg') no-repeat center center / contain;
+}
+
+
+
+/************************************/
+/*                                  */
 /* --------- Media queries -------- */
 /*                                  */
 /************************************/
