@@ -1,0 +1,284 @@
+            /************************************/
+            /*                                  */
+            /* -------- Sitewide styles ------- */
+            /*                                  */
+            /************************************/
+
+/* ---------- general styles ------------ */
+
+/* @import url('https://fonts.googleapis.com/css2?family=Skranji:wght@400;700&family=Tillana:wght@400;700&display=swap'); */
+/* @import url('https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Nunito+Sans:wght@400;700&display=swap'); */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    border: none;
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+}
+
+body {
+    /* background: #000; */
+     /* url(../images/u_symbol_dark_grey.png) fixed no-repeat center center / contain; */
+    font-family: 'Nunito Sans', sans-serif;
+    /* font-family: 'Roboto', sans-serif; */
+    /* font-family: 'Tillana', sans-serif; */
+    color: #000;
+}
+
+body a {
+    /* color: #fff; */
+    text-decoration: none;
+}
+
+@media(hover: hover) and (pointer: fine) {
+    body a:hover {
+        color: #8f897e;
+    }
+}
+
+h1, h2, h3 {
+    /* font-family: 'Skranji', sans-serif; */
+    /* font-family: 'Josefin Sans', sans-serif; */
+    font-family: 'Roboto', sans-serif;
+    /* font-weight: 400; */
+    font-weight: 700;
+    padding-top: 5px;
+}
+
+/* h1 {
+    text-transform: uppercase;
+} */
+
+/* hr {
+    border-top: 1px solid #8f897e;
+    width: 66%;
+    margin: 10px auto 0;   
+} */
+
+ul {
+    list-style-type: none;
+}
+
+/* dropdown menu toggle buttons */
+
+.menu-toggle-btn {
+    /* font-family: 'Josefin Sans', sans-serif; */
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    /* font-family: 'Skranji', sans-serif; */
+    padding: 10px 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* to counter default Bootstrap button behaviour */
+.menu-toggle-btn:focus:not(:focus-visible) {
+    outline: none;
+}
+
+@media(hover: hover) and (pointer: fine) {
+    .menu-toggle-btn:hover {
+        color: #8f897e;
+    }
+}
+
+.menu-toggle-btn span {
+    transition: all 0.25s;
+}
+
+.menu-icon {
+    width: 30px;
+    margin-right: 10px;
+    padding: 4px 0;
+}
+
+.menu-icon span {
+    width: 100%;
+    height: 4px;
+    border-radius: 4px;
+    background-color: #222f63;
+    display: block;
+}
+
+.menu-icon span:nth-of-type(2) {
+    margin: 5px 0;
+}
+
+.menu-btn-text {
+    font-size: 1.25rem;
+    padding-top: 5px;
+}
+
+.menu-toggle-btn-active .menu-icon span:nth-of-type(2) {
+    display: none;
+}
+
+.menu-toggle-btn-active .menu-icon span:nth-of-type(1) {
+    transform: translateY(2px) rotate(45deg);
+}
+
+.menu-toggle-btn-active .menu-icon span:nth-of-type(3) {
+    transform: translateY(-2px) rotate(-45deg);
+}
+
+/* .menu-toggle-btn-active .menu-btn-text {
+    text-transform: uppercase;
+} */
+
+.toggle-btn {
+    background: transparent;
+    color: #222f63;
+    cursor: pointer;
+}
+
+/* ------------ main header ----------- */
+
+#main-header {
+    /* background-color: rgba(0, 0, 0, 0.9); */
+    background-color: #fff;
+    height: 140px;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    z-index: 5;
+
+    display: flex;
+    /* justify-content: space-between; */
+    justify-content: center;
+}
+
+#main-header a {
+    color: #fff;
+}
+
+@media(hover: hover) and (pointer: fine) {
+    #main-header a:hover {
+        color: #8f897e;
+        text-decoration: none;
+    }
+}
+
+/* header logo */
+
+#header-logo {
+    height: 140px;
+    margin-left: 20px;
+}
+
+#header-logo img {
+    height: 120px;
+    margin: 10px;
+}
+
+/* header navigation */
+
+#main-menu {
+    /* font-family: 'Josefin Sans', sans-serif; */
+    font-family: 'Roboto Condensed', sans-serif;
+    font-weight: 700;
+    /* font-family: 'Skranji', sans-serif; */
+    /* font-size: 1.125rem; */
+    margin-right: 20px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+#main-menu-btn.menu-toggle-btn {
+    width: 110px;
+}
+
+/* #main-menu-items {
+    position: absolute;
+    top: 140px;
+    left: 0;
+    width: 100%;
+    background-color: #000;
+    text-align: center;
+} */
+
+.main-menu-responsive {
+    position: absolute;
+    top: 140px;
+    left: 0;
+    width: 100%;
+    background-color: #222f63;
+    text-align: center;
+}
+
+.main-menu-responsive ul {
+    /* align-items: center; */
+    padding: 20px 0;
+    margin: 0;
+    border: 0;
+}
+
+.main-menu-responsive li {
+    display: inline;
+    text-align: center;
+    padding: 20px 10px;
+    margin: 0;
+    border: 0;
+}
+
+/* navigation dropdown menus */
+
+.navbar-dropdown-btn {
+    display: inline-block;
+    color: #fff;
+    padding: 0 10px;
+}
+
+.navbar-dropdown-btn .menu-btn-text {
+    font-size: 1rem;
+}
+
+.navbar-dropdown-btn.menu-toggle-btn-active {
+    color: #8f897e;
+}
+
+.navbar-dropdown-menu-container {
+    position: relative;
+}
+
+.navbar-dropdown-menu {
+    border-radius: 0 0 5px 5px;
+    background-color: #222f63;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    height: 0;
+    /* height: auto; */
+    width: 200px;
+    overflow: hidden;
+}
+
+#navbar-info-menu {
+    width: 250px;
+}
+
+.navbar-dropdown-menu ul {
+    padding: 0 0 20px 0;
+}
+
+.navbar-dropdown-menu li {
+    display: block;
+    text-align: left;
+    padding: 10px 20px;
+}
+
+.navbar-dropdown-open {
+    height: auto;
+}
+
+/* active header navigation links */
+
+.active-link {
+    text-transform: uppercase;
+    color: #8f897e !important;
+}
