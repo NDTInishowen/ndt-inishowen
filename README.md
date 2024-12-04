@@ -1,3 +1,3 @@
-# NDT Imishowen
+# NDT Inishowen
 
 ## Documentation here
