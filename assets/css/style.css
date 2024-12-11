@@ -289,6 +289,10 @@ footer .affil-logo-img {
     font-size: 1.5rem;
 }
 
+.footer-contact-social-links .btn-link:focus {
+    outline: auto #000;
+}
+
 .footer-contact-social-links li {
     padding: 1.5rem 0;
 }
@@ -326,6 +330,47 @@ footer .affil-logo-img {
 #hwd-plug {
     padding: 5px 0 10px 0;
     font-size: 0.75rem;
+}
+
+
+
+            /************************************/
+            /*                                  */
+            /* -- Contact links popup modals -- */
+            /*                                  */
+            /************************************/
+
+.aria-modal-label, .aria-modal-description {
+height: 0;
+overflow: hidden;
+}
+
+.footer-contact-link-modal {
+height: 90vh;
+}
+
+.footer-contact-link-modal .modal-content {
+height: 100%;
+background-color: #4d4d4d;
+color: #fff;
+}
+
+.footer-contact-link-modal .close {
+color: #fff;
+font-size: 3rem;
+}
+
+.footer-contact-link-modal a {
+color: #fff;
+text-decoration: none;
+}
+
+.modal-body-content {
+padding-bottom: 80px;
+}
+
+#modal-phone-no {
+font-size: 1.5rem;
 }
 
 
