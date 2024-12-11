@@ -191,13 +191,13 @@
                                     <!-- footer links to social media accounts, etc. -->
                                     <ul class="footer-contact-social-links d-sm-flex justify-content-around">
                                         <li class="footer-contact-link">
-                                            <button type="button" class="btn btn-link p-0">
+                                            <button type="button" class="btn btn-link p-0" data-toggle="modal" data-target="#phone-info-modal" aria-label="open modal for phone details and call link">
                                                 <i class="fa-solid fa-phone"></i>
                                                 <!-- <span>&#43;353 86 194 8010</span> -->
                                             </button>
                                         </li>
                                         <li class="footer-contact-link">
-                                            <button type="button" class="btn btn-link p-0">
+                                            <button type="button" class="btn btn-link p-0" data-toggle="modal" data-target="#email-info-modal" aria-label="open modal for email adress and email form">
                                                 <i class="fa-solid fa-envelope"></i>
                                                 <!-- <span>info&#64;ndtinishowen.ie</span> -->
                                             </button>
@@ -232,6 +232,65 @@
 
     </footer>
 
+    <!-- Popup modals for phone and email links in footer -->
+
+    <div id="phone-info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="phone-info-title" aria-describedby="phone-info-description" aria-hidden="true">
+        <div class="modal-dialog footer-contact-link-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 id="phone-info-title" class="modal-title aria-modal-label">Phone details</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="modal-body-content text-center">
+                        <p id="phone-info-description" class="aria-modal-description">
+                            Call us on the number below, Monday to Friday, between 9 a m and 5 p m.
+                        </p>
+                        <p id="modal-phone-no">
+                            <a href="tel:00353861948010" aria-label="call N D T Inishowen on 00353861948010">
+                                <i class="fa-solid fa-phone"></i>
+                                <span> &#43;353 86 194 8010</span>
+                            </a>
+                        </p>
+                        <p class="open-hours-info">
+                            <i class="fa-regular fa-clock"></i>
+                            <span> Monday to Friday, 9a.m. to 5p.m.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="email-info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="email-info-title" aria-describedby="email-info-description" aria-hidden="true">
+        <div class="modal-dialog footer-contact-link-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h5 id="email-info-title" class="modal-title aria-modal-label">email us</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="modal-body-content text-center">
+                        <p id="email-info-description" class="aria-modal-description">
+                            Fill out the form below, or use the link to send a direct email to: info at n d t inishowen.ie
+                        </p>
+                        <p class="h4 text-left ml-3">Contact Us</p>
+                        <p id="email-modal-description" class="text-left ml-3">
+                            Fill out the form below, or send a direct email to: 
+                            <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a>
+                        </p>
+                        <div id="modal-email-form">
+                            <p>EMAIL FORM HERE</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
    
     <!-- Bootstrap scripts -->
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
