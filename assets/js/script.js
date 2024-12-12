@@ -65,12 +65,12 @@ document.addEventListener('DOMContentLoaded', function() {
     const menuOpenClass = 'main-menu-open';
     const links = dropdown.querySelectorAll('.main-menu-item');
 
-    if (window.innerWidth <= 820) {
+    if (window.innerWidth <= 768) {
         handlePopupAria(button, menuOpenClass);
     }
        
     window.addEventListener('resize', () => {
-        if (window.innerWidth >= 820) {
+        if (window.innerWidth >= 768) {
             button.setAttribute('aria-expanded', false);
             dropdown.removeAttribute('aria-hidden');
             for (let link of links) {
@@ -325,7 +325,7 @@ function handlePopup(toggleButton, togglerActiveClass, popupOpenClass) {
            external event handler if main menu is in dropdown mode - 
            will be handled along with main menu. Exempt news & events
            page articles from closing on external events in all cases. */
-        if (window.innerWidth <= 820) {
+        if (window.innerWidth <= 768) {
             if (!(toggleButton.classList.contains('navbar-dropdown-btn') || toggleButton.classList.contains('article-toggle-btn'))) {
                 handlePopupExternalEvent(toggleButton, togglerActiveClass, popupOpenClass);
             }
@@ -352,7 +352,7 @@ function handlePopup(toggleButton, togglerActiveClass, popupOpenClass) {
  * dropdown menu, to handleDropdownAria function; remove 'active' 
  * class from toggle button.
  * 
- * If main menu is in dropdown mode, (screen <= 820px), navigation
+ * If main menu is in dropdown mode, (screen <= 768px), navigation
  * dropdown menus won't have been passed in here, (see handlePopup
  * function), so they are dealt with along with the main menu (i.e.
  * passed to handleCloseNestedDropdowns function).
