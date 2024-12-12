@@ -34,7 +34,7 @@ body a {
 h1, h2, h3 {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
-    padding-top: 5px;
+    padding: 5px 0;
 }
 
 ul {
@@ -107,6 +107,35 @@ ul {
     background: transparent;
     color: #4d4d4d;
     cursor: pointer;
+}
+
+/* general buttons */
+
+.btn-cta {
+    font-weight: bold;
+    border-radius: 23px;
+    width: 160px;
+}
+
+.btn-blugrey {
+    color: #fff;
+    background-color: #222f63;
+    border-color: #222f63;
+}
+
+@media(hover: hover) and (pointer: fine) {
+    .btn-blugrey:hover {
+        color: #8f897e;
+    }
+}
+
+.btn-blugrey:focus {
+    border: 2px solid #fff;
+}
+
+.link-btn {
+    background: transparent;
+    text-decoration: underline;
 }
 
 /* ------------ main header ----------- */
@@ -232,7 +261,7 @@ ul {
 .navbar-dropdown-menu li {
     display: block;
     text-align: left;
-    padding: 10px 20px;
+    padding: 5px 10px 5px 20px;
 }
 
 .navbar-dropdown-open {
@@ -249,11 +278,11 @@ ul {
 /* -------- main page body -------- */
 
 main {
-    margin-top: 140px;
+    margin-top: 207px;
 }
 
 .anchor-section {
-    scroll-margin-top: 200px;
+    scroll-margin-top: 207px;
 }
 
 /* ------------ footer ------------ */
@@ -285,12 +314,8 @@ footer .affil-logo-img {
     justify-content: space-evenly; */
 }
 
-.footer-contact-social-links .btn-link {
+.footer-contact-social-links .link-btn {
     font-size: 1.5rem;
-}
-
-.footer-contact-social-links .btn-link:focus {
-    outline: auto #000;
 }
 
 .footer-contact-social-links li {
@@ -336,41 +361,62 @@ footer .affil-logo-img {
 
             /************************************/
             /*                                  */
-            /* -- Contact links popup modals -- */
+            /* --------- Popup modals --------- */
             /*                                  */
             /************************************/
 
+/* general */
+
 .aria-modal-label, .aria-modal-description {
-height: 0;
-overflow: hidden;
+    height: 0;
+    overflow: hidden;
 }
 
+/* footer contact links */
+
 .footer-contact-link-modal {
-height: 90vh;
+    height: 90vh;
 }
 
 .footer-contact-link-modal .modal-content {
-height: 100%;
-background-color: #4d4d4d;
-color: #fff;
+    height: 100%;
+    background-color: #4d4d4d;
+    color: #fff;
 }
 
 .footer-contact-link-modal .close {
-color: #fff;
-font-size: 3rem;
+    color: #fff;
+    font-size: 3rem;
 }
 
 .footer-contact-link-modal a {
-color: #fff;
-text-decoration: none;
+    color: #fff;
+    text-decoration: none;
 }
 
-.modal-body-content {
-padding-bottom: 80px;
+.footer-contact-link-modal .modal-body-content {
+    padding-bottom: 80px;
 }
 
 #modal-phone-no {
-font-size: 1.5rem;
+    font-size: 1.5rem;
+}
+
+/* about section modals */
+
+.about-section-modal .close {
+    font-size: 3rem;
+}
+
+.about-modal-img-wrapper img {
+    width: 200px;
+    float: left;
+    margin: 5px;
+}
+
+.about-section-modal .btn-secondary {
+    font-weight: bold;
+    border-radius: 23px;
 }
 
 
@@ -384,7 +430,7 @@ font-size: 1.5rem;
 /* general styles */
 
 .banner-container {
-    height: calc(100vh - 140px);
+    height: calc(100vh - 207px);
 
     background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center / cover;
     /* background: url('../images/mother-playing-with-her-autistic-son-using-toys_23-2150266524.jpg') no-repeat center center / cover; */
@@ -414,36 +460,14 @@ font-size: 1.5rem;
 
 .jumbotron {
     background-color: transparent;
+    margin: 0;
+    padding: 100px 0 0;
 }
 
 .jumbotron h1 {
     color: #fff;
     font-weight: bold;
     margin-bottom: 30px;
-}
-
-/* Buttons */
-
-.btn-cta {
-    font-weight: bold;
-    border-radius: 23px;
-    width: 160px;
-}
-
-.btn-blugrey {
-    color: #fff;
-    background-color: #222f63;
-    border-color: #222f63;
-}
-
-@media(hover: hover) and (pointer: fine) {
-    .btn-blugrey:hover {
-        color: #8f897e;
-    }
-}
-
-.btn-blugrey:focus {
-    border: 2px solid #fff;
 }
 
 /* About section */
@@ -462,9 +486,9 @@ font-size: 1.5rem;
 
 /* ---------- for responsive design ----------- */
 
-/* for medium-sized screens, up to 820 pixels wide */
+/* for medium-sized screens, up to 768 pixels wide (matches Bootstrap's sm - md breakpoint) */
 
-@media screen and (max-width: 820px) {
+@media screen and (max-width: 768px) {
 
     /* main header */
 
@@ -481,22 +505,23 @@ font-size: 1.5rem;
     .main-menu-responsive {
         left: auto;
         right: 0;
-        width: 100%;
+        width: 320px;
         height: 0;
         border-radius: 0 0 5px 5px;
-        background-color: #fff;
         overflow: hidden;
         transition: all 0.25s;
     }
 
     .main-menu-responsive ul {
-        padding: 5px 0;
+        padding: 5px 0 20px;
         margin-bottom: 0;
     }
 
     .main-menu-responsive li {
+        text-align: left;
         display: block;
-        padding: 5px;
+        margin-left: 50px;
+        padding: 5px 0;
     }
 
     .main-menu-open {
@@ -505,16 +530,61 @@ font-size: 1.5rem;
 
     /* navigation dropdown menus */
 
+    .navbar-dropdown-btn {
+        padding: 0;
+    }
+
     .navbar-dropdown-menu {
         position: relative;
-        top: 5px;
-        width: 100%;
+        top: 0;
+        width: 100% !important;
+    }
+
+    .navbar-dropdown-menu ul {
+        padding: 0;
+    }
+
+    .navbar-dropdown-menu li {
         margin-left: 20px;
+        padding: 2.5px 0;
     }
 
     /* main page body */
+
+    main {
+        margin-top: 140px;
+    }
     
     .anchor-section {
         scroll-margin-top: 140px;
+    }
+
+    /* landing page */
+
+    .banner-container {
+        height: calc(100vh - 140px);
+    }
+}
+
+/* for smaller-sized screens, up to 576 pixels wide (matches Bootstrap's xs - sm breakpoint) */
+
+@media screen and (max-width: 576px) {
+
+    /* header navigation menu */
+
+    .main-menu-responsive {
+        width: 100vw;
+    }
+}
+
+/* for extra-small screens, up to 430 pixels wide */
+
+@media screen and (max-width: 430px) {
+
+    /* popup modals */
+
+    .about-modal-img-wrapper img {
+        float: none;
+        width: 100%;
     }
 }
