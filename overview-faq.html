@@ -40,12 +40,12 @@
             <div id="main-menu-items" class="main-menu-responsive">
                 <ul>
                     <li>
-                        <a href="index.html" class="active-link main-menu-item">Home</a>
+                        <a href="index.html" class="main-menu-item">Home</a>
                     </li>
 
                     <!-- Information dropdown list -->
                     <li class="navbar-dropdown-menu-container">
-                        <button id="Info-dropdown-btn" class="main-menu-item navbar-dropdown-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-info-menu">
+                        <button id="Info-dropdown-btn" class="active-link main-menu-item navbar-dropdown-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-info-menu">
                             <span class="menu-btn-text">Neuro Developmental Therapy</span>
                         </button>
                         <div id="navbar-info-menu" class="navbar-dropdown-menu">
@@ -54,7 +54,7 @@
                                     <a href="overview-faq.html" class="navbar-dropdown-item">What to Expect</a>
                                 </li>
                                 <li>
-                                    <a href="overview-faq.html#faq" class="navbar-dropdown-item">Frequently Asked Questions</a>
+                                    <a href="#faq" class="navbar-dropdown-item">Frequently Asked Questions</a>
                                 </li>
                                 <li>
                                     <a href="#" class="navbar-dropdown-item">Screening Questionnaires</a>
@@ -115,50 +115,44 @@
     <main>
 
         <!-- Jumbotron, banner image & call to action -->
-        <div id="landing-banner" class="container-fluid banner-container">
+        <div id="overview-banner" class="container-fluid banner-container">
             <div class="opaque-overlay"></div>
             <div class="row">
                 <div class="col-12">
-                    <section class="jumbotron text-center">
-                        <h1 class="jumbotron-header">Helping your child spread their wings&#33;</h1>
-                        <a href="#landing-info" class="btn btn-lg btn-cta btn-blugrey">Learn More</a>
-                    </section>
+                    <div class="jumbotron text-center">
+                        <h1 class="jumbotron-header h2">What to Expect</h1>
+                        <div class="d-flex justify-content-around dbl-btn-wrapper">
+                            <a href="#faq" class="btn btn-cta btn-blugrey" aria-label="Frequently Asked Questions">F.A.Q.</a>
+                            <a href="#" class="btn btn-cta btn-blugrey">The Process</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- About section -->
+        <!-- Overview section -->
         <div class="container-wrapper">
-            <div class="container content-container about-container">
-                <section id="landing-info" class="about-section anchor-section my-3">
+            <div class="container content-container overview-container">
+                <section id="overview" class="overview-section my-3">
                     <div class="row">
-                        <div class="col-12 section-header">
-                            <h2>What we do</h2>
+                        <div class="col-12 section-header text-center">
+                            <h2 class="h3 font-weight-bold mb-0">Neuro Developmental Therapy</h2>
+                            <p class="h4 font-weight-bold">Overview</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 section-content bg-inishowen">
-                            <p><strong>INPP Neuro Developmental Therapy</strong></p>
-                            <p>Neuro-developmental therapists specialize in identifying and treating physical factors that contribute to specific learning difficulties, underachievement and behavioral problems.</p>
-                            <p>INPP (The Institute for Neuro-Physiological Psychology) has been a pioneer in researching the effects of neuro-developmental immaturity on learning and behavior since its establishment in 1975.</p>
-                            <p>The organization continues to study the impacts of retained primitive reflexes and has successfully assisted numerous children worldwide.</p>
-                            <p>Every child is born with a set of primitive reflexes that should be inhibited or controlled by a higher part of the brain within the first year of life.</p>
-                            <p>Failure to inhibit these reflexes can hinder subsequent motor development, visual functioning necessary for tasks like reading and writing and eye-hand coordination. Additionally, it can lead to behavioral challenges, frustration, fear, anxiety, poor concentration and impulse control issues.</p>
-                            <p>As an INPP Neuro-Developmental Therapist, I am equipped to identify underlying causes and provide a drug-free, non-invasive movement program to help your child overcome these challenges.</p>
-                            <p>This program aims to support your child in reaching their full potential by addressing these issues.</p>
+                            <p>Neurodevelopmental therapy is a non-invasive programme of movements, suitable for children experiencing developmental, learning, behavioural and social/emotional difficulties. A neural stimulation programme is uniquely created for each individual with the aim of promoting the development of the Central Nervous System (CNS) in order to treat developmental delay caused by retained primitive reflexes. By incorporating movements which are used naturally by a baby and a young child, the nervous system is gently encouraged to mature and become more open to learning.</p>
+                            <p>NDT Inishowen uses the INPP method of Neuro Developmental Therapy to assess and address neuro-motor and sensory immaturity that could potentially limit the learning process and cause difficulties in sport and social situations. This method of Neuro Developmental therapy was established by Peter Blythe in 1975 and since then has helped many thousands of children in many countries world-wide overcome these difficulties.</p>
+                            <p>The INPP Method involves carrying out physical exercises every day based on the natural movements normally made during the first year of life. These exercises help to integrate primitive reflexes, improve balance, posture, coordination and control of eye movements which support a child's general development and progress in education. Following a detailed assessment of gross and fine motor skills, balance, primitive and postural reflexes, eye movements and visual perception, your child will be given an individualised programme of exercises to carry out at home under parental supervision.</p>
+                            <p>The programme takes 5 to 10 minutes a day over the course of approximately 12 to 18 months. Progress is reviewed at 6-weekly intervals and the exercises adapted according to progress. Key elements of the programme are regularity, repetition and duration.</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-12 py-3 section-footer section-links">
                             <div class="row">
-                                <div class="col-12 col-sm-8 d-flex justify-content-around about-btn-wrapper">
-                                    <button type="button" class="btn btn-cta btn-blugrey" data-toggle="modal" data-target="#about-me-modal" aria-label="open modal to learn about me">About Me</button>
-                                    <button type="button" class="btn btn-cta btn-blugrey" data-toggle="modal" data-target="#about-inpp-modal" aria-label="open modal to learn about the I N P P">About INPP</button>
-                                </div>
-                                <!-- Force next column to break to new line at sm breakpoint and below -->
-                                <div class="w-100 d-block d-sm-none"></div>
-                                <div class="col-12 col-sm-4 d-flex justify-content-around mt-3 m-sm-0 info-btn-wrapper">
-                                    <a href="overview-faq.html" class="btn btn-cta btn-blugrey">What to Expect</a>
+                                <div class="col-12 text-center btn-wrapper">
+                                    <a href="#" class="btn btn-cta btn-blugrey">The Process</a>
                                 </div>
                             </div>
                         </div>
@@ -166,73 +160,34 @@
                 </section>
             </div>
         </div>
-
-        <!-- About section popup modals -->
-
-        <!-- About Me modal -->
-
-        <div id="about-me-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="about-me-title" aria-describedby="about-me-description" aria-hidden="true">
-            <div class="modal-dialog about-section-modal" role="document">
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <h2 id="about-me-title" class="modal-title">Sinead O'Toole</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="modal-body-content">
-                            <div class="about-modal-img-wrapper">
-                                <img src="assets/images/blank-pic-1.png" alt="Photograph of Sinead O'Toole">
-                            </div>
-                            <div id="about-me-description" class="">
-                                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Dolorem, rerum? Itaque illum sed molestiae delectus tempore suscipit doloremque, aliquid nostrum dolores rerum, at, id aspernatur animi consectetur tenetur repellendus nisi?</p>
-                                <p>Praesentium alias ratione magnam officia molestias ipsa accusantium eaque. Culpa, saepe. Nisi inventore velit fuga repudiandae asperiores, numquam libero sapiente laudantium ea veniam! Aut harum cupiditate ducimus itaque dicta. A.</p>
-                                <p>Accusantium quam voluptatem debitis deserunt possimus saepe, deleniti blanditiis aperiam hic sunt error nesciunt nostrum eos ab vitae exercitationem earum! Asperiores eligendi, amet rerum non veritatis consequuntur culpa inventore commodi.</p>
-                                <p>Dignissimos ut minus necessitatibus a illo molestias mollitia laboriosam nemo ipsa autem officiis quos rerum voluptatum vitae, consectetur neque voluptatem nihil optio cum delectus? Deleniti dolores commodi tempore dolore obcaecati?</p>
-                                <p>Aspernatur voluptatem doloribus aliquam laborum illo optio tempora. Debitis repellendus quis doloribus quam. Sapiente earum natus praesentium, nihil qui sed odio! Quos ex beatae officia atque sunt? Quia, quam recusandae.</p>
-                                <p>Est tempore unde facilis neque voluptatum molestias nobis. Exercitationem, modi? Voluptatem fugiat explicabo eveniet tempora neque illum est dicta tenetur quae veritatis. Quidem repellendus fugit enim unde esse quas. Mollitia?</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal-footer border-0">
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
-            </div>
         </div>
 
-        <!-- About INPP modal -->
-
-        <div id="about-inpp-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="about-inpp-title" aria-describedby="about-inpp-description" aria-hidden="true">
-            <div class="modal-dialog about-section-modal" role="document">
-                <div class="modal-content">
-                    <div class="modal-header border-0">
-                        <h2 id="about-inpp-title" class="modal-title">The Institute for Neuro-Physiological Psychology</h2>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+        <!-- FAQ section -->
+        <div class="container-wrapper">
+            <div class="container content-container faq-container">
+                <section id="faq" class="faq-section anchor-section my-3">
+                    <div class="row">
+                        <div class="col-12 section-header text-center">
+                            <h3 class="h3 font-weight-bold">Frequently Asked Questions</h3>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <div class="modal-body-content">
-                            <div class="about-modal-img-wrapper">
-                                <img src="assets/images/INPP_logo_cropped_y.jpg" alt="I N P P logo">
-                            </div>
-                            <div id="about-inpp-description" class="">
-                                <p>Specialists in identifying and treating physical factors underlying specific learning difficulties, under-achievement and behavioural problems, INPP has pioneered research into the effects of neuro-motor immaturity on learning and behaviour.</p>
-                                <p>Every child is born with a set of primitive reflexes, &#40;sometimes known as &#34;survival reflexes&#34;&#41;, which should be inhibited or controlled by a higher part of the brain during the first year of life. </p>
-                                <p>If these reflexes persist beyond the first year, they can interfere with subsequent motor development, visual functioning needed for reading, eye-hand co-ordination needed for writing, and perceptual skills. They provide evidence of immaturity in the functioning of the central nervous system which can act as a barrier to learning. They can also lead to behavioural problems such as concentration difficulties, frustration, poor impulse control and under-achievement.</p>
-                                <p>The INPP Method has been developed to identify underlying causes and to offer a completely drug-free and non-invasive treatment, which can help children overcome these problems and give them the tools with which to succeed.</p>
-                                <p>INPP was established in 1975 and since that time has helped many thousands of children in many countries worldwide.</p>
-                                <p>Details of published research based on The INPP Method may be found at <a href="https://www.inpp.org.uk/publications" target="_blank" rel="noopener" aria-label="www.inpp.org.uk/publications, (opens in a new tab)">www.inpp.org.uk/publications</a></p>
+                    <div class="row">
+                        <div class="col-12 section-content">
+                            <!-- accordion starts -->
+                            
+                            <!-- accordion ends -->
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 py-3 section-footer section-links">
+                            <div class="row">
+                                <div class="col-12 text-center btn-wrapper">
+                                    <a href="#" class="top-link">Back to Top</a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="modal-footer border-0">
-                      <a href="https://www.inpp.org.uk/" class="btn btn-cta btn-blugrey" target="_blank" rel="noopener" aria-label="Visit the INPP website, (opens in a new tab)">INPP Website</a></p>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    </div>
-                </div>
+                </section>
             </div>
         </div>
 
