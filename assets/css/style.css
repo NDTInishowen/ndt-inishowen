@@ -31,7 +31,7 @@ body a {
     }
 }
 
-h1, h2, h3 {
+h1, h2, h3, h4, h5, h6 {
     font-family: 'Roboto', sans-serif;
     font-weight: 700;
     padding: 5px 0;
@@ -180,7 +180,6 @@ ul {
 #main-menu {
     font-family: 'Roboto Condensed', sans-serif;
     font-weight: 700;
-    font-size: 1.125rem;
     margin-right: 20px;
 
     display: flex;
@@ -214,9 +213,13 @@ ul {
 .main-menu-responsive li {
     display: inline;
     text-align: center;
-    padding: 20px 10px;
+    padding: 20px 7.5px;
     margin: 0;
     border: 0;
+}
+
+.main-menu-item {
+    font-size: 1.25rem;
 }
 
 /* navigation dropdown menus */
@@ -225,10 +228,6 @@ ul {
     display: inline-block;
     color: #4d4d4d;
     padding: 0 10px;
-}
-
-.navbar-dropdown-btn .menu-btn-text {
-    font-size: 1.125rem;
 }
 
 .navbar-dropdown-btn.menu-toggle-btn-active {
@@ -264,6 +263,10 @@ ul {
     padding: 5px 10px 5px 20px;
 }
 
+.navbar-dropdown-item {
+    font-size: 1.125rem;
+}
+
 .navbar-dropdown-open {
     height: auto;
 }
@@ -271,7 +274,6 @@ ul {
 /* active header navigation links */
 
 .active-link {
-    text-transform: uppercase;
     color: #8f897e !important;
 }
 
@@ -283,6 +285,44 @@ main {
 
 .anchor-section {
     scroll-margin-top: 207px;
+}
+
+/* page banners */
+
+.banner-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.opaque-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Jumbotron */
+
+.jumbotron {
+    background-color: transparent;
+    margin: 0;
+}
+
+.jumbotron h1 {
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 30px;
+}
+
+/* generic section styles */
+
+.bg-inishowen {
+    background: url('../images/inishowen_outline_1.jpg') no-repeat center center / contain;    
 }
 
 /* ------------ footer ------------ */
@@ -309,9 +349,6 @@ footer .affil-logo-img {
     list-style-type: none;
     margin-bottom: 0;
     text-align: center;
-
-    /* display: flex;
-    justify-content: space-evenly; */
 }
 
 .footer-contact-social-links .link-btn {
@@ -429,51 +466,39 @@ footer .affil-logo-img {
 
 /* general styles */
 
-.banner-container {
+#landing-banner.banner-container {
     height: calc(100vh - 207px);
-
     background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center / cover;
-    /* background: url('../images/mother-playing-with-her-autistic-son-using-toys_23-2150266524.jpg') no-repeat center center / cover; */
-    /* background: url('../images/draft_logo_6.jpg') no-repeat center center; */
-    /* -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover; */
-    
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    position: relative;
-}
-
-.opaque-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
 }
 
 /* Jumbotron */
 
-.jumbotron {
-    background-color: transparent;
-    margin: 0;
+#landing-banner .jumbotron {
     padding: 100px 0 0;
 }
 
-.jumbotron h1 {
-    color: #fff;
-    font-weight: bold;
-    margin-bottom: 30px;
+
+
+            /************************************/
+            /*                                  */
+            /* -------- Overview page --------- */
+            /*                                  */
+            /************************************/
+
+/* general styles */
+
+#overview-banner.banner-container {
+    height: 50vh;
+    background: url('../images/child-mom-kindergarten-gym_237566-5249.jpg') no-repeat center center / cover;
 }
 
-/* About section */
+#overview-banner .jumbotron {
+    width: 100vw;
+    max-width: 1140px;
+}
 
-.about-section .section-content {
-    background: url('../images/inishowen_outline_1.jpg') no-repeat center center / contain;
+#overview-banner h1 {
+    margin-bottom: 0.5rem;
 }
 
 
@@ -505,14 +530,17 @@ footer .affil-logo-img {
     .main-menu-responsive {
         left: auto;
         right: 0;
+        /* width: 100%; */
         width: 320px;
         height: 0;
         border-radius: 0 0 5px 5px;
+        /* background-color: rgba(0, 0, 0, 0.9); */
         overflow: hidden;
         transition: all 0.25s;
     }
 
     .main-menu-responsive ul {
+        /* align-items: center; */
         padding: 5px 0 20px;
         margin-bottom: 0;
     }
@@ -561,7 +589,7 @@ footer .affil-logo-img {
 
     /* landing page */
 
-    .banner-container {
+    #landing-banner.banner-container {
         height: calc(100vh - 140px);
     }
 }
