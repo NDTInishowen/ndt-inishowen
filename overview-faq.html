@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="NDT Inishowen, neurodevelopmental therapist, based in Buncrana, County Donegal. Ireland">
+    <meta name="description" content="NDT Inishowen, Neuro Developmental Therapist, based in Buncrana, County Donegal. Ireland">
     <meta name="keywords" content="">
 
     <!-- Bootstrap css link -->
@@ -15,7 +15,7 @@
     <title>NDT Inishowen</title>
 </head>
 <body>
-    
+    <a class="top"></a>
     <header id="main-header">
         
         <div id="header-logo">
@@ -142,10 +142,10 @@
                     </div>
                     <div class="row">
                         <div class="col-12 section-content bg-inishowen">
-                            <p>Neurodevelopmental therapy is a non-invasive programme of movements, suitable for children experiencing developmental, learning, behavioural and social/emotional difficulties. A neural stimulation programme is uniquely created for each individual with the aim of promoting the development of the Central Nervous System (CNS) in order to treat developmental delay caused by retained primitive reflexes. By incorporating movements which are used naturally by a baby and a young child, the nervous system is gently encouraged to mature and become more open to learning.</p>
+                            <p>Neuro Developmental Therapy is a non-invasive programme of movements, suitable for children experiencing developmental, learning, behavioural and social/emotional difficulties. A neural stimulation programme is uniquely created for each individual with the aim of promoting the development of the Central Nervous System (CNS) in order to treat developmental delay caused by retained primitive reflexes. By incorporating movements which are used naturally by a baby and a young child, the nervous system is gently encouraged to mature and become more open to learning.</p>
                             <p>NDT Inishowen uses the INPP method of Neuro Developmental Therapy to assess and address neuro-motor and sensory immaturity that could potentially limit the learning process and cause difficulties in sport and social situations. This method of Neuro Developmental therapy was established by Peter Blythe in 1975 and since then has helped many thousands of children in many countries world-wide overcome these difficulties.</p>
-                            <p>The INPP Method involves carrying out physical exercises every day based on the natural movements normally made during the first year of life. These exercises help to integrate primitive reflexes, improve balance, posture, coordination and control of eye movements which support a child's general development and progress in education. Following a detailed assessment of gross and fine motor skills, balance, primitive and postural reflexes, eye movements and visual perception, your child will be given an individualised programme of exercises to carry out at home under parental supervision.</p>
-                            <p>The programme takes 5 to 10 minutes a day over the course of approximately 12 to 18 months. Progress is reviewed at 6-weekly intervals and the exercises adapted according to progress. Key elements of the programme are regularity, repetition and duration.</p>
+                            <p>The INPP Method involves carrying out physical exercises every day based on the natural movements normally made during the first year of life. These exercises help to integrate primitive reflexes, improve balance, posture, co-ordination and control of eye movements which support a child's general development and progress in education. Following a detailed assessment of gross and fine motor skills, balance, primitive and postural reflexes, eye movements and visual perception, your child will be given an individualised programme of exercises to carry out at home under parental supervision.</p>
+                            <p>The programme takes 5 to 10 minutes per day over the course of approximately 12 to 18 months. Progress is reviewed at 6-weekly intervals and the exercises adapted according to progress. Key elements of the programme are regularity, repetition and duration.</p>
                         </div>
                     </div>
                     <div class="row">
@@ -173,8 +173,209 @@
                     </div>
                     <div class="row">
                         <div class="col-12 section-content">
+                            <!--------------------------------------------------------------------------------------->
+                            <!-------------------------------------- IMPORTANT! ------------------------------------->
+                            <!------ The empty anchor tags below with the 'card-x-anchor' id and 'card-anchor' ------>
+                            <!-------- class are essential for the efficient operation of the FAQ section! ---------->
+                            <!------------------------------------ DO NOT REMOVE! ----------------------------------->
+                            <!--------------------------------------------------------------------------------------->
+                            <!-- There follows a Bootstrap 'accordion' of their 'collapse' components in order
+                                to organise what is potentially a rather long list of questions and answers on the
+                                page. It's comprised of a series of 'card' components with the question in the card
+                                header and the answer in the collapsable card body. Since the contents of each card
+                                body also has potential for a lot of length, a tweak had to be made to the default
+                                Bootstrap behaviour. The problem arises when, especiallly on mobile devices, a
+                                question is clicked to reveal an answer that has length and another long answer is
+                                open above it. The result is that a chunk of the newly revealed answer jumps up out
+                                of view behind our fixed page header (and potentially past the top of the browser
+                                window) when the answer above it closes, so a Javascript function is needed to
+                                return the card header containing the question to the top of the viewport, but
+                                below the page header, when the link is clicked.
+                                This should has been relatively easy to acheive with CSS 'scroll-margin-top' and
+                                the JS events 'show.bs.collapse' or 'hide.bs.collapse' that are supposedly fired by
+                                the Bootstrap 'collapse' component, but, upon testing, the event didn't appear to
+                                fire no matter what I tried and 'scroll-margin-top' wouldn't work with the 'card'
+                                components, likely due to them having built-in inline or flex display properties.
+                                This was overcome easily enough by instead using a 'click' event listener on the
+                                card header anchor links and adding the aforementioned, empty anchor tags with the
+                                'card-anchor' class just above each card header. They are made block-level elements
+                                with the Bootstrap 'd-block' class so that 'scroll-margin-top' will work with them
+                                and that property is applied with the custom, global class, 'anchor-section'.
+                                It's something of a hacky solution... But it works! :-) -->
+                            <!--------------------------------------------------------------------------------------->
+                            <!-------- See also the handleBootstrapAccordionPageBreach function in script.js -------->
+                            <!--------------------------------------------------------------------------------------->
                             <!-- accordion starts -->
-                            
+                            <div id="faq-accordion" class="accordion">
+                                <!-- Question #1 -->
+                                <div class="card">
+                                    <a id="card-1-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-1" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-1" role="button" aria-expanded="false" aria-controls="answer-1"><i class="fa-solid fa-caret-up mr-3"></i>Who can Neuro Developmental Therapy help&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-1" class="collapse" aria-labelledby="question-1" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #2 -->
+                                <div class="card">
+                                    <a id="card-2-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-2" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-2" role="button" aria-expanded="false" aria-controls="answer-2"><i class="fa-solid fa-caret-up mr-3"></i>What is Developmental Delay&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-2" class="collapse" aria-labelledby="question-2" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #3 -->
+                                <div class="card">
+                                    <a id="card-3-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-3" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-3" role="button" aria-expanded="false" aria-controls="answer-3"><i class="fa-solid fa-caret-up mr-3"></i>What are Primitive Reflexes&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-3" class="collapse" aria-labelledby="question-3" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #4 -->
+                                <div class="card">
+                                    <a id="card-4-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-4" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-4" role="button" aria-expanded="false" aria-controls="answer-4"><i class="fa-solid fa-caret-up mr-3"></i>When are Primitive Reflexes retained&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-4" class="collapse" aria-labelledby="question-4" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #5 -->
+                                <div class="card">
+                                    <a id="card-5-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-5" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-5" role="button" aria-expanded="false" aria-controls="answer-5"><i class="fa-solid fa-caret-up mr-3"></i>What are the causes of Developmental Delay or retained Primitive Reflexes&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-5" class="collapse" aria-labelledby="question-5" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #6 -->
+                                <div class="card">
+                                    <a id="card-6-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-6" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-6" role="button" aria-expanded="false" aria-controls="answer-6"><i class="fa-solid fa-caret-up mr-3"></i>What are the signs and symptoms of Developmental Delay or retained Primitive Reflexes&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-6" class="collapse" aria-labelledby="question-6" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #7 -->
+                                <div class="card">
+                                    <a id="card-7-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-7" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-7" role="button" aria-expanded="false" aria-controls="answer-7"><i class="fa-solid fa-caret-up mr-3"></i>At what age can a child begin a programme of Neuro Developmental Therapy&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-7" class="collapse" aria-labelledby="question-7" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #8 -->
+                                <div class="card">
+                                    <a id="card-8-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-8" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-8" role="button" aria-expanded="false" aria-controls="answer-8"><i class="fa-solid fa-caret-up mr-3"></i>Is Neuro Developmental Therapy useful for adults&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-8" class="collapse" aria-labelledby="question-8" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #9 -->
+                                <div class="card">
+                                    <a id="card-9-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-9" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-9" role="button" aria-expanded="false" aria-controls="answer-9"><i class="fa-solid fa-caret-up mr-3"></i>Must the programme continue for life&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-9" class="collapse" aria-labelledby="question-9" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #10 -->
+                                <div class="card">
+                                    <a id="card-10-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-10" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-10" role="button" aria-expanded="false" aria-controls="answer-10"><i class="fa-solid fa-caret-up mr-3"></i>Do I need a referral&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-10" class="collapse" aria-labelledby="question-10" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #11 -->
+                                <div class="card">
+                                    <a id="card-11-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-11" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-11" role="button" aria-expanded="false" aria-controls="answer-11"><i class="fa-solid fa-caret-up mr-3"></i>What happens when I contact you&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-11" class="collapse" aria-labelledby="question-11" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- Question #12 -->
+                                <div class="card">
+                                    <a id="card-12-anchor" class="card-anchor d-block anchor-section"></a>
+                                    <div id="question-12" class="card-header">
+                                        <h4 class="mb-0 h6">
+                                            <a class="faq-accordion-link collapsed" data-toggle="collapse" href="#answer-12" role="button" aria-expanded="false" aria-controls="answer-12"><i class="fa-solid fa-caret-up mr-3"></i>Is Neuro Developmental Therapy expensive&#63;</a>
+                                        </h4>
+                                    </div>
+                                    <div id="answer-12" class="collapse" aria-labelledby="question-12" data-parent="#faq-accordion">
+                                        <div class="card-body">
+                                            Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <!-- accordion ends -->
                         </div>
                     </div>
@@ -182,7 +383,7 @@
                         <div class="col-12 py-3 section-footer section-links">
                             <div class="row">
                                 <div class="col-12 text-center btn-wrapper">
-                                    <a href="#" class="top-link">Back to Top</a>
+                                    <a href="#top" class="top-link btn btn-sm btn-cta btn-secondary">Back to Top</a>
                                 </div>
                             </div>
                         </div>
