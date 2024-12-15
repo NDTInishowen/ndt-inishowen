@@ -138,6 +138,10 @@ ul {
     text-decoration: underline;
 }
 
+.top-link {
+    width: auto;
+}
+
 /* ------------ main header ----------- */
 
 #main-header {
@@ -499,6 +503,51 @@ footer .affil-logo-img {
 
 #overview-banner h1 {
     margin-bottom: 0.5rem;
+}
+
+/* FAQ section */
+
+.faq-section {
+    background-color: rgba(0,0,0,.1);
+    padding-top: 10px;
+}
+
+#faq-accordion .card {
+    background: transparent;
+    border: 0;
+}
+
+#faq-accordion .card-header {
+    background: transparent;
+    border: 0;
+}
+
+#faq-accordion .card-body {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.faq-accordion-link {
+    color: #8f897e;
+    display: flex;
+}
+
+.faq-accordion-link i {
+    align-self: center;
+}
+
+.faq-accordion-link.collapsed {
+    color: #4d4d4d;
+}
+
+.faq-accordion-link.collapsed i {
+    transform: scale(-1, -1);
+}
+
+@media(hover: hover) and (pointer: fine) {
+    .faq-accordion-link:hover {
+        color: #8f897e;
+        text-decoration: none;
+    }
 }
 
 
