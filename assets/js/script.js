@@ -42,6 +42,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // ---------------- Bootstrap Accordions
+
+    /* Get all Bootstrap 'accordion' components from the page and if found,
+       pass each one to handler function */
+
+    const accordions = document.querySelectorAll('.accordion');
+
+    if (accordions.length > 0) {
+        for (let accordion of accordions) {
+            handleBootstrapAccordionPageBreach(accordion);
+        }
+    }
+
 });
 
 // -------------------- Handler functions
@@ -424,6 +437,65 @@ function handlePopupExternalEvent(toggleButton, togglerActiveClass, popupOpenCla
 }
 
 // --------------- Popups & dropdowns functions end
+
+// -------------- Bootstrap components custom handlers
+
+// ------------------------- Accordions
+
+/**
+ * Get passed-in Bootstrap 'accordion' component's child 'card'
+ * components, each of which in turn contains a Bootstrap 'collapse'
+ * component in the card body and its associated control link in the
+ * card header.
+ * 
+ * Get each card's empty, block-level anchor tag which contains its
+ * CSS 'scroll-margin-top' property and hence controls its position
+ * below the page's fixed header.
+ * 
+ * Get each card's header and 'collapse' component's controlling
+ * link.
+ * 
+ * Add 'click' event listener to each controlling link. (Used
+ * instead of Bootstrap 'show.bs.collapse' or 'hide.bs.collapse'
+ * events in case they don't fire in time.)
+ * 
+ * On click, wait 0.5 seconds (setTimeout()) for 'collapse' component
+ * to expand. If the card header has passed the bottom of the page's
+ * fixed header, set the window target to the card's empty anchor tag
+ * so that the card header scrolls back to the bottom of the page
+ * header.
+ * 
+ * @param {HTMLElement} accordion - Bootstrap 'accordion' component element.
+ */
+function handleBootstrapAccordionPageBreach(accordion) {
+    const cards = accordion.querySelectorAll('.card');
+
+    if (cards.length > 0) {
+        for (let card of cards) {
+            const anchor = card.querySelector('.card-anchor');
+            const header = card.querySelector('.card-header');
+            const collapseLink = header.querySelector('.faq-accordion-link');
+
+            collapseLink.addEventListener('click', () => {
+                setTimeout(() => {
+                    // On smaller screens (width <= 768px), page header is 140px high
+                    if (window.innerWidth <= 768) {
+                        if (header.getBoundingClientRect().top < 140) {
+                            window.location.href = `#${anchor.id}`;                                
+                        }
+                    // On larger screens, page header is 207px high
+                    } else {
+                        if (header.getBoundingClientRect().top < 207) {
+                            window.location.href = `#${anchor.id}`;                                
+                        }
+                    }
+                }, 500);
+            });
+        }
+    }
+}
+
+// ----------- Bootstrap components custom functions end
 
 // ------------------- Miscellaneous functions
 
