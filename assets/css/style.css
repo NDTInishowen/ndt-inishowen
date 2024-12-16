@@ -22,7 +22,7 @@ body {
 }
 
 body a {
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 @media(hover: hover) and (pointer: fine) {
@@ -163,7 +163,7 @@ ul {
 @media(hover: hover) and (pointer: fine) {
     #main-header a:hover {
         color: #8f897e;
-        text-decoration: none;
+        text-decoration: none !important;
     }
 }
 
@@ -323,6 +323,12 @@ main {
     margin-bottom: 30px;
 }
 
+/* accordions */
+
+.accordion a:focus {
+    text-decoration: none !important;
+}
+
 /* generic section styles */
 
 .bg-inishowen {
@@ -379,7 +385,7 @@ footer .affil-logo-img {
     }
 
     .footer-contact-social-links a:hover {
-        text-decoration: none;
+        text-decoration: none !important;
     }
 }
 
@@ -432,7 +438,7 @@ footer .affil-logo-img {
 
 .footer-contact-link-modal a {
     color: #fff;
-    text-decoration: none;
+    text-decoration: none !important;
 }
 
 .footer-contact-link-modal .modal-body-content {
@@ -527,7 +533,7 @@ footer .affil-logo-img {
 }
 
 .faq-accordion-link {
-    color: #8f897e;
+    color: #8f897e !important;
     display: flex;
 }
 
@@ -536,7 +542,7 @@ footer .affil-logo-img {
 }
 
 .faq-accordion-link.collapsed {
-    color: #4d4d4d;
+    color: #4d4d4d !important;
 }
 
 .faq-accordion-link.collapsed i {
@@ -546,7 +552,7 @@ footer .affil-logo-img {
 @media(hover: hover) and (pointer: fine) {
     .faq-accordion-link:hover {
         color: #8f897e;
-        text-decoration: none;
+        text-decoration: none !important;
     }
 }
 

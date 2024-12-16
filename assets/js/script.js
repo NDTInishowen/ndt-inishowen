@@ -30,6 +30,20 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    /* Get all navigation dropdown list link from the page and, if found, get any
+       sections from the page that they might link to. If sections found, pass both
+       lists to handler function along with appropriate 'active' class for styling */
+
+    const navbarDropdownLinks = document.querySelectorAll('.navbar-dropdown-item');
+    const activeClass = 'active-link'
+
+    if (navbarDropdownLinks.length > 0) {
+        const navbarLinkedEls = document.querySelectorAll('.navbar-linked-section');
+        if (navbarLinkedEls.length > 0) {
+            handleActiveLinkStyleOnScroll(navbarDropdownLinks, navbarLinkedEls, activeClass);
+        }
+    }
+
     // ---------------------- Footer
 
     // Set current year in copyright statement if found
@@ -498,6 +512,84 @@ function handleBootstrapAccordionPageBreach(accordion) {
 // ----------- Bootstrap components custom functions end
 
 // ------------------- Miscellaneous functions
+
+// Applying 'active' class to navigation links when associated page section in view
+
+/**
+ * Find link element in passed-in navigation link node list that has
+ * the passed-in 'active' class, if any, and set as default 'active'
+ * link.
+ * 
+ * Add 'scroll' event listener to window. On scroll event:
+ * 
+ * For each section element in passed-in section elements node list,
+ * get its height and its offsetTop property (distance in pixels from
+ * top of element to top of closest offset parent element, in this
+ * case 'body');
+ * 
+ * When scrolled window's Y coordinate + height of fixed page header
+ * is greater than or equal to section element's offsetTop - 1/3 of
+ * section element's height, (i.e. 1/3 of section visible below header),
+ * set section element's id attribute as 'current' section id;
+ * 
+ * Remove 'active' class from each navigation link, check its href
+ * attribute for the 'current' section id (i.e  whether or not it
+ * links to 'current' section) and set as 'active' link if matching.
+ * If no 'current' section id (undefined), set default 'active' link
+ * as 'active link;
+ * 
+ * Add 'active' class to 'active' link. 
+ * 
+ * @param {NodeList} navLinkEls - Navigation link elements that could potentially be subject to style change on scroll event.
+ * @param {NodeList} LinkedSectionEls - Section elements associated with navigation links.
+ * @param {string} activeClass - Class name that applies CSS styles to link elements deemed 'active'.
+ */
+function handleActiveLinkStyleOnScroll(navLinkEls, linkedSectionEls, activeClass) {
+    let defaultActiveLink;
+
+    for (let link of navLinkEls) {
+        if (link.classList.contains(activeClass)) {
+            defaultActiveLink = link;
+        }
+    }
+
+    window.addEventListener('scroll', () => {
+        let currentSectionId;
+        let activeLink;
+
+        for (let linkedSection of linkedSectionEls) {
+            const sectionTop = linkedSection.offsetTop;
+            const sectionHeight = linkedSection.clientHeight;
+            // On smaller screens (width <= 768px), page header is 140px high
+            if (window.innerWidth <= 768) {   
+                if ((scrollY + 140) >= (sectionTop - (sectionHeight / 3))) {
+                    currentSectionId = linkedSection.id
+                }
+            // On larger screens, page header is 207px high
+            } else {
+                if ((scrollY + 207) >= (sectionTop - (sectionHeight / 3))) {
+                    currentSectionId = linkedSection.id
+                }
+            }
+            
+        }
+
+        for (let link of navLinkEls) {
+            if (link.classList.contains(activeClass)) {
+                link.classList.remove(activeClass);
+            }
+            
+            if (link.href.includes(`#${currentSectionId}`)) {
+                activeLink = link;
+            } else if (!currentSectionId){
+                activeLink = defaultActiveLink;
+            }
+        }
+
+        activeLink.classList.add(activeClass);
+    });
+
+}
 
 // Throttling
 
