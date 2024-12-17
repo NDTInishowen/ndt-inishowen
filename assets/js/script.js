@@ -131,15 +131,31 @@ function handleMainMenuDropdown(menu) {
 // ----------------- Navigation dropdown functions
 
 /**
- * Get passed-in dropdown's toggle button and set it's 'active' class
- * name based on dropdown it pertains to.
+ * Get passed-in dropdown's toggle button and set button 'active'
+ * class name. Set dropdown's menu 'open' class name and get menu
+ * links.
  * 
  * Pass toggle button and class name(s) to handlePopup and
  * handleDropdownAria functions.
  * 
  * Add event listener to close dropdowns and set appropriate aria 
- * properties if screen is resized (e.g. mobile device flipped between
- * portrait & landscape mode). 
+ * properties if screen is resized (e.g. mobile device flipped
+ * between portrait & landscape mode).
+ * 
+ * Add 'click' event listener to each menu link, passing event
+ * handler function as callback to throttleEvent function with
+ * 'interval' parameter of 300ms, thus limiting click events to
+ * max 3 per second.
+ * 
+ * On click, after 300ms: close dropdown by passing it to
+ * handleCloseNavDropdown function along with button 'active'
+ * class; on smaller screens, (width <= 768px), main-menu will be
+ * in dropdown mode, so get it along with its toggle button and
+ * dropdown menu; set main menu 'open' class and pass it and menu
+ * to handleCloseNestedDropdown function, remove 'open' class from
+ * main menu dropdown and 'active' class from main menu toggle
+ * button, thus closing entire main menu; pass main menu's toggle
+ * button and 'open' class to handlePopupAria function.
  * 
  * @param {HTMLElement} dropdown - Element containing or consisting of navigation dropdown to be handled.
  */
@@ -147,6 +163,8 @@ function handleMainMenuDropdown(menu) {
     const dropdownToggleButton = dropdown.querySelector('.menu-toggle-btn');
     const buttonActiveClass = 'menu-toggle-btn-active';
     const dropdownOpenClass = 'navbar-dropdown-open';
+    const menuLinks = dropdown.querySelectorAll('.navbar-dropdown-item');
+
 
     handleDropdownAria(dropdownToggleButton, dropdownOpenClass);
     handlePopup(dropdownToggleButton, buttonActiveClass, dropdownOpenClass);
@@ -158,17 +176,39 @@ function handleMainMenuDropdown(menu) {
         handleDropdownAria(dropdownToggleButton, dropdownOpenClass);
         dropdownToggleButton.classList.remove(buttonActiveClass);
     });
+
+    if (menuLinks.length > 0) {
+        for (let link of menuLinks) {
+            link.addEventListener('click', throttleEvent(e => {
+                // Only target link anchor element
+                let targetLink = e.target.closest('a');
+                if (!targetLink) return;
+
+                setTimeout (() => {
+                    if (window.innerWidth <= 768) {
+                        const mainMenu = document.querySelector('#main-menu');
+                        const mainMenuButton = mainMenu.querySelector('#main-menu-btn');
+                        const mainMenuDropdown = mainMenu.querySelector('#main-menu-items');
+                        const mainMenuOpenClass = 'main-menu-open';
+
+                        handleCloseNestedDropdowns(mainMenu, buttonActiveClass);
+                        mainMenuDropdown.classList.remove(mainMenuOpenClass);
+                        mainMenuButton.classList.remove(buttonActiveClass);
+                        handlePopupAria(mainMenuButton, mainMenuOpenClass);
+                    } else {
+                        handleCloseNavdDropdown(dropdown, buttonActiveClass);
+                    }
+                }, 300);
+               // Pass 300ms time interval to throttleEvent function
+            }, 300));
+        }
+    }
 }
 
 /**
  * Get passed-in parent element's nested navigation dropdown menus and
- * get each one's toggle button and associated menu list. Set 'active'
- * class name for menu lists.
- * 
- * Remove 'active' class name from menu lists, effectively closing them.
- * Pass toggle buttons and their associated menus' 'active' class name to
- * handleDropdownAria function.
- * Remove passed-in 'active' class name from toggler buttons.
+ * pass each one, along with passed-in toggle button 'active' class to
+ * handler function.
  * 
  * @param {HTMLElement} parentMenu - Element containing navigation dropdowns to be handled.
  * @param {string} togglerActiveClass - Class name denoting toggle button active (popup visible).
@@ -176,14 +216,31 @@ function handleMainMenuDropdown(menu) {
  function handleCloseNestedDropdowns(parentMenu, togglerActiveClass) {
     const dropdowns = parentMenu.querySelectorAll('.navbar-dropdown-menu-container');
     for (let dropdown of dropdowns) {
-        const ddToggleBtn = dropdown.querySelector('.menu-toggle-btn');
-        const ddId = ddToggleBtn.getAttribute('aria-controls');
-        const ddMenu = dropdown.querySelector(`#${ddId}`);
-        const ddOpenClass = 'navbar-dropdown-open';
-        ddMenu.classList.remove(ddOpenClass);
-        handleDropdownAria(ddToggleBtn, ddOpenClass);
-        ddToggleBtn.classList.remove(togglerActiveClass);
+        handleCloseNavdDropdown(dropdown, togglerActiveClass);
     }
+}
+
+/**
+ * Get passed-in navigation dropdown menu's toggle button and associated
+ * menu list. Set 'active' class name for menu list.
+ * 
+ * Remove 'active' class name from menu list, effectively closing it.
+ * Pass toggle button and its associated menu's 'active' class name to
+ * handleDropdownAria function.
+ * 
+ * Remove passed-in 'active' class name from toggler button.
+ * 
+ * @param {HTMLElement} parentMenu - Element containing navigation dropdowns to be handled.
+ * @param {string} togglerActiveClass - Class name denoting toggle button active (popup visible).
+ */
+ function handleCloseNavdDropdown(dropdown, togglerActiveClass) {
+    const ddToggleBtn = dropdown.querySelector('.menu-toggle-btn');
+    const ddId = ddToggleBtn.getAttribute('aria-controls');
+    const ddMenu = dropdown.querySelector(`#${ddId}`);
+    const ddOpenClass = 'navbar-dropdown-open';
+    ddMenu.classList.remove(ddOpenClass);
+    handleDropdownAria(ddToggleBtn, ddOpenClass);
+    ddToggleBtn.classList.remove(togglerActiveClass);
 }
 
 // --------------- Navigation dropdown functions end
