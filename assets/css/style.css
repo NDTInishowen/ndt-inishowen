@@ -299,7 +299,7 @@ main {
 
 /* page banners */
 
-.banner-container {
+.banner-container, .mini-banner {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -324,9 +324,12 @@ main {
 }
 
 .jumbotron h1 {
+    margin-bottom: 30px;
+}
+
+.jumbotron h1, .jumbotron h2, .jumbotron h3 {
     color: #fff;
     font-weight: bold;
-    margin-bottom: 30px;
 }
 
 /* accordions */
@@ -574,6 +577,57 @@ footer .affil-logo-img {
 
 .faq-answer-container {
     padding: 0 15px !important;
+}
+
+
+
+            /************************************/
+            /*                                  */
+            /* --- Primitive Reflexes page ---- */
+            /*                                  */
+            /************************************/
+
+/* general styles */
+
+#prim-ref-banner.banner-container {
+    background: url('../images/baby-toddler-banner.jpg') no-repeat bottom center / auto 200px;
+    height: 205px;
+}
+
+#prim-ref-banner .opaque-overlay {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+.prim-r-article ul {
+    list-style-type: initial;
+}
+
+/* mini-banners */
+
+.prim-r-article .mini-banner {
+    height: 175px;
+    border-radius: 50% 20% / 10% 40%;
+    overflow: hidden;
+}
+
+.prim-r-article .opaque-overlay {
+    background-color: rgba(0, 0, 0, 0.35);
+}
+
+#mr-banner {
+    background: url('../images/noise-sensitivity-cropped.jpg') no-repeat center center / cover;
+}
+
+#tlr-banner {
+    background: url('../images/shutterstock_184595435-baby-held-in-foetal-pos.jpg') no-repeat center center / cover;
+}
+
+#stnr-banner {
+    background: url('../images/shutterstock_417211102-W-sitting-cropped.jpg') no-repeat center center / cover;
+}
+
+#atnr-banner {
+    background: url('../images/immature-pencil-grip.jpg') no-repeat center center / cover;
 }
 
 
