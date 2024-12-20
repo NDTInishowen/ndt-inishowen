@@ -113,6 +113,10 @@ ul {
 
 /* general buttons */
 
+.btn:focus {
+    color: #fff !important;
+}
+
 .btn-cta {
     font-weight: bold;
     border-radius: 23px;
@@ -291,6 +295,16 @@ ul {
 
 main {
     margin-top: 207px;
+}
+
+@media(hover: none) {
+    main a {
+        color: #000 !important;
+    }
+
+    main a.btn, main button {
+        color: #fff !important;
+    }
 }
 
 .anchor-section {
@@ -508,7 +522,7 @@ footer .affil-logo-img {
 
 #overview-banner.banner-container {
     height: 50vh;
-    background: url('../images/child-mom-kindergarten-gym_237566-5249.jpg') no-repeat center center / cover;
+    background: url('../images/mom-helping-girl-exercise-ball_23-2148570181.jpg') no-repeat center center / cover;
 }
 
 #overview-banner .jumbotron {
@@ -634,13 +648,94 @@ footer .affil-logo-img {
 
             /************************************/
             /*                                  */
+            /* ------- The Process page-------- */
+            /*                                  */
+            /************************************/
+
+/* general styles */
+
+#process-banner.banner-container {
+    background: url('../images/psychologist-helping-little-girl.jpg') no-repeat center center / cover;
+    height: 50vh;
+}
+
+#process-banner h1 {
+    margin: 0;
+}
+
+/* steps sections */
+
+.process-step-section .section-header {
+    float: left;
+    margin: 0 1rem 0 0;
+    width: 33%;
+    border-radius: 50% 20% / 10% 40%;
+    overflow: hidden;
+}
+
+.process-step-section .even-section-header {
+    float: right;
+    margin: 0 0 0 1rem;
+}
+
+.process-step-section .section-content {
+    padding-top: 1rem;
+    text-align: justify;
+}
+
+.float-divider-div {
+    clear: both;
+    height: 1rem;
+}
+
+#s1-abt-questionnaire .section-footer .row {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+#abt-questionnaire-banner {
+    background: url('../images/businessman-using-laptop-clipboard_23-2147985223.jpg') no-repeat center center / cover;
+}
+
+#initial-con-banner {
+    background: url('../images/parents-kid-doing-therapy_23-2149305196.jpg') no-repeat center center / cover;
+}
+
+#diagnostic-as-banner {
+    background: url('../images/close-up-woman-kid-indoors_23-2149063728.jpg') no-repeat center center / cover;
+}
+
+#home-prog-banner {
+    background: url('../images/family-yoga-workout_23-2148542877.jpg') no-repeat center center / cover;
+}
+
+#diagnostic-rep-banner {
+    background: url('../images/close-up-girl-therapy-session-with-parents_23-2149220301.jpg') no-repeat center center / cover;
+}
+
+#prog-revs-banner {
+    background: url('../images/boy-having-occupational-therapy-session-with-psychologist_23-2149091525.jpg') no-repeat center center / cover;
+}
+
+#prog-conclusion-banner {
+    background: url('../images/kids-jumping-log-cropped.jpg') no-repeat center center / cover;
+}
+
+#the-process .section-footer p {
+    margin-bottom: 5px;
+}
+
+
+
+            /************************************/
+            /*                                  */
             /* --------- Media queries -------- */
             /*                                  */
             /************************************/
 
 /* ---------- for responsive design ----------- */
 
-/* for medium-sized screens, up to 1200 pixels wide (matches Bootstrap's lg - xl breakpoint) */
+/* for large screens, up to 1200 pixels wide (matches Bootstrap's lg - xl breakpoint) */
 
 @media screen and (max-width: 1200px) {
 
@@ -650,6 +745,17 @@ footer .affil-logo-img {
         max-width: none;
         margin: auto;
         padding: 0 30px;
+    }
+}
+
+/* for medium-large-sized screens, up to 992 pixels wide (matches Bootstrap's md - lg breakpoint) */
+
+@media screen and (max-width: 992px) {
+
+    /* the process page */
+
+    .process-step-section .section-header {
+        width: 50%;
     }
 }
 
@@ -751,6 +857,19 @@ footer .affil-logo-img {
     .faq-answer-content {
         padding: 0;
         margin-left: 0 !important;
+    }
+
+    /* the process page */
+
+    .process-step-section .section-header {
+        float: none;
+        width: 100%;
+        margin: 0 0 0.5rem 0;
+    }
+
+    .process-step-section .section-content {
+        padding-top: 0.5rem;
+        text-align: left;
     }
 }
 
