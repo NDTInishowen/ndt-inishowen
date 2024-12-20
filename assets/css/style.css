@@ -501,8 +501,7 @@ footer .affil-logo-img {
 
 #landing-banner.banner-container {
     height: calc(100vh - 207px);
-    /* background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center; */
-    background: url('../images/mother-playing-with-her-autistic-son-using-toys_23-2150266524.jpg') no-repeat center center / cover;
+    background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center / cover;
 }
 
 /* Jumbotron */
