@@ -2,6 +2,29 @@
 
 document.addEventListener('DOMContentLoaded', function() {
 
+    // --------------------- EmailJS
+
+    // ------------ Initialise EmailJs service
+
+    (function(){
+        emailjs.init({
+          publicKey: "7csZIXHjvuV0I0E82",
+        });
+     })();
+
+    //  ------------------ Contact forms
+
+    /* Get contact form(s) from the page and if found, pass to handler
+       function */
+
+    const contactForms = document.querySelectorAll('.contact-form');
+
+    if (contactForms.length > 0) {
+        for (let form of contactForms) {
+            handleContactFormEmailJS(form);
+        }
+    }
+
     // -------------------- Main menu
 
     /* Get main menu from the DOM and pass to handler functions if
@@ -567,6 +590,59 @@ function handleBootstrapAccordionPageBreach(accordion) {
 }
 
 // ----------- Bootstrap components custom functions end
+
+// ------------------- Contact Forms & EmailJS
+
+/**
+ * Get passed-in form element's child 'success' and 'failure' message
+ * div elements.
+ * 
+ * Add 'submit' event listener to passed-in form element.
+ * 
+ * On submit, set template parameters object to be passed to EmailJS
+ * send() method with keys matching EmailJS template variable names
+ * and values populated from corresponding field in form element.
+ * 
+ * Call send() method to submit form details to EmailJS, passing in
+ * EmailJS service ID, EmailJS template ID and template parameters
+ * object, then await response. On 'success' response, display
+ * 'success' message. On 'error' response, display 'failure' message.
+ * 
+ * @param {HTMLElement} contactForm - Contact form from 'Contact Us' page or footer email modal: form element.
+ */
+function handleContactFormEmailJS(contactForm) {
+    const successMsg = contactForm.querySelector('.cf-success-message');
+    const failureMsg = contactForm.querySelector('.cf-failure-message');
+
+    contactForm.addEventListener('submit', (e) => {
+        // Prevent page from refreshing on form submit
+        e.preventDefault();
+        // Set parameters to be sent to EmailJS template
+        // **Key values MUST match variable names in EmailJS template
+        let templateParams = {
+            'first_name': contactForm.firstname.value,
+            'last_name': contactForm.surname.value,
+            'email_addr': contactForm.email.value,
+            'phone_no': contactForm.phone.value,
+            'message': contactForm.message.value,
+        }
+        // Call EmailJS send() method to submit form
+        emailjs.send('gmail_mhcp', 'contact-form', templateParams).then(
+            (response) => {
+              console.log('SUCCESS!', response.status, response.text);
+              successMsg.classList.remove('cf-message-hidden');
+              successMsg.setAttribute('aria-hidden', false);
+            },
+            (error) => {
+              console.log('FAILED...', error);
+              failureMsg.classList.remove('cf-message-hidden');
+              failureMsg.setAttribute('aria-hidden', false);
+            },
+        );
+    });
+}
+
+// ------------- Contact Forms & EmailJS functions end
 
 // ------------------- Miscellaneous functions
 
