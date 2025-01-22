@@ -13,6 +13,9 @@
     <!-- Custom css -->
     <link rel="stylesheet" href="assets/css/style.css" type="text/css">
     <title>NDT Inishowen</title>
+
+    <!-- EmailJS CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 </head>
 <body>
     
@@ -91,7 +94,7 @@
                         <div id="navbar-more-menu" class="navbar-dropdown-menu">
                             <ul>
                                 <li>
-                                    <a href="#" class="navbar-dropdown-item">Contact Us</a>
+                                    <a href="contact.html" class="navbar-dropdown-item">Contact Us</a>
                                 </li>
                                 <li>
                                     <a href="#" class="navbar-dropdown-item">Testimonials</a>
@@ -346,7 +349,7 @@
                                             </button>
                                         </li>
                                         <li class="footer-contact-link">
-                                            <button type="button" class="btn link-btn p-0" data-toggle="modal" data-target="#email-info-modal" aria-label="open modal for email adress and email form">
+                                            <button type="button" class="btn link-btn p-0" data-toggle="modal" data-target="#email-info-modal" aria-label="open modal for email address and email form">
                                                 <i class="fa-solid fa-envelope"></i>
                                             </button>
                                         </li>
@@ -385,14 +388,14 @@
         <div class="modal-dialog footer-contact-link-modal" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h5 id="phone-info-title" class="modal-title aria-modal-label">Phone details</h5>
+                    <h4 id="phone-info-title" class="modal-title p-3">Call Us</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body d-flex justify-content-center align-items-center">
                     <div class="modal-body-content text-center">
-                        <p id="phone-info-description" class="aria-modal-description">
+                        <p id="phone-info-description" class="aria-modal-description sr-only">
                             Call us on the number below, Monday to Friday, between 9 a m and 5 p m.
                         </p>
                         <p id="modal-phone-no">
@@ -415,23 +418,68 @@
         <div class="modal-dialog footer-contact-link-modal" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h5 id="email-info-title" class="modal-title aria-modal-label">email us</h5>
+                    <h4 id="email-info-title" class="modal-title p-3">Contact Us</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div class="modal-body d-flex justify-content-center align-items-center">
-                    <div class="modal-body-content text-center">
-                        <p id="email-info-description" class="aria-modal-description">
+                <div class="modal-body pt-0">
+                    <div class="modal-body-content text-center pb-0">
+                        <p id="email-info-description" class="aria-modal-description sr-only">
                             Fill out the form below, or use the link to send a direct email to: info at n d t inishowen.ie
                         </p>
-                        <p class="h4 text-left ml-3">Contact Us</p>
                         <p id="email-modal-description" class="text-left ml-3">
                             Fill out the form below, or send a direct email to: 
                             <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a>
                         </p>
+                        <p aria-hidden="true">Fields marked with &#42; are required.</p>
                         <div id="modal-email-form">
-                            <p>EMAIL FORM HERE</p>
+                            <form id="modal-contact-form" class="contact-form">
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-6">
+                                        <label for="modal-cf-first-name" class="sr-only">First Name (required)</label>
+                                        <input type="text" id="modal-cf-first-name" name="firstname" class="form-control" placeholder="First Name&#42;" required>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6">
+                                        <label for="modal-cf-last-name" class="sr-only">Surname (required)</label>
+                                        <input type="text" id="modal-cf-last-name" name="surname" class="form-control" placeholder="Surname&#42;" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modal-cf-email-address" class="sr-only">Email Address (required)</label>
+                                    <input type="email" id="modal-cf-email-address" name="email" class="form-control" placeholder="Email Address&#42;" aria-describedby="modal-cf-email-help-text" required>
+                                    <small id="modal-cf-email-help-text" class="form-text">We'll never share your email with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modal-cf-phone-no" class="sr-only">Phone Number (optional)</label>
+                                    <input type="text" id="modal-cf-phone-no" name="phone" class="form-control" placeholder="Phone Number" aria-describedby="modal-cf-phone-help-text">
+                                    <small id="modal-cf-phone-help-text" class="form-text">We'll never share your phone number with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modal-cf-message">Your Message (required)</label>
+                                    <textarea rows="5" id="modal-cf-message" name="message" class="form-control" placeholder="Enter Your Message&#42;" required></textarea>
+                                </div>
+                                <div class="cf-success-message cf-message-hidden text-center" aria-hidden="true">
+                                    <p>Your message was sent successfully!</p>
+                                    <p>
+                                        Thank you for reaching out. <br>
+                                        We'll be in touch as soon as possible.
+                                    </p>
+                                </div>
+                                <div class="cf-failure-message cf-message-hidden text-center" aria-hidden="true">
+                                    <p>
+                                        Unfortunately, your message was not sent <br>
+                                        due to a system error.
+                                    </p>
+                                    <p>
+                                        Instead, please send a direct email to: <br>
+                                        <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a>
+                                    </p>
+                                </div>
+                                <div class="col-12 text-center contact-btn-wrapper">
+                                    <button type="submit" class="btn btn-cta btn-blugrey">Get in Touch</button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
