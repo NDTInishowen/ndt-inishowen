@@ -435,13 +435,6 @@ footer .affil-logo-img {
             /*                                  */
             /************************************/
 
-/* general */
-
-.aria-modal-label, .aria-modal-description {
-    height: 0;
-    overflow: hidden;
-}
-
 /* footer contact links */
 
 .footer-contact-link-modal {
@@ -457,6 +450,10 @@ footer .affil-logo-img {
 .footer-contact-link-modal .close {
     color: #fff;
     font-size: 3rem;
+}
+
+.footer-contact-link-modal .modal-body {
+    overflow-y: auto;
 }
 
 .footer-contact-link-modal a {
@@ -744,6 +741,66 @@ footer .affil-logo-img {
 
             /************************************/
             /*                                  */
+            /* --------- Contact page --------- */
+            /*                                  */
+            /************************************/
+
+/* general styles */
+
+#contact-banner.banner-container {
+background: url('../images/studio-background-concept-abstract-empty-light-gradient-purple-studio-room-background-product-plain-studio-background_1258-63896.jpg') no-repeat center center / cover;
+height: 300px;
+}
+
+.contact-banner-img {
+    height: 300px;
+}
+
+#contact-banner h1 {
+margin: 0;
+}
+
+.contact-info-section .open-hours-info {
+    font-weight: 700;
+}
+
+.contact-info-section .footer-social-link {
+    font-size: 2rem;
+    padding: 0 1.5rem;
+}
+
+#contact-page-form {
+    margin: 0 auto;
+    max-width: 70%;
+}
+
+#contact-page-form input::placeholder {
+    color: #4d4d4d;
+}
+
+.cf-success-message, .cf-failure-message {
+    margin-bottom: 1rem;
+    font-size: 0.9rem;
+    color: #a00101;
+}
+
+.cf-success-message p, .cf-failure-message p {
+    margin-bottom: 0;
+}
+
+#modal-email-form .cf-success-message, #modal-email-form .cf-failure-message {
+    color: #fff;
+}
+
+.cf-message-hidden {
+    display: none;
+    overflow: hidden;
+}
+
+
+
+            /************************************/
+            /*                                  */
             /* --------- Media queries -------- */
             /*                                  */
             /************************************/
@@ -771,6 +828,12 @@ footer .affil-logo-img {
 
     .process-step-section .section-header {
         width: 50%;
+    }
+
+    /* contact page */
+
+    #contact-page-form {
+        max-width: 100%;
     }
 }
 
