@@ -792,9 +792,8 @@ margin: 0;
     color: #fff;
 }
 
-.cf-message-hidden {
+.cf-hidden {
     display: none;
-    overflow: hidden;
 }
 
 

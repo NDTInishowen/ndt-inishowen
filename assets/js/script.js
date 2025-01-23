@@ -595,7 +595,7 @@ function handleBootstrapAccordionPageBreach(accordion) {
 
 /**
  * Get passed-in form element's child 'success' and 'failure' message
- * div elements.
+ * div elements and submit button's container div element.
  * 
  * Add 'submit' event listener to passed-in form element.
  * 
@@ -606,13 +606,16 @@ function handleBootstrapAccordionPageBreach(accordion) {
  * Call send() method to submit form details to EmailJS, passing in
  * EmailJS service ID, EmailJS template ID and template parameters
  * object, then await response. On 'success' response, display
- * 'success' message. On 'error' response, display 'failure' message.
+ * 'success' message and hide submit button. On 'error' response,
+ * display 'failure' message and hide submit button. Change each
+ * element's 'aria-hidden' attribute accordingly.
  * 
  * @param {HTMLElement} contactForm - Contact form from 'Contact Us' page or footer email modal: form element.
  */
 function handleContactFormEmailJS(contactForm) {
     const successMsg = contactForm.querySelector('.cf-success-message');
     const failureMsg = contactForm.querySelector('.cf-failure-message');
+    const submitBtnSection = contactForm.querySelector('.contact-btn-wrapper');
 
     contactForm.addEventListener('submit', (e) => {
         // Prevent page from refreshing on form submit
@@ -630,12 +633,16 @@ function handleContactFormEmailJS(contactForm) {
         emailjs.send('gmail_mhcp', 'contact-form', templateParams).then(
             (response) => {
               console.log('SUCCESS!', response.status, response.text);
-              successMsg.classList.remove('cf-message-hidden');
+              submitBtnSection.classList.add('cf-hidden');
+              submitBtnSection.setAttribute('aria-hidden', true);
+              successMsg.classList.remove('cf-hidden');
               successMsg.setAttribute('aria-hidden', false);
             },
             (error) => {
               console.log('FAILED...', error);
-              failureMsg.classList.remove('cf-message-hidden');
+              submitBtnSection.classList.add('cf-hidden');
+              submitBtnSection.setAttribute('aria-hidden', true);
+              failureMsg.classList.remove('cf-hidden');
               failureMsg.setAttribute('aria-hidden', false);
             },
         );
