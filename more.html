@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="NDT Inishowen, Neuro Developmental Therapist, based in Buncrana, County Donegal. Ireland">
+    <meta name="keywords" content="">
+
+    <!-- Bootstrap css link -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <!-- Custom css -->
+    <link rel="stylesheet" href="assets/css/style.css" type="text/css">
+    <title>NDT Inishowen</title>
+
+    <!-- EmailJS CDN -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+</head>
+<body>
+    
+    <header id="main-header">
+        
+        <div id="header-logo">
+            <a href="index.html">
+                <img src="assets/images/draft_logo_4.jpg" alt="NDT Inishowen logo">
+            </a>
+        </div>
+
+        <nav id="main-menu" class="popup-container" role="navigation">
+
+            <!-- dropdown menu button for smaller screens -->
+            <button id="main-menu-btn" class="menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="main-menu-items">
+                <span class="menu-icon">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </span>
+                <span class="menu-btn-text">Menu</span>
+            </button>
+
+            <!-- main menu links -->
+            <div id="main-menu-items" class="main-menu-responsive">
+                <ul>
+                    <li>
+                        <a href="index.html" class="main-menu-item">Home</a>
+                    </li>
+
+                    <!-- Information dropdown list -->
+                    <li class="navbar-dropdown-menu-container">
+                        <button id="info-dropdown-btn" class="main-menu-item navbar-dropdown-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-info-menu">
+                            <span class="menu-btn-text">Neuro Developmental Therapy</span>
+                        </button>
+                        <div id="navbar-info-menu" class="navbar-dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a href="overview-faq.html" class="navbar-dropdown-item">What to Expect</a>
+                                </li>
+                                <li>
+                                    <a href="overview-faq.html#faq" class="navbar-dropdown-item">Frequently Asked Questions</a>
+                                </li>
+                                <li>
+                                    <a href="primitive-reflexes.html" class="navbar-dropdown-item">Primitive Reflexes</a>
+                                </li>
+                                <li>
+                                    <a href="process.html" class="navbar-dropdown-item">The Process</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li>
+                        <a href="contact.html" class="main-menu-item">Contact Us</a>
+                    </li>
+
+                    <!-- Additional links dropdown list -->
+                    <li class="navbar-dropdown-menu-container">
+                        <button id="more-dropdown-btn" class="active-link main-menu-item navbar-dropdown-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-more-menu">
+                            <span class="menu-btn-text">More</span>
+                        </button>
+                        <div id="navbar-more-menu" class="navbar-dropdown-menu">
+                            <ul>
+                                <li>
+                                    <a href="#testimonials" class="active-link navbar-dropdown-item">Testimonials</a>
+                                </li>
+                                <li>
+                                    <a href="#useful-links" class="navbar-dropdown-item">Useful Links</a>
+                                </li>
+                                <li>
+                                    <a href="#further-reading" class="navbar-dropdown-item">Further Reading</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+
+        </nav>
+        
+    </header>
+
+    <main>
+
+        <!-- Jumbotron & banner image -->
+        <!-- <div id="contact-banner" class="container-fluid banner-container">
+            <div class="opaque-overlay"></div>
+            <div class="row">
+                <div class="col-12">
+                    <section class="jumbotron d-flex justify-content-sm-around p-0">
+                        <div class="row">
+                            <div class="col-3 pl-0">
+                                <img src="assets/images/contact-blocks-col-transp-thin.png" alt="Childrens' building blocks with contact icons primted on them" class="contact-banner-img">
+                            </div>
+                            <div class="col-9 d-flex justify-content-center align-items-center text-center">
+                                <h1 class="jumbotron-header">Contact Us</h1>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div> -->
+
+        <!-- Testimonials section -->
+        <div class="container-wrapper">
+            <div class="container content-container more-container">
+                <section id="testimonials" class="testimonials-section anchor-section navbar-linked-section my-3">
+                    <div class="row">
+                        <div class="col-12 section-header text-center">
+                            <h2 class="h3">Client Testimonials</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 section-content">
+                            <div class="row">
+                                <div class="col-12 col-md-4 mb-3">
+                                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Sit ad, a officia numquam atque nulla odit labore ab! Excepturi corporis necessitatibus nostrum maiores est reiciendis consectetur aliquam consequatur mollitia nihil?</p>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Porro, maiores eligendi hic qui iure eaque placeat iusto quaerat officiis consequuntur quam tempore libero rem? Labore blanditiis voluptatibus fugit molestiae tenetur.</p>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Recusandae assumenda repellendus quo ipsa, praesentium cumque ipsam quae minima saepe culpa consequuntur, dicta dolor vero quidem exercitationem numquam aliquid aperiam! Maxime!</p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12 col-md-4 mb-3">
+                                    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Atque ratione minus reprehenderit, sit maiores fugiat perferendis aspernatur mollitia, dolorum minima, inventore vitae. Aut unde deleniti eum sed ut, omnis aperiam?</p>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Autem quam vitae fugiat labore reiciendis eligendi neque recusandae, id nisi sint, ea, quasi odio. Voluptatum ducimus corporis iste assumenda, delectus optio.</p>
+                                </div>
+                                <div class="col-12 col-md-4 mb-3">
+                                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Eveniet atque porro ipsam cupiditate in illum voluptate quas nemo excepturi consequatur? Dolor repellat reprehenderit voluptas ut provident harum quia commodi quis.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 section-footer text-center">
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <hr class="page-divider">
+        
+        <!-- Useful links section -->
+        <div class="container-wrapper">
+            <div class="container content-container more-container">
+                <section id="useful-links" class="useful-links-section anchor-section navbar-linked-section my-3">
+                    <div class="row">
+                        <div class="col-12 section-header text-center">
+                            <h2 class="h3">Useful Links</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 section-content">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit.</p>
+                                    </div>
+                                    <div>
+                                        <p>Facere, nesciunt rem nihil accusamus reiciendis veniam quibusdam dicta officiis, vel esse consectetur blanditiis ipsam nemo eaque dolorem nostrum?</p>
+                                    </div>
+                                    <div>
+                                        <p>Minus, nesciunt laboriosam?</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 section-footer text-center">
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <hr class="page-divider">
+
+        <!-- Further reading section -->
+        <div class="container-wrapper">
+            <div class="container content-container more-container">
+                <section id="further-reading" class="useful-links-section anchor-section navbar-linked-section my-3">
+                    <div class="row">
+                        <div class="col-12 section-header text-center">
+                            <h2 class="h3">Further Reading</h2>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-12 section-content">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                    <div>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <div>
+                                        <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Asperiores, corporis obcaecati! Temporibus eaque incidunt fugit voluptatem, illum nulla quis dignissimos commodi blanditiis dolor tenetur, odio quas sit optio amet molestias!</p>
+                                    </div>
+                                    <div>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Expedita dolorem corrupti libero enim alias! At veritatis, a, architecto vero commodi accusantium maxime consequatur fugit excepturi vitae ad, minus molestias! Deleniti.</p>
+                                    </div>
+                                    <div>
+                                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Rem voluptatum quas sunt placeat repudiandae inventore eius et mollitia beatae perferendis in doloribus sed, quo pariatur ad iste. Ex, molestias error.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 section-footer text-center">
+
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+    </main>
+
+    <footer>
+        <hr>
+
+        <!-- main footer content -->
+        <div class="container-wrapper">
+            <div class="container content-container footer-container">
+                <div class="row align-items-center">
+                    <!-- affilaition links -->
+                    <div class="col-9 h-100">
+                        <section id="footer-affiliations" class="my-3">
+                            <div class="row">
+                                <div class="col-12 section-header text-center">
+                                    <h6>Affiliations</h6>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6 section-content d-flex justify-content-center">
+                                    <a href="https://www.inpp.org.uk/" target="_blank" rel="noopener" aria-label="The Institute for Neuro-physiological Psychology homepage, (opens in a new tab)">
+                                        <img src="assets/images/INPP_Licentiate_logo.png" alt="INPP logo" class="affil-logo-img">
+                                    </a>
+                                </div>
+                                <!-- Force next column to break to new line at sm breakpoint and below -->
+                                <div class="w-100 d-sm-none d-block"></div>
+                                <div class="col-sm-6 section-content d-flex justify-content-center">
+                                    <a href="https://www.neurodevelopmentaltherapy.ie/" target="_blank" rel="noopener" aria-label="The Irish Association of Neuro Developmental Therapists Homepage, (opens in a new tab)">
+                                        <img src="assets/images/IANDT_logo.jpg" alt="I A N D T logo" class="affil-logo-img">
+                                    </a>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                    <!-- contact info & social media links -->
+                    <div class="col-3">
+                        <section id="footer-links" class="my-3">
+                            <div class="row">
+                                <div class="col-12 section-content">
+                                    <!-- footer links to social media accounts, etc. -->
+                                    <ul class="footer-contact-social-links d-sm-flex justify-content-around">
+                                        <li class="footer-contact-link">
+                                            <button type="button" class="btn link-btn p-0" data-toggle="modal" data-target="#phone-info-modal" aria-label="open modal for phone details and call link">
+                                                <i class="fa-solid fa-phone"></i>
+                                            </button>
+                                        </li>
+                                        <li class="footer-contact-link">
+                                            <button type="button" class="btn link-btn p-0" data-toggle="modal" data-target="#email-info-modal" aria-label="open modal for email address and email form">
+                                                <i class="fa-solid fa-envelope"></i>
+                                            </button>
+                                        </li>
+                                    </ul>
+                                    <ul class="footer-contact-social-links d-sm-flex justify-content-around">
+                                        <li class="footer-social-link">
+                                            <a href="https://www.facebook.com/" target="_blank" rel="noopener" aria-label="Visit our facebook page, (opens in a new tab)"><i class="fab fa-facebook"></i></a>
+                                        </li>
+                                        <li class="footer-social-link">
+                                            <a href="https://www.instagram.com/" target="_blank" rel="noopener" aria-label="Visit our instagram page, (opens in a new tab)"><i class="fab fa-instagram"></i></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <!-- copyright statement -->
+        <div id="copyright-statement">
+            &copy; <span class="copyright-year"></span> NDT Inishowen: all rights reserved
+        </div>
+        <!-- company plug -->
+        <div id="hwd-plug">
+            Website design &amp; build by <a href="https://www.headwebdesign.ie/" target="_blank" rel="noopener" aria-label="Head Web Design homepage, (opens in a new tab)">Head Web Design</a> &copy; <span class="copyright-year"></span>: all rights reserved
+        </div>
+
+    </footer>
+
+    <!-- Popup modals for phone and email links in footer -->
+
+    <div id="phone-info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="phone-info-title" aria-describedby="phone-info-description" aria-hidden="true">
+        <div class="modal-dialog footer-contact-link-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h4 id="phone-info-title" class="modal-title p-3">Call Us</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body d-flex justify-content-center align-items-center">
+                    <div class="modal-body-content text-center">
+                        <p id="phone-info-description" class="aria-modal-description sr-only">
+                            Call us on the number below, Monday to Friday, between 9 a m and 5 p m.
+                        </p>
+                        <p id="modal-phone-no">
+                            <a href="tel:00353861948010" aria-label="call N D T Inishowen on 00353861948010">
+                                <i class="fa-solid fa-phone"></i>
+                                <span> &#43;353 86 194 8010</span>
+                            </a>
+                        </p>
+                        <p class="open-hours-info">
+                            <i class="fa-regular fa-clock"></i>
+                            <span> Monday to Friday, 9a.m. to 5p.m.</span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="email-info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="email-info-title" aria-describedby="email-info-description" aria-hidden="true">
+        <div class="modal-dialog footer-contact-link-modal" role="document">
+            <div class="modal-content">
+                <div class="modal-header border-0">
+                    <h4 id="email-info-title" class="modal-title p-3">Contact Us</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body pt-0">
+                    <div class="modal-body-content text-center pb-0">
+                        <p id="email-info-description" class="aria-modal-description sr-only">
+                            Fill out the form below, or use the link to send a direct email to: info at n d t inishowen.ie
+                        </p>
+                        <p id="email-modal-description" class="text-left ml-3">
+                            Fill out the form below, or send a direct email to: 
+                            <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a>
+                        </p>
+                        <p aria-hidden="true">Fields marked with &#42; are required.</p>
+                        <div id="modal-email-form">
+                            <form id="modal-contact-form" class="contact-form">
+                                <div class="form-row">
+                                    <div class="form-group col-12 col-sm-6">
+                                        <label for="modal-cf-first-name" class="sr-only">First Name (required)</label>
+                                        <input type="text" id="modal-cf-first-name" name="firstname" class="form-control" placeholder="First Name&#42;" required>
+                                    </div>
+                                    <div class="form-group col-12 col-sm-6">
+                                        <label for="modal-cf-last-name" class="sr-only">Surname (required)</label>
+                                        <input type="text" id="modal-cf-last-name" name="surname" class="form-control" placeholder="Surname&#42;" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modal-cf-email-address" class="sr-only">Email Address (required)</label>
+                                    <input type="email" id="modal-cf-email-address" name="email" class="form-control" placeholder="Email Address&#42;" aria-describedby="modal-cf-email-help-text" required>
+                                    <small id="modal-cf-email-help-text" class="form-text">We'll never share your email with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modal-cf-phone-no" class="sr-only">Phone Number (optional)</label>
+                                    <input type="text" id="modal-cf-phone-no" name="phone" class="form-control" placeholder="Phone Number" aria-describedby="modal-cf-phone-help-text">
+                                    <small id="modal-cf-phone-help-text" class="form-text">We'll never share your phone number with anyone else.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="modal-cf-message">Your Message (required)</label>
+                                    <textarea rows="5" id="modal-cf-message" name="message" class="form-control" placeholder="Enter Your Message&#42;" required></textarea>
+                                </div>
+                                <div class="cf-success-message cf-hidden text-center" aria-hidden="true">
+                                    <p>Your message was sent successfully&#33;</p>
+                                    <p>
+                                        Thank you for reaching out. <br>
+                                        We'll be in touch as soon as possible.
+                                    </p>
+                                </div>
+                                <div class="cf-failure-message cf-hidden text-center" aria-hidden="true">
+                                    <p>
+                                        Unfortunately, your message was not sent <br>
+                                        due to a system error.
+                                    </p>
+                                    <p>
+                                        Instead, please send a direct email to <br>
+                                        <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a> <br>
+                                        or refresh the page to try again.
+                                    </p>
+                                </div>
+                                <div class="col-12 text-center contact-btn-wrapper">
+                                    <button type="submit" class="btn btn-cta btn-blugrey">Get in Touch</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Bootstrap scripts -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <!-- Font Awesome script -->
+    <script src="https://kit.fontawesome.com/e5bba26aba.js" crossorigin="anonymous"></script>
+
+    <!-- Custom scripts -->
+    <script src="assets/js/script.js"></script>
+</body>
+</html>
