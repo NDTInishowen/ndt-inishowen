@@ -801,6 +801,44 @@ margin: 0;
 
             /************************************/
             /*                                  */
+            /* --------- 'More' page ---------- */
+            /*                                  */
+            /************************************/
+
+/* general styles */
+
+/* mini-banners */
+
+.more-banner {
+    height: 175px;
+    overflow: hidden;
+}
+
+/* testimonials section */
+
+#testimonials-banner {
+    background: url('../images/hands-showing-positive-gesture_1134-313.jpg') no-repeat center center / contain;
+}
+
+.testimonial-quote {
+    margin-bottom: 0.25rem;
+    font-style: italic;
+}
+
+.testimonial-name {
+    margin-bottom: 0;
+    font-weight: 700;
+    text-align: right;
+}
+
+/* useful links section */
+
+/* further reading section */
+
+
+
+            /************************************/
+            /*                                  */
             /* --------- Media queries -------- */
             /*                                  */
             /************************************/
@@ -955,6 +993,12 @@ margin: 0;
     .process-step-section .section-content {
         padding-top: 0.5rem;
         text-align: left;
+    }
+
+    /* 'more' page */
+
+    #testimonials-banner {
+        background-size: cover;
     }
 }
 
