@@ -833,6 +833,14 @@ margin: 0;
 
 /* useful links section */
 
+#useful-links-banner {
+    background: url('../images/links-basic-rgb_53876-37712.jpg') no-repeat center center / cover;
+}
+
+.useful-links-video {
+    width: 60%;
+}
+
 /* further reading section */
 
 
@@ -1000,6 +1008,10 @@ margin: 0;
     #testimonials-banner {
         background-size: cover;
     }
+
+    .useful-links-video {
+        width: 80%;
+    }
 }
 
 /* for extra-small screens, up to 430 pixels wide */
@@ -1011,5 +1023,11 @@ margin: 0;
     .about-modal-img-wrapper img {
         float: none;
         width: 100%;
+    }
+
+    /* 'more' page */
+
+    .useful-links-video {
+        width: 90%;
     }
 }
