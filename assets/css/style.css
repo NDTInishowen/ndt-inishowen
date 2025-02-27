@@ -807,6 +807,10 @@ margin: 0;
 
 /* general styles */
 
+/* .bc-hidden {
+    display: none;
+} */
+
 /* mini-banners */
 
 .more-banner {
@@ -821,11 +825,14 @@ margin: 0;
 }
 
 .testimonial-quote {
-    margin-bottom: 0.25rem;
     font-style: italic;
 }
 
-.testimonial-name {
+.testimonial-quote p {
+    margin-bottom: 0.25rem;
+}
+
+.testimonial-name p {
     margin-bottom: 0;
     font-weight: 700;
     text-align: right;

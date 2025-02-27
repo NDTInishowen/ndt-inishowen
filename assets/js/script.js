@@ -92,6 +92,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // ------------------ 'More' page
+
+    /* Get 'More' page's <main> element and if found, pass to handler
+       function for content to be dynamically populated from Google Sheets */
+
+    const moreMain = document.querySelector('#more-main');
+
+    if (moreMain) {
+        handleMorePageContent(moreMain);
+    }
+    
 });
 
 // -------------------- Handler functions
@@ -650,6 +661,210 @@ function handleContactFormEmailJS(contactForm) {
 }
 
 // ------------- Contact Forms & EmailJS functions end
+
+// ---------- 'More' page (dynamically populated) functions
+
+/**
+ * Get each div element to be dynamically populated from passed-in
+ * 'main' element.
+ * 
+ * Fetch custom Google Forms / Google Sheets CMS data from custom
+ * Google Apps Script endpoint, handling any errors in a try-catch
+ * block. Get each data object array (Google Sheets data) from
+ * fetch response JSON object.
+ * 
+ * Pass each div to be populated, along with corresponding data
+ * object array, to their respective handler functions. If any
+ * errors thrown, display backup content from DOM instead.
+ * 
+ * @param {HTMLElement} moreMain - 'More' page's 'main' element.
+ */
+async function handleMorePageContent(moreMain) {
+    const testimonialSection = moreMain.querySelector('#testimonials-content');
+    const videoLinksSection = moreMain.querySelector('#video-links-content');
+    const webLinksSection = moreMain.querySelector('#website-links-content');
+    const furtherReadingSection = moreMain.querySelector('#further-reading-content');
+
+    // URL for deployed custom Google Apps Script web app endpoint
+    const url = 'https://script.google.com/macros/s/AKfycbxGufsKBOdwATMTU0dr5s91wdJOV1EvWrSuYOUkvIyh605Er3z4iKI5TZxLqkb_B16Ndw/exec';
+    
+    try {
+        const response = await fetch(url);
+        // Check fetch response is returned correctly
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`);
+        }
+        // Convert returned JSON string format to JSON object
+        const spreadsheetData = await response.json();
+        // Check for custom error message from endpoint
+        const sheetKeys = Object.keys(spreadsheetData);
+        for (let key of sheetKeys) {
+            if (spreadsheetData[key].error) {
+                throw new Error(`Error: ${spreadsheetData[key].error} (${key})`);
+            }
+        }
+        /* Break fetched Google Sheets spreadsheet data object down
+           into object arrays consisting of individual sheet data */
+        const testimonialsData = spreadsheetData.testimonialsformdata;
+        const videoLinksData = spreadsheetData.videolinksformdata;
+        const webLinksData = spreadsheetData.sitelinksformdata;
+        const readingData = spreadsheetData.frformdata;
+        // Call handler functions to populate page
+        populateTestimonials(testimonialSection, testimonialsData);
+        populateVideoLinks(videoLinksSection, videoLinksData);
+        populateWebLinks(webLinksSection, webLinksData);
+        populateFurtherReading(furtherReadingSection, readingData);
+    } catch (error) {
+        console.error(error.message);
+        // Display backup content in case of error
+        const backupContent = document.querySelectorAll('.backup-content');
+        for (let backup of backupContent) {
+            backup.classList.remove('bc-hidden');
+            backup.setAttribute('aria-hidden', false);
+        }
+    }
+}
+
+// Client testimonials section
+
+/**
+ * For each object in passed-in Google Shhet data array, get
+ * 'clientname' and 'clienttestimonial' string values. Check
+ * each is not an empty string (or 'null', etc). If 'clientname'
+ * has no value, assign 'Anonymous' as name value. If
+ * 'clientteatimonial' has no value, ignore this object and
+ * move on to next object in data array.
+ * 
+ * Format name and testimonial string values using
+ * formatStringForHtml() function.
+ * 
+ * Create elements for each data array object (structured to
+ * match backup content in DOM) and append to passed-in 'section'
+ * element.
+ * 
+ * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
+ */
+function populateTestimonials(section, data) {
+    for (let obj of data) {
+        let name = obj.clientname
+        let quote = obj.clienttestimonial
+
+        /* Conditional statements used to safeguard against Google
+           Sheets data having missing cells */
+
+        if (name) {
+            name = formatStringForHtml(name);
+        } else {
+            name = 'Anonymous';
+        }
+        // Only use object data if testimonial content present
+        if (quote) {
+            quote = formatStringForHtml(quote);
+
+            const testimonialDiv = document.createElement('div');
+            testimonialDiv.classList.add('col-12', 'col-md-4', 'mb-3');
+
+            const quoteDiv = document.createElement('div');
+            quoteDiv.classList.add('testimonial-quote');
+            quoteDiv.innerHTML = `<p>&#34;${quote}&#34;</p>`
+
+            const nameDiv = document.createElement('div');
+            nameDiv.classList.add('testimonial-name');
+            nameDiv.innerHTML = `<p>&#45; ${name}</p>`;
+
+            testimonialDiv.append(quoteDiv, nameDiv);
+            section.append(testimonialDiv);
+        }
+    }
+}
+
+// Useful Links: Videos section
+
+function populateVideoLinks(section, data) {
+    console.log(section);
+    console.log(data);
+}
+
+//  Useful Links: Websites section
+
+function populateWebLinks(section, data) {
+    console.log(section);
+    console.log(data);
+}
+
+// Further Reading section
+
+function populateFurtherReading(section, data) {
+    console.log(section);
+    console.log(data);
+}
+
+// Format text string for use as HTML content
+
+/**
+ * Takes a passed-in string of raw text (e.g. user submitted via
+ * form or fetched from API) and applies chained replace() methods
+ * with globally tagged RegEx literals in order to:
+ * replace special/unicode characters with HTML entities;
+ * replace any plain-text version of site owner's name with proper
+ * accented version using 'eacute' HTML entity;
+ * replace line breaks with closing/opening 'p' tags;
+ * remove any empty 'p' tags that might cause unwanted vertical
+ * indentation.
+ * 
+ * This provides any calling function with a properly formatted
+ * string, which can be inserted between 'p' tags in a string
+ * template literal, for use as innerHTML when dynamically
+ * populating the DOM, ensuring consistent cross-browser
+ * display/readability.
+ *  
+ * Also, by replacing special characters, (particularly angle
+ * brackets), it provides an initial layer of code sanitisation,
+ * helping to prevent XSS vulnerabilities (e.g. malicious script
+ * tag insertion) particular to the use of innerHTML.
+ *  
+ * @param {string} paramString - String to be formatted.
+ * @returns {string} newString - Formatted string ready for use as innerHTML
+ */
+function formatStringForHtml(paramString) {
+    const newString = paramString.replace(/&/g, '&#38;')
+                                 .replace(/!/g, '&#33;')
+                                 .replace(/"/g, '&#34;')
+                                 .replace(/\$/g, '&#36;')
+                                 .replace(/%/g, '&#37;')
+                                 .replace(/\(/g, '&#40;')
+                                 .replace(/\)/g, '&#41;')
+                                 .replace(/\*/g, '&#42;')
+                                 .replace(/\+/g, '&#43;')
+                                 .replace(/-/g, '&#45;')
+                                 .replace(/\//g, '&#47;')
+                                 .replace(/:/g, '&#58;')
+                                 .replace(/</g, '&#60;')
+                                 .replace(/=/g, '&#61;')
+                                 .replace(/>/g, '&#62;')
+                                 .replace(/\?/g, '&#63;')
+                                 .replace(/@/g, '&#64;')
+                                 .replace(/\[/g, '&#91;')
+                                 .replace(/\\/g, '&#92;')
+                                 .replace(/\]/g, '&#93;')
+                                 .replace(/\^/g, '&#94;')
+                                 .replace(/_/g, '&#95;')
+                                 .replace(/`/g, '&#96;')
+                                 .replace(/\{/g, '&#123;')
+                                 .replace(/\|/g, '&#124;')
+                                 .replace(/\}/g, '&#125;')
+                                 .replace(/~/g, '&#126;')
+                                 .replace(/£/g, '&#163;')
+                                 .replace(/©/g, '&#169;')
+                                 .replace(/€/g, '&#8364;')
+                                 .replace(/Sinead/g, 'Sin&#233;ad')
+                                 .replace(/\n/g, '</p><p>')
+                                 .replace(/<p><\/p>/g, '');
+    return newString
+}
+
+// ------ 'More' page (dynamically populated) functions end
 
 // ------------------- Miscellaneous functions
 
