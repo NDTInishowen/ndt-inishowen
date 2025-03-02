@@ -844,6 +844,10 @@ margin: 0;
     background: url('../images/links-basic-rgb_53876-37712.jpg') no-repeat center center / cover;
 }
 
+.useful-link-wrapper p {
+    margin-bottom: 0;
+}
+
 .useful-links-video {
     width: 60%;
 }

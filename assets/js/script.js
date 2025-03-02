@@ -728,14 +728,14 @@ async function handleMorePageContent(moreMain) {
 // Client testimonials section
 
 /**
- * For each object in passed-in Google Shhet data array, get
+ * For each object in passed-in Google Sheet data array, get
  * 'clientname' and 'clienttestimonial' string values. Check
  * each is not an empty string (or 'null', etc). If 'clientname'
  * has no value, assign 'Anonymous' as name value. If
  * 'clientteatimonial' has no value, ignore this object and
  * move on to next object in data array.
  * 
- * Format name and testimonial string values using
+ * Format and sanitise name and testimonial string values using
  * formatStringForHtml() function.
  * 
  * Create elements for each data array object (structured to
@@ -781,9 +781,212 @@ function populateTestimonials(section, data) {
 
 // Useful Links: Videos section
 
+/**
+ * Construct array of trusted video source names.
+ * 
+ * For each object in passed-in Google Sheet data array, get all
+ * string values. Check each 'required' value is not an empty
+ * string (or 'null', etc). If any have no value, ignore this object
+ * and move on to next object in data array.
+ * 
+ * Pass video URL to validator functions to check for 'https'
+ * protocol and that host name contains trusted source name from
+ * 'sources' array. If neither return true, again skip this object
+ * 
+ * Create main container div and heading elements, adding classes
+ * for styling. Format and sanitise video title and description
+ * string values using formatStringForHtml() function. Pass video
+ * URL and aria-label string constructed of video title and URL text
+ * to createExternalLinkElement() function in order to create primary
+ * video link element. Add formatted/sanitised video title as link
+ * text and add primary video link element to heading. Add heading
+ * to main container div.
+ * 
+ * Create container div element for video description. Add
+ * formatted/sanitised video description to container div as string
+ * template literal with 'p' element wrapper. Add description to main
+ * container div.
+ * 
+ * Pass video embed code with video title and 'sources' array to
+ * createVideoEmbed() function in attempt to create embedded video
+ * iframe element. If video embed code (not 'required') is an empty
+ * string/null or contains an invalid 'src' URL, function will
+ * return null. If iframe element returned, add Bootstrap responsive
+ * embed class.
+ * 
+ * Create embedded video container div and iframe container div
+ * elements, adding classes for Bootstrap responsive embed and
+ * styling. Add iframe element to iframe container div and iframe
+ * container to video container div. Add video container to main
+ * container div.
+ * 
+ * Create container paragraph element for second primary video link.
+ * Format/sanitise video URL text, clone original primary link
+ * element and add URL text. Add new primary video link element to
+ * container paragraph. Add container paragraph element to main
+ * container.
+ * 
+ * If secondary video URL and by implication, secondary URL text,
+ * (neither 'required') are not empty strings/null, pass secondary
+ * video URL and required parameters to validator functions. Only
+ * continue if both return true. Repeat previous steps to create
+ * secondary/alternative video link element and add to main container.
+ * 
+ * Add main container to passed-in 'section' element.
+ * 
+ * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS. 
+ */
 function populateVideoLinks(section, data) {
-    console.log(section);
-    console.log(data);
+    const sources = ['YouTube', 'youtu.be', 'Amazon', 'primevideo', 'Vimeo', 'Dailymotion', 'Facebook'];
+
+    for (let obj of data) {
+        const title = obj.videotitle;
+        let description = obj.videodescription;
+        const videoUrl = obj.videourl;
+        let urlText = obj.videourltext;
+        let embedCode = obj.videoembedcode;
+        const altUrl = obj.secondaryurl;
+        let altText = obj.secondaryurltext;
+
+        /* The following nested conditional statements are
+           to safeguard against missing cells in Google
+           Sheets CMS data - i.e. only continue if required
+           fields were filled out in linked Google Form */
+        if (title) {
+            if (description) {
+                if (videoUrl) {
+                    if (urlText) {
+                        /* Only continue if video URL is valid 'https' URL
+                        and appears to come from a trusted domain */
+                        if (isValidUrl(videoUrl, 'https:') && isTrustedUrl(videoUrl, sources)) {
+                            const wrapperDiv = document.createElement('div');
+                            wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
+
+                            const videoHeading = document.createElement('h4');
+                            videoHeading.classList.add('h5', 'mb-0');
+                            /* Retain original 'obj.videotitle' string
+                            for use in aria-label' and 'title'
+                            attributes of dynamically created elements */
+                            const newTitle = formatStringForHtml(title);
+                            description = formatStringForHtml(description);
+                            const videoLink = createExternalLinkElement(videoUrl, `Watch '${title}' - ${urlText}`);
+                            videoLink.innerHTML = newTitle;
+                            videoHeading.appendChild(videoLink);
+                            wrapperDiv.appendChild(videoHeading);
+                            
+                            const descriptionDiv = document.createElement('div');
+                            const descriptionParag = `<p>${description}</p>`;
+                            descriptionDiv.innerHTML = descriptionParag;
+                            wrapperDiv.appendChild(descriptionDiv);
+                            
+                            embedCode = createVideoEmbed(embedCode, title, sources);
+                            if (embedCode) {
+                                embedCode.classList.add('embed-responsive-item');
+                                
+                                const videoDiv = document.createElement('div');
+                                videoDiv.classList.add('useful-links-video-wrapper', 'd-flex', 'justify-content-center', 'my-1');
+                                const iframeDiv = document.createElement('div');
+                                iframeDiv.classList.add('useful-links-video', 'embed-responsive', 'embed-responsive-16by9');
+                                iframeDiv.appendChild(embedCode);
+                                videoDiv.appendChild(iframeDiv);
+                                wrapperDiv.appendChild(videoDiv);
+                            }
+                            
+                            const videoLinkParag = document.createElement('p');
+                            urlText = formatStringForHtml(urlText);
+                            const newVideoLink = videoLink.cloneNode();
+                            newVideoLink.innerHTML = urlText;
+                            videoLinkParag.appendChild(newVideoLink);
+                            wrapperDiv.appendChild(videoLinkParag);
+
+                            if (altUrl) {
+                                /* Only create secondary video link if secondary
+                                   URL is valid 'https' URL and appears to come
+                                   from a trusted domain */
+                                if (isValidUrl(altUrl, 'https:') && isTrustedUrl(altUrl, sources)) {
+                                    const secondLinkParag = document.createElement('p');
+                                    const secondaryLink = createExternalLinkElement(altUrl, `Watch '${title}' - ${altText}`);
+                                    altText = formatStringForHtml(altText);
+                                    secondaryLink.innerHTML = altText;
+                                    secondLinkParag.appendChild(secondaryLink);
+                                    wrapperDiv.appendChild(secondLinkParag);
+                                }
+                            }
+                            section.append(wrapperDiv);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
+ * Construct object containing all attributes and their values
+ * necessary for the iframe element to be created. 
+ * 
+ * Use RegEx match() method to get passed-in video embed code's 'src'
+ * URL. Pass to validator functions to check for 'https' protocol and
+ * that host name contains trusted source name from passed-on array.
+ * Only continue if both return true. Set 'src' attribute to validated
+ * URL.
+ * 
+ * Check URL's source/domain and set 'title' attribute accordingly
+ * using passed-in video title.
+ * 
+ * Create iframe element and set attributes from object.
+ * 
+ * Return null if passed an empty string for embedCode.
+ * Return null if embedCode's 'src' URL fails either validation
+ * function.
+ * Otherwise return new iframe element.
+ * 
+ * @param {string} embedCode - Video embed code from Google Sheets custom CMS data.
+ * @param {string} titleString - Video title from Google Sheets custom CMS data.
+ * @param {Array.<string>} sourceArray - Array of trusted source names to be passed to validator function.
+ * @returns {HTMLElement | null} - Newly created iframe element or null.
+ */
+function createVideoEmbed(embedCode, titleString, sourceArray) {
+    const attributes = {
+        'class': '',
+        'src': '',
+        'title': '',
+        'frameborder': '0',
+        'allow': 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
+        'referrerpolicy': 'strict-origin-when-cross-origin',
+        'allowfullscreen': 'true'
+    };
+    let embedUrl;
+
+    if (embedCode) {
+        /* Use regular expression and match() method to
+        extract URL from embed code */
+        const urlRegex = /(https?:\/\/[^ ]*)/gi;
+        embedUrl = embedCode.match(urlRegex)[0];
+        /* Only continue if extracted URL is valid 'https' URL
+           and appears to come from a trusted domain */
+        if (isValidUrl(embedUrl, 'https:') && isTrustedUrl(embedUrl, sourceArray)) {
+            attributes.src = embedUrl
+
+            if (embedUrl.includes('youtu')) {
+                attributes.title = `YouTube video player - ${titleString}`;
+            } else if (embedUrl.includes('vimeo')) {
+                attributes.title = `vimeo-player - ${titleString}`;
+            } else if (embedUrl.includes('dailymotion')) {
+                attributes.title = `Dailymotion Video Player - ${titleString}`;
+            } else {
+                attributes.title = `Embedded Video Player - ${titleString}`;
+            }
+
+            embedCode = document.createElement('iframe');
+            for (let key in attributes) {
+                embedCode.setAttribute(key, attributes[key]);
+            }
+
+            return embedCode;
+        } else return null;
+    } else return null;
 }
 
 //  Useful Links: Websites section
@@ -825,7 +1028,7 @@ function populateFurtherReading(section, data) {
  * tag insertion) particular to the use of innerHTML.
  *  
  * @param {string} paramString - String to be formatted.
- * @returns {string} newString - Formatted string ready for use as innerHTML
+ * @returns {string} newString - Formatted string ready for use as innerHTML.
  */
 function formatStringForHtml(paramString) {
     const newString = paramString.replace(/&/g, '&#38;')
@@ -861,7 +1064,93 @@ function formatStringForHtml(paramString) {
                                  .replace(/Sinead/g, 'Sin&#233;ad')
                                  .replace(/\n/g, '</p><p>')
                                  .replace(/<p><\/p>/g, '');
-    return newString
+    return newString;
+}
+
+// Validator functions
+
+/**
+ * Construct new URL from passed-in URL string. If valid, check
+ * if hostname contains trusted source from passed-in array of
+ * sources.
+ * 
+ * Return true if conditions met, false if not.
+ *  
+ * @param {string} urlString - URL string to be validated.
+ * @param {Array.<string>} sourceArray - Array of trusted source names.
+ * @returns {boolean}
+ */
+function isTrustedUrl(urlString, sourceArray) {
+    try {
+        /* Passing an invalid URL string to the URL constructor
+           will return a TypeError */
+        const newUrl = new URL(urlString);
+        /* True if hostname includes any trusted source name
+           from passed-in array */
+        return sourceArray.some(source => newUrl.hostname.includes(source.toLowerCase()));
+    } catch(error) {
+        console.error(error.message);
+        return false;
+    }
+}
+
+/**
+ * Construct new URL from passed-in URL string. If valid, check
+ * if protocol matches passed-in protocol type.
+ * 
+ * Return true if conditions met, false if not.
+ *  
+ * @param {string} urlString - URL string to be validated.
+ * @param {string} protocolString - Protocol type to be tested for.
+ * @returns {boolean}
+ */
+function isValidUrl(urlString, protocolString) {
+    try {
+        /* Passing an invalid URL string to the URL constructor
+           will return a TypeError */
+        const newUrl = new URL(urlString);
+        /* True if protocol matches passed-in protocol type, 
+           e.g. 'https:' or 'mailto:' */
+        return newUrl.protocol === protocolString;
+    } catch(error) {
+        console.error(error.message);
+        return false;
+    }
+}
+
+// Create external link element
+
+/**
+ * Construct object containing: 'href' attribute with passed-in URL
+ * string as value; 'target' and 'rel' attributes with values set
+ * for external links (open in new tab).
+ * 
+ * Create new anchor element and set attributes from object.
+ * 
+ * If passed-in aria-label string exists, append the text, '(Opens
+ * in a new tab)' and set the attribute.
+ * 
+ * Return new anchor element.
+ * 
+ * @param {string} urlString - Validated URL string used to populate 'href' HTML attribute.
+ * @param {string} ariaLabelString - (Optional) String used to populate 'aria-label' HTML attribute.
+ * @returns {HTMLElement} - Newly created external hyperlink (anchor) element.
+ */
+function createExternalLinkElement(urlString, ariaLabelString) {
+    const attributes = {
+        'href': urlString,
+        'target': '_blank',
+        'rel': 'noopener'
+    };
+
+    const linkElement = document.createElement('a');
+    for (let key in attributes) {
+        linkElement.setAttribute(key, attributes[key]);
+    }
+    if (ariaLabelString) {
+        linkElement.setAttribute('aria-label', `${ariaLabelString} (Opens in a new tab)`)
+    }
+    return linkElement;
 }
 
 // ------ 'More' page (dynamically populated) functions end
