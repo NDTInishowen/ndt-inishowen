@@ -791,7 +791,7 @@ function populateTestimonials(section, data) {
  * 
  * Pass video URL to validator functions to check for 'https'
  * protocol and that host name contains trusted source name from
- * 'sources' array. If neither return true, again skip this object
+ * 'sources' array. If neither return true, again skip this object.
  * 
  * Create main container div and heading elements, adding classes
  * for styling. Format and sanitise video title and description
@@ -835,7 +835,7 @@ function populateTestimonials(section, data) {
  * Add main container to passed-in 'section' element.
  * 
  * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
- * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS. 
+ * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateVideoLinks(section, data) {
     const sources = ['YouTube', 'youtu.be', 'Amazon', 'primevideo', 'Vimeo', 'Dailymotion', 'Facebook'];
@@ -991,9 +991,70 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
 
 //  Useful Links: Websites section
 
+/**
+ * For each object in passed-in Google Sheet data array, get all
+ * string values. Check each 'required' value is not an empty
+ * string (or 'null', etc). If any have no value, ignore this object
+ * and move on to next object in data array.
+ * 
+ * Format and sanitise description and text string values using
+ * formatStringForHtml() function.
+ * 
+ * Pass link URL to validator function to check for 'https'
+ * protocol. If validator function returns false, again skip this
+ * object.
+ * 
+ * Create main container div element, adding classes for styling.
+ * Create container paragraph element for link text and link element
+ * and add formatted/sanitised description string to it.
+ * 
+ * Pass link URL and aria-label string consisting of website name to
+ * createExternalLinkElement() function in order to create link element.
+ * As website name is only used as aria-label attribute, no need for
+ * formatting/sanitising. Add formatted/sanitised link text to link
+ * element and add link element to container paragraph. Add container
+ * paragraph to main container div and add main container to passed-in
+ * 'section' element.
+ * 
+ * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
+ */
 function populateWebLinks(section, data) {
-    console.log(section);
-    console.log(data);
+    for (let obj of data) {
+        let description = obj.linkdescription;
+        let text = obj.linktext;
+        const url = obj.linkurl;
+        const siteName = obj.websitename;
+
+        /* The following nested conditional statements are
+           to safeguard against missing cells in Google
+           Sheets CMS data - i.e. only continue if required
+           fields were filled out in linked Google Form */
+        if (description) {
+            if (text) {
+                if (url) {
+                    if(siteName){
+                        description = formatStringForHtml(description);
+                        text = formatStringForHtml(text);
+                        // Only continue if link URL is valid 'https' URL
+                        if (isValidUrl(url, 'https:')) {
+                            const wrapperDiv = document.createElement('div');
+                            wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
+                            const containerParag = document.createElement('p');
+                            containerParag.innerHTML = `${description}&#58; `;
+                            
+                            const newLink = createExternalLinkElement(url, siteName);
+                            newLink.innerHTML = text;
+
+                            containerParag.appendChild(newLink);
+                            wrapperDiv.appendChild(containerParag);
+                            section.append(wrapperDiv);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Further Reading section
