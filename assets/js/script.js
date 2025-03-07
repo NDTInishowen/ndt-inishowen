@@ -433,12 +433,6 @@ function handlePopup(toggleButton, togglerActiveClass, popupOpenClass) {
             handlePopupAria(toggleButton, popupOpenClass);
         }
 
-        /* Exempt news & events page article dropdowns and music
-           page mini player popups from closing on outside events */
-        // if (!(toggleButton.classList.contains('article-toggle-btn') || toggleButton.classList.contains('mini-player-btn'))) {
-        //     handlePopupExternalEvent(toggleButton, togglerActiveClass, popupOpenClass);
-        // }
-
         /* Exempt navigation dropdown menus from being passed to 
            external event handler if main menu is in dropdown mode - 
            will be handled along with main menu. Exempt news & events
@@ -901,16 +895,19 @@ function populateVideoLinks(section, data) {
                             wrapperDiv.appendChild(videoLinkParag);
 
                             if (altUrl) {
-                                /* Only create secondary video link if secondary
-                                   URL is valid 'https' URL and appears to come
-                                   from a trusted domain */
-                                if (isValidUrl(altUrl, 'https:') && isTrustedUrl(altUrl, sources)) {
-                                    const secondLinkParag = document.createElement('p');
-                                    const secondaryLink = createExternalLinkElement(altUrl, `Watch '${title}' - ${altText}`);
-                                    altText = formatStringForHtml(altText);
-                                    secondaryLink.innerHTML = altText;
-                                    secondLinkParag.appendChild(secondaryLink);
-                                    wrapperDiv.appendChild(secondLinkParag);
+                                // Secondary video link requires link text
+                                if (altText) {
+                                    /* Only create secondary video link if secondary
+                                    URL is valid 'https' URL and appears to come
+                                    from a trusted domain */
+                                    if (isValidUrl(altUrl, 'https:') && isTrustedUrl(altUrl, sources)) {
+                                        const secondLinkParag = document.createElement('p');
+                                        const secondaryLink = createExternalLinkElement(altUrl, `Watch '${title}' - ${altText}`);
+                                        altText = formatStringForHtml(altText);
+                                        secondaryLink.innerHTML = altText;
+                                        secondLinkParag.appendChild(secondaryLink);
+                                        wrapperDiv.appendChild(secondLinkParag);
+                                    }
                                 }
                             }
                             section.append(wrapperDiv);
@@ -997,24 +994,24 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
  * string (or 'null', etc). If any have no value, ignore this object
  * and move on to next object in data array.
  * 
- * Format and sanitise description and text string values using
- * formatStringForHtml() function.
- * 
  * Pass link URL to validator function to check for 'https'
  * protocol. If validator function returns false, again skip this
  * object.
+ * 
+ * Format and sanitise description and text string values using
+ * formatStringForHtml() function.
  * 
  * Create main container div element, adding classes for styling.
  * Create container paragraph element for link text and link element
  * and add formatted/sanitised description string to it.
  * 
  * Pass link URL and aria-label string consisting of website name to
- * createExternalLinkElement() function in order to create link element.
- * As website name is only used as aria-label attribute, no need for
- * formatting/sanitising. Add formatted/sanitised link text to link
- * element and add link element to container paragraph. Add container
- * paragraph to main container div and add main container to passed-in
- * 'section' element.
+ * createExternalLinkElement() function in order to create link
+ * element. As website name ('siteName') is only used as aria-label
+ * attribute, no need for formatting/sanitising. Add formatted/
+ * sanitised link text to link element and add link element to
+ * container paragraph. Add container paragraph to main container
+ * div and add main container to passed-in 'section' element.
  * 
  * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
@@ -1034,10 +1031,11 @@ function populateWebLinks(section, data) {
             if (text) {
                 if (url) {
                     if(siteName){
-                        description = formatStringForHtml(description);
-                        text = formatStringForHtml(text);
                         // Only continue if link URL is valid 'https' URL
                         if (isValidUrl(url, 'https:')) {
+                            description = formatStringForHtml(description);
+                            text = formatStringForHtml(text);
+
                             const wrapperDiv = document.createElement('div');
                             wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
                             const containerParag = document.createElement('p');
@@ -1059,9 +1057,189 @@ function populateWebLinks(section, data) {
 
 // Further Reading section
 
+/**
+ * For each object in passed-in Google Sheet data array, get all
+ * string values. Check each 'required' value is not an empty
+ * string (or 'null', etc). If any have no value, ignore this object
+ * and move on to next object in data array.
+ * 
+ * Pass primary link URL to validator function to check for 'https'
+ * protocol. If validator function returns false, again skip this
+ * object.
+ * 
+ * Format and sanitise all 'required' non-url string values using
+ * formatStringForHtml() function.
+ * 
+ * Create Bootstrap 'row' and 'col' container div elements, adding
+ * classes for formatting and styling. Create container 'div' and
+ * 'h3' elements for article headline. Add formatted/sanitised
+ * headline string to 'h3' element and add that to conatiner element.
+ * Add headline container to 'col' container element.
+ * 
+ * If article subheading string exists, format/sanitise it using
+ * formatStringForHtml() function, create its container element and
+ * add all to 'col' container element.
+ * 
+ * If any of the author, publication or publication date strings
+ * exist, create container 'div' and paragraph elements. For each
+ * string that exists, format/sanitise it using formatStringForHtml()
+ * function, create its conatainer 'span' element and add to
+ * paragraph element (structured to match backup content in DOM).
+ * Add paragraph element to container element and add that to 'col'
+ * container element.
+ * 
+ * Create container 'div' element for summary string, add formatted/
+ * sanitised string and add that to 'col' container element.
+ * 
+ * Create container 'div' and paragraph elements for primary link.
+ * Pass validated primary url and aria-label string consisting of
+ * original link text to createExternalLink() function in order to
+ * create link element. Add formatted/sanitised link text to link
+ * element. Add link element to container paragraph element and add
+ * that to container 'div' element. Add link container to 'col'
+ * container element.
+ * 
+ * If secondary link URL and by implication, secondary URL text,
+ * (neither 'required') exist, pass link URL to validator function
+ * to check for 'https' protocol. If validator function returns false,
+ * do not continue. Clone primary link container element and its
+ * children in order to create secondary link container. Pass
+ * validated secondary url and aria-label string consisting of
+ * original secondary link text to createExternalLink() function in
+ * order to create link element. Format/sanitise secondary link text
+ * using formatStringForHtml() function and add to secondary link
+ * element. Remove original link element from cloned node and replace
+ * with secondary link element. Add secondary link container to 'col'
+ * container element.
+ * 
+ * Add 'col' container element to 'row' container element and add that
+ * to passed-in 'section' element.
+ * 
+ * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
+ */
 function populateFurtherReading(section, data) {
-    console.log(section);
-    console.log(data);
+    for (let obj of data) {
+        let headline = obj.articleheadline;
+        let subhead = obj.articlesubheading;
+        let summary = obj.articlesummary;
+        const primaryUrl = obj.articlelink;
+        let primaryLinkText = obj.articlelinktext;
+        let author = obj.author;
+        let publication = obj.publication;
+        let pubDate = obj.publicationdate;
+        const secondaryUrl = obj.secondarylink;
+        let secondaryLinkText = obj.secondarylinktext;
+
+        /* The following nested conditional statements are
+           to safeguard against missing cells in Google
+           Sheets CMS data - i.e. only continue if required
+           fields were filled out in linked Google Form */
+        if (headline) {
+            if (summary) {
+                if (primaryUrl) {
+                    if(primaryLinkText){
+                        // Only continue if primary link URL is valid 'https' URL
+                        if (isValidUrl(primaryUrl, 'https:')) {
+                            headline = formatStringForHtml(headline);
+                            summary = formatStringForHtml(summary);
+                            /* Retain original obj.articlelinktext string for
+                               use in 'aria-label' attribute of dynamically
+                               created link elements */
+                            let newLinkText = formatStringForHtml(primaryLinkText);
+
+                            const wrapperRow = document.createElement('div');
+                            wrapperRow.classList.add('row');
+                            const wrapperCol = document.createElement('div');
+                            wrapperCol.classList.add('col-12', 'fr-art', 'mb-4');
+                            
+                            const headWrapper = document.createElement('div');
+                            headWrapper.classList.add('fr-art-headline');
+                            const headlineEl = document.createElement('h3');
+                            headlineEl.classList.add('h4');
+                            headlineEl.innerHTML = headline;
+                            headWrapper.appendChild(headlineEl);
+                            wrapperCol.appendChild(headWrapper);
+
+                            if (subhead) {
+                                subhead = formatStringForHtml(subhead);
+                                const subHeadWrapper = document.createElement('div');
+                                subHeadWrapper.classList.add('fr-art-subhead');
+                                subHeadWrapper.innerHTML = `<p>${subhead}</p>`;
+                                wrapperCol.appendChild(subHeadWrapper);
+                            }
+
+                            if (author || publication || pubDate) {
+                                const authorPubWrapper = document.createElement('div');
+                                authorPubWrapper.classList.add('fr-art-auth-pub');
+                                const authPubPrg = document.createElement('p');
+
+                                if (author) {
+                                    author = formatStringForHtml(author);
+                                    const authorSpan = document.createElement('span');
+                                    authorSpan.classList.add('fr-art-author');
+                                    authorSpan.innerHTML = author;
+                                    authPubPrg.textContent = 'by ';
+                                    authPubPrg.appendChild(authorSpan);
+                                }
+
+                                if (publication) {
+                                    publication = formatStringForHtml(publication);
+                                    const pubSpan = document.createElement('span');
+                                    pubSpan.classList.add('fr-art-publication');
+                                    pubSpan.innerHTML = ` &#45; ${publication}`;
+                                    authPubPrg.appendChild(pubSpan);
+                                }
+
+                                if (pubDate) {
+                                    pubDate = formatStringForHtml(pubDate);
+                                    const pubDateSpan = document.createElement('span');
+                                    pubDateSpan.innerHTML = ` &#45; ${pubDate}`;
+                                    authPubPrg.appendChild(pubDateSpan);
+                                }
+
+                                authorPubWrapper.appendChild(authPubPrg);
+                                wrapperCol.appendChild(authorPubWrapper);
+                            }
+
+                            const summaryWrapper = document.createElement('div');
+                            summaryWrapper.classList.add('fr-art-summary');
+                            summaryWrapper.innerHTML = `<p>${summary}</p>`;
+                            wrapperCol.appendChild(summaryWrapper);
+                            
+                            const articleLinkWrapper = document.createElement('div');
+                            articleLinkWrapper.classList.add('fr-art-link');
+                            const articleLinkPrg = document.createElement('p');
+                            const primaryLink = createExternalLinkElement(primaryUrl, primaryLinkText);
+                            primaryLink.innerHTML = newLinkText;
+                            articleLinkPrg.appendChild(primaryLink);
+                            articleLinkWrapper.appendChild(articleLinkPrg);
+                            wrapperCol.appendChild(articleLinkWrapper);
+
+                            if (secondaryUrl) {
+                                // Secondary link requires link text
+                                if (secondaryLinkText) {
+                                    /* Only create secondary link if secondary
+                                    URL is valid 'https' URL */
+                                    if (isValidUrl(secondaryUrl, 'https:')) {
+                                        const altLinkWrapper = articleLinkWrapper.cloneNode(true);
+                                        const secondaryLink = createExternalLinkElement(secondaryUrl, secondaryLinkText);
+                                        secondaryLinkText = formatStringForHtml(secondaryLinkText);
+                                        secondaryLink.innerHTML = secondaryLinkText;
+                                        altLinkWrapper.firstElementChild.firstElementChild.remove();
+                                        altLinkWrapper.firstElementChild.appendChild(secondaryLink);
+                                        wrapperCol.appendChild(altLinkWrapper);
+                                    }
+                                }
+                            }
+                            wrapperRow.appendChild(wrapperCol);
+                            section.append(wrapperRow);
+                        }
+                    }
+                }
+            }
+        }
+    }
 }
 
 // Format text string for use as HTML content
@@ -1078,15 +1256,15 @@ function populateFurtherReading(section, data) {
  * indentation.
  * 
  * This provides any calling function with a properly formatted
- * string, which can be inserted between 'p' tags in a string
- * template literal, for use as innerHTML when dynamically
+ * string, which can be inserted (between 'p' tags if necessary) in
+ * a string template literal, for use as innerHTML when dynamically
  * populating the DOM, ensuring consistent cross-browser
  * display/readability.
  *  
  * Also, by replacing special characters, (particularly angle
  * brackets), it provides an initial layer of code sanitisation,
- * helping to prevent XSS vulnerabilities (e.g. malicious script
- * tag insertion) particular to the use of innerHTML.
+ * helping to prevent XSS vulnerabilities (e.g. malicious script tag
+ * insertion) particular to the use of innerHTML.
  *  
  * @param {string} paramString - String to be formatted.
  * @returns {string} newString - Formatted string ready for use as innerHTML.
