@@ -722,17 +722,17 @@ async function handleMorePageContent(moreMain) {
 // Client testimonials section
 
 /**
- * For each object in passed-in Google Sheet data array, get
- * 'clientname' and 'clienttestimonial' string values. Check
- * each is not an empty string (or 'null', etc). If 'clientname'
- * has no value, assign 'Anonymous' as name value. If
- * 'clientteatimonial' has no value, ignore this object and
- * move on to next object in data array.
+ * For each object in passed-in Google Sheet data array:
  * 
- * Format and sanitise name and testimonial string values using
+ * - Get 'clientname' and 'clienttestimonial' string values. Check each
+ * is not an empty string/null/etc. If 'clientname' has no value, assign
+ * 'Anonymous' as name value. If 'clientteatimonial' has no value,
+ * ignore this object and move on to next object in data array.
+ * 
+ * - Format and sanitise name and testimonial string values using
  * formatStringForHtml() function.
  * 
- * Create elements for each data array object (structured to
+ * - Create elements for each data array object (structured to
  * match backup content in DOM) and append to passed-in 'section'
  * element.
  * 
@@ -746,7 +746,6 @@ function populateTestimonials(section, data) {
 
         /* Conditional statements used to safeguard against Google
            Sheets data having missing cells */
-
         if (name) {
             name = formatStringForHtml(name);
         } else {
@@ -778,55 +777,50 @@ function populateTestimonials(section, data) {
 /**
  * Construct array of trusted video source names.
  * 
- * For each object in passed-in Google Sheet data array, get all
- * string values. Check each 'required' value is not an empty
- * string (or 'null', etc). If any have no value, ignore this object
+ * For each object in passed-in Google Sheet data array:
+ * 
+ * - Get all string values. Check each 'required' value is not an
+ * empty string/null/etc. If any have no value, ignore this object
  * and move on to next object in data array.
  * 
- * Pass video URL to validator functions to check for 'https'
+ * - Pass video URL to validator functions to check for 'https'
  * protocol and that host name contains trusted source name from
  * 'sources' array. If neither return true, again skip this object.
  * 
- * Create main container div and heading elements, adding classes
- * for styling. Format and sanitise video title and description
- * string values using formatStringForHtml() function. Pass video
- * URL and aria-label string constructed of video title and URL text
- * to createExternalLinkElement() function in order to create primary
- * video link element. Add formatted/sanitised video title as link
- * text and add primary video link element to heading. Add heading
- * to main container div.
+ * - Create required container elements, adding Bootstrap and other
+ * classes for formatting/styling.
  * 
- * Create container div element for video description. Add
- * formatted/sanitised video description to container div as string
- * template literal with 'p' element wrapper. Add description to main
- * container div.
+ * - Format/sanitise all non-URL string values using
+ * formatStringForHtml() function, withholding any required for
+ * 'aria-label'/'title' attributes until after use for that purpose.
  * 
- * Pass video embed code with video title and 'sources' array to
- * createVideoEmbed() function in attempt to create embedded video
- * iframe element. If video embed code (not 'required') is an empty
- * string/null or contains an invalid 'src' URL, function will
- * return null. If iframe element returned, add Bootstrap responsive
- * embed class.
+ * - Pass video URL and aria-label string constructed of video
+ * title + URL text to createExternalLinkElement() function in order
+ * to create primary video link element. Add formatted/sanitised
+ * video title as link text for video heading link.
  * 
- * Create embedded video container div and iframe container div
- * elements, adding classes for Bootstrap responsive embed and
- * styling. Add iframe element to iframe container div and iframe
- * container to video container div. Add video container to main
- * container div.
+ * - For any video embed code: Pass video embed code with video title
+ * and 'sources' array to createVideoEmbed() function in attempt to
+ * create embedded video iframe element. If video embed code
+ * (not 'required') is an empty string/null or contains an invalid
+ * 'src' URL, function will return null. If iframe element returned,
+ * add Bootstrap responsive embed classes to it and its container
+ * element.
  * 
- * Create container paragraph element for second primary video link.
- * Format/sanitise video URL text, clone original primary link
- * element and add URL text. Add new primary video link element to
- * container paragraph. Add container paragraph element to main
- * container.
+ * - Clone video link used in heading for primary video link and
+ * replace link text with formatted/sanitised video URL text.
  * 
- * If secondary video URL and by implication, secondary URL text,
- * (neither 'required') are not empty strings/null, pass secondary
- * video URL and required parameters to validator functions. Only
- * continue if both return true. Repeat previous steps to create
- * secondary/alternative video link element and add to main container.
+ * - If secondary video URL and by implication, secondary URL text,
+ * (neither 'required') are not empty strings/null, validate secondary
+ * video URL, only continuing if validator functions both return true.
+ * Pass secondary video URL and aria-label string constructed of video
+ * title + secondary URL text to createExternalLinkElement() function
+ * in order to create secondary video link element. Add formatted/
+ * sanitised secondary URL text as link text.
  * 
- * Add main container to passed-in 'section' element.
+ * - Having added all newly created elements in order to an outer
+ * container, (structured to match backup content in DOM), add outer
+ * container to passed-in 'section' element.
  * 
  * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
@@ -854,30 +848,34 @@ function populateVideoLinks(section, data) {
                         /* Only continue if video URL is valid 'https' URL
                         and appears to come from a trusted domain */
                         if (isValidUrl(videoUrl, 'https:') && isTrustedUrl(videoUrl, sources)) {
+                            // Outer container
                             const wrapperDiv = document.createElement('div');
                             wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
 
+                            // Video heading element
                             const videoHeading = document.createElement('h4');
                             videoHeading.classList.add('h5', 'mb-0');
                             /* Retain original 'obj.videotitle' string
                             for use in aria-label' and 'title'
                             attributes of dynamically created elements */
                             const newTitle = formatStringForHtml(title);
-                            description = formatStringForHtml(description);
+                            // Primary video link for heading
                             const videoLink = createExternalLinkElement(videoUrl, `Watch '${title}' - ${urlText}`);
                             videoLink.innerHTML = newTitle;
                             videoHeading.appendChild(videoLink);
                             wrapperDiv.appendChild(videoHeading);
                             
+                            // Video description element
                             const descriptionDiv = document.createElement('div');
+                            description = formatStringForHtml(description);
                             const descriptionParag = `<p>${description}</p>`;
                             descriptionDiv.innerHTML = descriptionParag;
                             wrapperDiv.appendChild(descriptionDiv);
                             
+                            // Embedded video
                             embedCode = createVideoEmbed(embedCode, title, sources);
                             if (embedCode) {
                                 embedCode.classList.add('embed-responsive-item');
-                                
                                 const videoDiv = document.createElement('div');
                                 videoDiv.classList.add('useful-links-video-wrapper', 'd-flex', 'justify-content-center', 'my-1');
                                 const iframeDiv = document.createElement('div');
@@ -887,6 +885,7 @@ function populateVideoLinks(section, data) {
                                 wrapperDiv.appendChild(videoDiv);
                             }
                             
+                            // Primary video link element
                             const videoLinkParag = document.createElement('p');
                             urlText = formatStringForHtml(urlText);
                             const newVideoLink = videoLink.cloneNode();
@@ -894,6 +893,7 @@ function populateVideoLinks(section, data) {
                             videoLinkParag.appendChild(newVideoLink);
                             wrapperDiv.appendChild(videoLinkParag);
 
+                            // Secondary video link element
                             if (altUrl) {
                                 // Secondary video link requires link text
                                 if (altText) {
@@ -989,29 +989,30 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
 //  Useful Links: Websites section
 
 /**
- * For each object in passed-in Google Sheet data array, get all
- * string values. Check each 'required' value is not an empty
- * string (or 'null', etc). If any have no value, ignore this object
+ * For each object in passed-in Google Sheet data array:
+ * 
+ * - Get all string values. Check each 'required' value is not an
+ * empty string/null/etc. If any have no value, ignore this object
  * and move on to next object in data array.
  * 
- * Pass link URL to validator function to check for 'https'
- * protocol. If validator function returns false, again skip this
- * object.
+ * - Pass link URL to validator function to check for 'https'
+ * protocol. If function returns false, again skip this object.
  * 
- * Format and sanitise description and text string values using
+ * - Create required container elements, adding Bootstrap and other
+ * classes for formatting/styling.
+ * 
+ * - Format/sanitise all non-URL string values using
  * formatStringForHtml() function.
  * 
- * Create main container div element, adding classes for styling.
- * Create container paragraph element for link text and link element
- * and add formatted/sanitised description string to it.
- * 
- * Pass link URL and aria-label string consisting of website name to
- * createExternalLinkElement() function in order to create link
- * element. As website name ('siteName') is only used as aria-label
+ * - Pass link URL and aria-label string consisting of website name
+ * to createExternalLinkElement() function in order to create link
+ * element. As website name ('siteName') is only used as 'aria-label'
  * attribute, no need for formatting/sanitising. Add formatted/
- * sanitised link text to link element and add link element to
- * container paragraph. Add container paragraph to main container
- * div and add main container to passed-in 'section' element.
+ * sanitised link text to link element.
+ * 
+ * - Having added all newly created elements in order to an outer
+ * container, (structured to match backup content in DOM), add outer
+ * container to passed-in 'section' element.
  * 
  * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
@@ -1033,15 +1034,16 @@ function populateWebLinks(section, data) {
                     if(siteName){
                         // Only continue if link URL is valid 'https' URL
                         if (isValidUrl(url, 'https:')) {
-                            description = formatStringForHtml(description);
-                            text = formatStringForHtml(text);
-
+                            // Outer container
                             const wrapperDiv = document.createElement('div');
                             wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
+                            // Link description element
                             const containerParag = document.createElement('p');
+                            description = formatStringForHtml(description);
                             containerParag.innerHTML = `${description}&#58; `;
-                            
+                            // Link element
                             const newLink = createExternalLinkElement(url, siteName);
+                            text = formatStringForHtml(text);
                             newLink.innerHTML = text;
 
                             containerParag.appendChild(newLink);
@@ -1058,63 +1060,43 @@ function populateWebLinks(section, data) {
 // Further Reading section
 
 /**
- * For each object in passed-in Google Sheet data array, get all
- * string values. Check each 'required' value is not an empty
- * string (or 'null', etc). If any have no value, ignore this object
+ * For each object in passed-in Google Sheet data array:
+ * 
+ * - Get all string values. Check each 'required' value is not an
+ * empty string/null/etc. If any have no value, ignore this object
  * and move on to next object in data array.
  * 
- * Pass primary link URL to validator function to check for 'https'
+ * - Pass primary link URL to validator function to check for 'https'
  * protocol. If validator function returns false, again skip this
  * object.
  * 
- * Format and sanitise all 'required' non-url string values using
- * formatStringForHtml() function.
+ * - Create required container elements, adding Bootstrap and other
+ * classes for formatting/styling.
  * 
- * Create Bootstrap 'row' and 'col' container div elements, adding
- * classes for formatting and styling. Create container 'div' and
- * 'h3' elements for article headline. Add formatted/sanitised
- * headline string to 'h3' element and add that to conatiner element.
- * Add headline container to 'col' container element.
+ * - Format/sanitise all non-URL string values using
+ * formatStringForHtml() function, withholding any required for
+ * 'aria-label'/'title' attributes until after use for that purpose.
  * 
- * If article subheading string exists, format/sanitise it using
- * formatStringForHtml() function, create its container element and
- * add all to 'col' container element.
- * 
- * If any of the author, publication or publication date strings
- * exist, create container 'div' and paragraph elements. For each
- * string that exists, format/sanitise it using formatStringForHtml()
- * function, create its conatainer 'span' element and add to
- * paragraph element (structured to match backup content in DOM).
- * Add paragraph element to container element and add that to 'col'
- * container element.
- * 
- * Create container 'div' element for summary string, add formatted/
- * sanitised string and add that to 'col' container element.
- * 
- * Create container 'div' and paragraph elements for primary link.
- * Pass validated primary url and aria-label string consisting of
+ * - Pass validated primary url and aria-label string consisting of
  * original link text to createExternalLink() function in order to
  * create link element. Add formatted/sanitised link text to link
- * element. Add link element to container paragraph element and add
- * that to container 'div' element. Add link container to 'col'
- * container element.
+ * element.
+ *  
+ * - If secondary link URL and by implication, secondary URL text,
+ * (neither 'required') are not empty strings/null, validate secondary
+ * link URL, only continuing if validator function returns true. Clone
+ * primary link container element and its children in order to create
+ * secondary link container. Pass validated secondary url and
+ * aria-label string consisting of original secondary link text to
+ * createExternalLink() function in order to create secondary link
+ * element. Add formatted/sanitised secondary link text. Remove
+ * original link element from cloned node and replace with secondary
+ * link element.
  * 
- * If secondary link URL and by implication, secondary URL text,
- * (neither 'required') exist, pass link URL to validator function
- * to check for 'https' protocol. If validator function returns false,
- * do not continue. Clone primary link container element and its
- * children in order to create secondary link container. Pass
- * validated secondary url and aria-label string consisting of
- * original secondary link text to createExternalLink() function in
- * order to create link element. Format/sanitise secondary link text
- * using formatStringForHtml() function and add to secondary link
- * element. Remove original link element from cloned node and replace
- * with secondary link element. Add secondary link container to 'col'
- * container element.
- * 
- * Add 'col' container element to 'row' container element and add that
- * to passed-in 'section' element.
- * 
+ * - Having added all newly created elements in order to an outer
+ * container, (structured to match backup content in DOM), add outer
+ * container to passed-in 'section' element.
+ *   
  * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
@@ -1141,26 +1123,23 @@ function populateFurtherReading(section, data) {
                     if(primaryLinkText){
                         // Only continue if primary link URL is valid 'https' URL
                         if (isValidUrl(primaryUrl, 'https:')) {
-                            headline = formatStringForHtml(headline);
-                            summary = formatStringForHtml(summary);
-                            /* Retain original obj.articlelinktext string for
-                               use in 'aria-label' attribute of dynamically
-                               created link elements */
-                            let newLinkText = formatStringForHtml(primaryLinkText);
-
+                            // Outer container
                             const wrapperRow = document.createElement('div');
                             wrapperRow.classList.add('row');
                             const wrapperCol = document.createElement('div');
                             wrapperCol.classList.add('col-12', 'fr-art', 'mb-4');
-                            
+
+                            // Article headline element
                             const headWrapper = document.createElement('div');
                             headWrapper.classList.add('fr-art-headline');
                             const headlineEl = document.createElement('h3');
                             headlineEl.classList.add('h4');
+                            headline = formatStringForHtml(headline);
                             headlineEl.innerHTML = headline;
                             headWrapper.appendChild(headlineEl);
                             wrapperCol.appendChild(headWrapper);
 
+                            // Article subheading element
                             if (subhead) {
                                 subhead = formatStringForHtml(subhead);
                                 const subHeadWrapper = document.createElement('div');
@@ -1169,11 +1148,11 @@ function populateFurtherReading(section, data) {
                                 wrapperCol.appendChild(subHeadWrapper);
                             }
 
+                            // Author & publication details element
                             if (author || publication || pubDate) {
                                 const authorPubWrapper = document.createElement('div');
                                 authorPubWrapper.classList.add('fr-art-auth-pub');
                                 const authPubPrg = document.createElement('p');
-
                                 if (author) {
                                     author = formatStringForHtml(author);
                                     const authorSpan = document.createElement('span');
@@ -1182,7 +1161,6 @@ function populateFurtherReading(section, data) {
                                     authPubPrg.textContent = 'by ';
                                     authPubPrg.appendChild(authorSpan);
                                 }
-
                                 if (publication) {
                                     publication = formatStringForHtml(publication);
                                     const pubSpan = document.createElement('span');
@@ -1190,32 +1168,35 @@ function populateFurtherReading(section, data) {
                                     pubSpan.innerHTML = ` &#45; ${publication}`;
                                     authPubPrg.appendChild(pubSpan);
                                 }
-
                                 if (pubDate) {
                                     pubDate = formatStringForHtml(pubDate);
                                     const pubDateSpan = document.createElement('span');
                                     pubDateSpan.innerHTML = ` &#45; ${pubDate}`;
                                     authPubPrg.appendChild(pubDateSpan);
                                 }
-
                                 authorPubWrapper.appendChild(authPubPrg);
                                 wrapperCol.appendChild(authorPubWrapper);
                             }
 
+                            // Article summary element
                             const summaryWrapper = document.createElement('div');
                             summaryWrapper.classList.add('fr-art-summary');
+                            summary = formatStringForHtml(summary);
                             summaryWrapper.innerHTML = `<p>${summary}</p>`;
                             wrapperCol.appendChild(summaryWrapper);
                             
+                            // Primary link element
                             const articleLinkWrapper = document.createElement('div');
                             articleLinkWrapper.classList.add('fr-art-link');
                             const articleLinkPrg = document.createElement('p');
                             const primaryLink = createExternalLinkElement(primaryUrl, primaryLinkText);
-                            primaryLink.innerHTML = newLinkText;
+                            primaryLinkText = formatStringForHtml(primaryLinkText);
+                            primaryLink.innerHTML = primaryLinkText;
                             articleLinkPrg.appendChild(primaryLink);
                             articleLinkWrapper.appendChild(articleLinkPrg);
                             wrapperCol.appendChild(articleLinkWrapper);
 
+                            // Secondary link element
                             if (secondaryUrl) {
                                 // Secondary link requires link text
                                 if (secondaryLinkText) {
@@ -1232,6 +1213,7 @@ function populateFurtherReading(section, data) {
                                     }
                                 }
                             }
+
                             wrapperRow.appendChild(wrapperCol);
                             section.append(wrapperRow);
                         }
