@@ -659,17 +659,17 @@ function handleContactFormEmailJS(contactForm) {
 // ---------- 'More' page (dynamically populated) functions
 
 /**
- * Get each div element to be dynamically populated from passed-in
+ * Get each element to be dynamically populated from passed-in
  * 'main' element.
  * 
  * Fetch custom Google Forms / Google Sheets CMS data from custom
- * Google Apps Script endpoint, handling any errors in a try-catch
- * block. Get each data object array (Google Sheets data) from
- * fetch response JSON object.
+ * Google Apps Script endpoint, handling errors in try-catch block.
+ * Get each data object array (Google Sheets data) from fetch
+ * response JSON object.
  * 
- * Pass each div to be populated, along with corresponding data
- * object array, to their respective handler functions. If any
- * errors thrown, display backup content from DOM instead.
+ * Pass each element to be populated, along with corresponding data
+ * object array, to respective handler functions. If any errors
+ * thrown, display backup content from DOM instead.
  * 
  * @param {HTMLElement} moreMain - 'More' page's 'main' element.
  */
@@ -690,13 +690,6 @@ async function handleMorePageContent(moreMain) {
         }
         // Convert returned JSON string format to JSON object
         const spreadsheetData = await response.json();
-        // Check for custom error message from endpoint
-        const sheetKeys = Object.keys(spreadsheetData);
-        for (let key of sheetKeys) {
-            if (spreadsheetData[key].error) {
-                throw new Error(`Error: ${spreadsheetData[key].error} (${key})`);
-            }
-        }
         /* Break fetched Google Sheets spreadsheet data object down
            into object arrays consisting of individual sheet data */
         const testimonialsData = spreadsheetData.testimonialsformdata;
@@ -709,12 +702,12 @@ async function handleMorePageContent(moreMain) {
         populateWebLinks(webLinksSection, webLinksData);
         populateFurtherReading(furtherReadingSection, readingData);
     } catch (error) {
-        console.error(error.message);
-        // Display backup content in case of error
+        console.error(`${error.message}. Displaying backup data.`);
+        // Display all backup content in case of error
         const backupContent = document.querySelectorAll('.backup-content');
         for (let backup of backupContent) {
             backup.classList.remove('bc-hidden');
-            backup.setAttribute('aria-hidden', false);
+            backup.removeAttribute('aria-hidden');
         }
     }
 }
@@ -722,52 +715,70 @@ async function handleMorePageContent(moreMain) {
 // Client testimonials section
 
 /**
- * For each object in passed-in Google Sheet data array:
+ * Check for custom error message from Google Apps Script endpoint
+ * (will be present if sheet missing/mis-named). If present, call
+ * sheetErrorBackup() function, with passed-in 'section' element,
+ * relevant sheet name and error message as parameters, in order to
+ * display backup content.
  * 
- * - Get 'clientname' and 'clienttestimonial' string values. Check each
- * is not an empty string/null/etc. If 'clientname' has no value, assign
- * 'Anonymous' as name value. If 'clientteatimonial' has no value,
- * ignore this object and move on to next object in data array.
+ * If no error message, for each object in passed-in Google Sheet data
+ * array:
+ * 
+ * - Get 'clientname' and 'clienttestimonial' string values. Check
+ * each is not an empty string/null/etc. If 'clientname' has no value,
+ * assign 'Anonymous' as name value. If 'clientteatimonial' has no
+ * value, ignore this object and move on to next object in data array.
  * 
  * - Format and sanitise name and testimonial string values using
  * formatStringForHtml() function.
  * 
- * - Create elements for each data array object (structured to
- * match backup content in DOM) and append to passed-in 'section'
- * element.
+ * - Create elements for each data array object (structured to match
+ * backup content in DOM) and add to passed-in 'section' element.
  * 
- * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * If 'section' element ends up with no content, (i.e. no valid data
+ * passed in), pass to sheetErrorBackup() function with relevant sheet
+ * name in order to display backup content.
+ * 
+ * @param {HTMLElement} section - Containing div element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateTestimonials(section, data) {
-    for (let obj of data) {
-        let name = obj.clientname
-        let quote = obj.clienttestimonial
+    if (data.error) {
+        sheetErrorBackup(section, 'Testimonials Form Data', data.error);
+    } else {
+        for (let obj of data) {
+            let name = obj.clientname
+            let quote = obj.clienttestimonial
 
-        /* Conditional statements used to safeguard against Google
-           Sheets data having missing cells */
-        if (name) {
-            name = formatStringForHtml(name);
-        } else {
-            name = 'Anonymous';
+            /* Conditional statements used to safeguard against Google
+            Sheets data having missing cells */
+            if (name) {
+                name = formatStringForHtml(name);
+            } else {
+                name = 'Anonymous';
+            }
+            // Only use object data if testimonial content present
+            if (quote) {
+                quote = formatStringForHtml(quote);
+                // Outer container
+                const testimonialDiv = document.createElement('div');
+                testimonialDiv.classList.add('col-12', 'col-md-4', 'mb-3');
+                // Testimonial element
+                const quoteDiv = document.createElement('div');
+                quoteDiv.classList.add('testimonial-quote');
+                quoteDiv.innerHTML = `<p>&#34;${quote}&#34;</p>`
+                testimonialDiv.appendChild(quoteDiv);
+                // client name element
+                const nameDiv = document.createElement('div');
+                nameDiv.classList.add('testimonial-name');
+                nameDiv.innerHTML = `<p>&#45; ${name}</p>`;
+                testimonialDiv.appendChild(nameDiv);
+
+                section.appendChild(testimonialDiv);
+            }
         }
-        // Only use object data if testimonial content present
-        if (quote) {
-            quote = formatStringForHtml(quote);
-
-            const testimonialDiv = document.createElement('div');
-            testimonialDiv.classList.add('col-12', 'col-md-4', 'mb-3');
-
-            const quoteDiv = document.createElement('div');
-            quoteDiv.classList.add('testimonial-quote');
-            quoteDiv.innerHTML = `<p>&#34;${quote}&#34;</p>`
-
-            const nameDiv = document.createElement('div');
-            nameDiv.classList.add('testimonial-name');
-            nameDiv.innerHTML = `<p>&#45; ${name}</p>`;
-
-            testimonialDiv.append(quoteDiv, nameDiv);
-            section.append(testimonialDiv);
+        if (!section.innerHTML) {
+            sheetErrorBackup(section, 'Testimonials Form Data');
         }
     }
 }
@@ -777,7 +788,14 @@ function populateTestimonials(section, data) {
 /**
  * Construct array of trusted video source names.
  * 
- * For each object in passed-in Google Sheet data array:
+ * Check for custom error message from Google Apps Script endpoint
+ * (will be present if sheet missing/mis-named). If present, call
+ * sheetErrorBackup() function, with passed-in 'section' element,
+ * relevant sheet name and error message as parameters, in order to
+ * display backup content.
+ * 
+ * If no error message, for each object in passed-in Google Sheet data
+ * array:
  * 
  * - Get all string values. Check each 'required' value is not an
  * empty string/null/etc. If any have no value, ignore this object
@@ -822,99 +840,110 @@ function populateTestimonials(section, data) {
  * container, (structured to match backup content in DOM), add outer
  * container to passed-in 'section' element.
  * 
- * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * If 'section' element ends up with no content, (i.e. no valid data
+ * passed in), pass to sheetErrorBackup() function with relevant sheet
+ * name in order to display backup content.
+ * 
+ * @param {HTMLElement} section - Containing div element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateVideoLinks(section, data) {
     const sources = ['YouTube', 'youtu.be', 'Amazon', 'primevideo', 'Vimeo', 'Dailymotion', 'Facebook'];
 
-    for (let obj of data) {
-        const title = obj.videotitle;
-        let description = obj.videodescription;
-        const videoUrl = obj.videourl;
-        let urlText = obj.videourltext;
-        let embedCode = obj.videoembedcode;
-        const altUrl = obj.secondaryurl;
-        let altText = obj.secondaryurltext;
+    if (data.error) {
+        sheetErrorBackup(section, 'Video Links Form Data', data.error);
+    } else {
+        for (let obj of data) {
+            const title = obj.videotitle;
+            let description = obj.videodescription;
+            const videoUrl = obj.videourl;
+            let urlText = obj.videourltext;
+            let embedCode = obj.videoembedcode;
+            const altUrl = obj.secondaryurl;
+            let altText = obj.secondaryurltext;
 
-        /* The following nested conditional statements are
-           to safeguard against missing cells in Google
-           Sheets CMS data - i.e. only continue if required
-           fields were filled out in linked Google Form */
-        if (title) {
-            if (description) {
-                if (videoUrl) {
-                    if (urlText) {
-                        /* Only continue if video URL is valid 'https' URL
-                        and appears to come from a trusted domain */
-                        if (isValidUrl(videoUrl, 'https:') && isTrustedUrl(videoUrl, sources)) {
-                            // Outer container
-                            const wrapperDiv = document.createElement('div');
-                            wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
+            /* The following nested conditional statements are
+            to safeguard against missing cells in Google
+            Sheets CMS data - i.e. only continue if required
+            fields were filled out in linked Google Form */
+            if (title) {
+                if (description) {
+                    if (videoUrl) {
+                        if (urlText) {
+                            /* Only continue if video URL is valid 'https' URL
+                            and appears to come from a trusted domain */
+                            if (isValidUrl(videoUrl, 'https:') && isTrustedUrl(videoUrl, sources)) {
+                                // Outer container
+                                const wrapperDiv = document.createElement('div');
+                                wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
 
-                            // Video heading element
-                            const videoHeading = document.createElement('h4');
-                            videoHeading.classList.add('h5', 'mb-0');
-                            /* Retain original 'obj.videotitle' string
-                            for use in aria-label' and 'title'
-                            attributes of dynamically created elements */
-                            const newTitle = formatStringForHtml(title);
-                            // Primary video link for heading
-                            const videoLink = createExternalLinkElement(videoUrl, `Watch '${title}' - ${urlText}`);
-                            videoLink.innerHTML = newTitle;
-                            videoHeading.appendChild(videoLink);
-                            wrapperDiv.appendChild(videoHeading);
-                            
-                            // Video description element
-                            const descriptionDiv = document.createElement('div');
-                            description = formatStringForHtml(description);
-                            const descriptionParag = `<p>${description}</p>`;
-                            descriptionDiv.innerHTML = descriptionParag;
-                            wrapperDiv.appendChild(descriptionDiv);
-                            
-                            // Embedded video
-                            embedCode = createVideoEmbed(embedCode, title, sources);
-                            if (embedCode) {
-                                embedCode.classList.add('embed-responsive-item');
-                                const videoDiv = document.createElement('div');
-                                videoDiv.classList.add('useful-links-video-wrapper', 'd-flex', 'justify-content-center', 'my-1');
-                                const iframeDiv = document.createElement('div');
-                                iframeDiv.classList.add('useful-links-video', 'embed-responsive', 'embed-responsive-16by9');
-                                iframeDiv.appendChild(embedCode);
-                                videoDiv.appendChild(iframeDiv);
-                                wrapperDiv.appendChild(videoDiv);
-                            }
-                            
-                            // Primary video link element
-                            const videoLinkParag = document.createElement('p');
-                            urlText = formatStringForHtml(urlText);
-                            const newVideoLink = videoLink.cloneNode();
-                            newVideoLink.innerHTML = urlText;
-                            videoLinkParag.appendChild(newVideoLink);
-                            wrapperDiv.appendChild(videoLinkParag);
+                                // Video heading element
+                                const videoHeading = document.createElement('h4');
+                                videoHeading.classList.add('h5', 'mb-0');
+                                /* Retain original 'obj.videotitle' string
+                                for use in aria-label' and 'title'
+                                attributes of dynamically created elements */
+                                const newTitle = formatStringForHtml(title);
+                                // Primary video link for heading
+                                const videoLink = createExternalLinkElement(videoUrl, `Watch '${title}' - ${urlText}`);
+                                videoLink.innerHTML = newTitle;
+                                videoHeading.appendChild(videoLink);
+                                wrapperDiv.appendChild(videoHeading);
+                                
+                                // Video description element
+                                const descriptionDiv = document.createElement('div');
+                                description = formatStringForHtml(description);
+                                const descriptionParag = `<p>${description}</p>`;
+                                descriptionDiv.innerHTML = descriptionParag;
+                                wrapperDiv.appendChild(descriptionDiv);
+                                
+                                // Embedded video
+                                embedCode = createVideoEmbed(embedCode, title, sources);
+                                if (embedCode) {
+                                    embedCode.classList.add('embed-responsive-item');
+                                    const videoDiv = document.createElement('div');
+                                    videoDiv.classList.add('useful-links-video-wrapper', 'd-flex', 'justify-content-center', 'my-1');
+                                    const iframeDiv = document.createElement('div');
+                                    iframeDiv.classList.add('useful-links-video', 'embed-responsive', 'embed-responsive-16by9');
+                                    iframeDiv.appendChild(embedCode);
+                                    videoDiv.appendChild(iframeDiv);
+                                    wrapperDiv.appendChild(videoDiv);
+                                }
+                                
+                                // Primary video link element
+                                const videoLinkParag = document.createElement('p');
+                                urlText = formatStringForHtml(urlText);
+                                const newVideoLink = videoLink.cloneNode();
+                                newVideoLink.innerHTML = urlText;
+                                videoLinkParag.appendChild(newVideoLink);
+                                wrapperDiv.appendChild(videoLinkParag);
 
-                            // Secondary video link element
-                            if (altUrl) {
-                                // Secondary video link requires link text
-                                if (altText) {
-                                    /* Only create secondary video link if secondary
-                                    URL is valid 'https' URL and appears to come
-                                    from a trusted domain */
-                                    if (isValidUrl(altUrl, 'https:') && isTrustedUrl(altUrl, sources)) {
-                                        const secondLinkParag = document.createElement('p');
-                                        const secondaryLink = createExternalLinkElement(altUrl, `Watch '${title}' - ${altText}`);
-                                        altText = formatStringForHtml(altText);
-                                        secondaryLink.innerHTML = altText;
-                                        secondLinkParag.appendChild(secondaryLink);
-                                        wrapperDiv.appendChild(secondLinkParag);
+                                // Secondary video link element
+                                if (altUrl) {
+                                    // Secondary video link requires link text
+                                    if (altText) {
+                                        /* Only create secondary video link if secondary
+                                        URL is valid 'https' URL and appears to come
+                                        from a trusted domain */
+                                        if (isValidUrl(altUrl, 'https:') && isTrustedUrl(altUrl, sources)) {
+                                            const secondLinkParag = document.createElement('p');
+                                            const secondaryLink = createExternalLinkElement(altUrl, `Watch '${title}' - ${altText}`);
+                                            altText = formatStringForHtml(altText);
+                                            secondaryLink.innerHTML = altText;
+                                            secondLinkParag.appendChild(secondaryLink);
+                                            wrapperDiv.appendChild(secondLinkParag);
+                                        }
                                     }
                                 }
+                                section.appendChild(wrapperDiv);
                             }
-                            section.append(wrapperDiv);
                         }
                     }
                 }
             }
+        }
+        if (!section.innerHTML) {
+            sheetErrorBackup(section, 'Video Links Form Data');
         }
     }
 }
@@ -952,6 +981,7 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
         'frameborder': '0',
         'allow': 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share',
         'referrerpolicy': 'strict-origin-when-cross-origin',
+        'loading': 'lazy',
         'allowfullscreen': 'true'
     };
     let embedUrl;
@@ -989,7 +1019,14 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
 //  Useful Links: Websites section
 
 /**
- * For each object in passed-in Google Sheet data array:
+ * Check for custom error message from Google Apps Script endpoint
+ * (will be present if sheet missing/mis-named). If present, call
+ * sheetErrorBackup() function, with passed-in 'section' element,
+ * relevant sheet name and error message as parameters, in order to
+ * display backup content.
+ * 
+ * If no error message, for each object in passed-in Google Sheet data
+ * array:
  * 
  * - Get all string values. Check each 'required' value is not an
  * empty string/null/etc. If any have no value, ignore this object
@@ -1014,45 +1051,56 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
  * container, (structured to match backup content in DOM), add outer
  * container to passed-in 'section' element.
  * 
- * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * If 'section' element ends up with no content, (i.e. no valid data
+ * passed in), pass to sheetErrorBackup() function with relevant sheet
+ * name in order to display backup content.
+ * 
+ * @param {HTMLElement} section - Containing div element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateWebLinks(section, data) {
-    for (let obj of data) {
-        let description = obj.linkdescription;
-        let text = obj.linktext;
-        const url = obj.linkurl;
-        const siteName = obj.websitename;
+    if (data.error) {
+        sheetErrorBackup(section, 'Site Links Form Data', data.error);
+    } else {
+        for (let obj of data) {
+            let description = obj.linkdescription;
+            let text = obj.linktext;
+            const url = obj.linkurl;
+            const siteName = obj.websitename;
 
-        /* The following nested conditional statements are
-           to safeguard against missing cells in Google
-           Sheets CMS data - i.e. only continue if required
-           fields were filled out in linked Google Form */
-        if (description) {
-            if (text) {
-                if (url) {
-                    if(siteName){
-                        // Only continue if link URL is valid 'https' URL
-                        if (isValidUrl(url, 'https:')) {
-                            // Outer container
-                            const wrapperDiv = document.createElement('div');
-                            wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
-                            // Link description element
-                            const containerParag = document.createElement('p');
-                            description = formatStringForHtml(description);
-                            containerParag.innerHTML = `${description}&#58; `;
-                            // Link element
-                            const newLink = createExternalLinkElement(url, siteName);
-                            text = formatStringForHtml(text);
-                            newLink.innerHTML = text;
+            /* The following nested conditional statements are
+            to safeguard against missing cells in Google
+            Sheets CMS data - i.e. only continue if required
+            fields were filled out in linked Google Form */
+            if (description) {
+                if (text) {
+                    if (url) {
+                        if(siteName){
+                            // Only continue if link URL is valid 'https' URL
+                            if (isValidUrl(url, 'https:')) {
+                                // Outer container
+                                const wrapperDiv = document.createElement('div');
+                                wrapperDiv.classList.add('useful-link-wrapper', 'mb-4');
+                                // Link description element
+                                const containerParag = document.createElement('p');
+                                description = formatStringForHtml(description);
+                                containerParag.innerHTML = `${description}&#58; `;
+                                // Link element
+                                const newLink = createExternalLinkElement(url, siteName);
+                                text = formatStringForHtml(text);
+                                newLink.innerHTML = text;
 
-                            containerParag.appendChild(newLink);
-                            wrapperDiv.appendChild(containerParag);
-                            section.append(wrapperDiv);
+                                containerParag.appendChild(newLink);
+                                wrapperDiv.appendChild(containerParag);
+                                section.appendChild(wrapperDiv);
+                            }
                         }
                     }
                 }
             }
+        }
+        if (!section.innerHTML) {
+            sheetErrorBackup(section, 'Site Links Form Data');
         }
     }
 }
@@ -1060,7 +1108,14 @@ function populateWebLinks(section, data) {
 // Further Reading section
 
 /**
- * For each object in passed-in Google Sheet data array:
+ * Check for custom error message from Google Apps Script endpoint
+ * (will be present if sheet missing/mis-named). If present, call
+ * sheetErrorBackup() function, with passed-in 'section' element,
+ * relevant sheet name and error message as parameters, in order to
+ * display backup content.
+ * 
+ * If no error message, for each object in passed-in Google Sheet data
+ * array:
  * 
  * - Get all string values. Check each 'required' value is not an
  * empty string/null/etc. If any have no value, ignore this object
@@ -1096,132 +1151,172 @@ function populateWebLinks(section, data) {
  * - Having added all newly created elements in order to an outer
  * container, (structured to match backup content in DOM), add outer
  * container to passed-in 'section' element.
+ * 
+ * If 'section' element ends up with no content, (i.e. no valid data
+ * passed in), pass to sheetErrorBackup() function with relevant sheet
+ * name in order to display backup content.
  *   
- * @param {HTMLElement} section - Containing 'div' element for dynamically populated content.
+ * @param {HTMLElement} section - Containing div element for dynamically populated content.
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateFurtherReading(section, data) {
-    for (let obj of data) {
-        let headline = obj.articleheadline;
-        let subhead = obj.articlesubheading;
-        let summary = obj.articlesummary;
-        const primaryUrl = obj.articlelink;
-        let primaryLinkText = obj.articlelinktext;
-        let author = obj.author;
-        let publication = obj.publication;
-        let pubDate = obj.publicationdate;
-        const secondaryUrl = obj.secondarylink;
-        let secondaryLinkText = obj.secondarylinktext;
+    if (data.error) {
+        sheetErrorBackup(section, 'FR Form Data', data.error);
+    } else {
+        for (let obj of data) {
+            let headline = obj.articleheadline;
+            let subhead = obj.articlesubheading;
+            let summary = obj.articlesummary;
+            const primaryUrl = obj.articlelink;
+            let primaryLinkText = obj.articlelinktext;
+            let author = obj.author;
+            let publication = obj.publication;
+            let pubDate = obj.publicationdate;
+            const secondaryUrl = obj.secondarylink;
+            let secondaryLinkText = obj.secondarylinktext;
 
-        /* The following nested conditional statements are
-           to safeguard against missing cells in Google
-           Sheets CMS data - i.e. only continue if required
-           fields were filled out in linked Google Form */
-        if (headline) {
-            if (summary) {
-                if (primaryUrl) {
-                    if(primaryLinkText){
-                        // Only continue if primary link URL is valid 'https' URL
-                        if (isValidUrl(primaryUrl, 'https:')) {
-                            // Outer container
-                            const wrapperRow = document.createElement('div');
-                            wrapperRow.classList.add('row');
-                            const wrapperCol = document.createElement('div');
-                            wrapperCol.classList.add('col-12', 'fr-art', 'mb-4');
+            /* The following nested conditional statements are
+            to safeguard against missing cells in Google
+            Sheets CMS data - i.e. only continue if required
+            fields were filled out in linked Google Form */
+            if (headline) {
+                if (summary) {
+                    if (primaryUrl) {
+                        if(primaryLinkText){
+                            // Only continue if primary link URL is valid 'https' URL
+                            if (isValidUrl(primaryUrl, 'https:')) {
+                                // Outer container
+                                const wrapperRow = document.createElement('div');
+                                wrapperRow.classList.add('row');
+                                const wrapperCol = document.createElement('div');
+                                wrapperCol.classList.add('col-12', 'fr-art', 'mb-4');
 
-                            // Article headline element
-                            const headWrapper = document.createElement('div');
-                            headWrapper.classList.add('fr-art-headline');
-                            const headlineEl = document.createElement('h3');
-                            headlineEl.classList.add('h4');
-                            headline = formatStringForHtml(headline);
-                            headlineEl.innerHTML = headline;
-                            headWrapper.appendChild(headlineEl);
-                            wrapperCol.appendChild(headWrapper);
+                                // Article headline element
+                                const headWrapper = document.createElement('div');
+                                headWrapper.classList.add('fr-art-headline');
+                                const headlineEl = document.createElement('h3');
+                                headlineEl.classList.add('h4');
+                                headline = formatStringForHtml(headline);
+                                headlineEl.innerHTML = headline;
+                                headWrapper.appendChild(headlineEl);
+                                wrapperCol.appendChild(headWrapper);
 
-                            // Article subheading element
-                            if (subhead) {
-                                subhead = formatStringForHtml(subhead);
-                                const subHeadWrapper = document.createElement('div');
-                                subHeadWrapper.classList.add('fr-art-subhead');
-                                subHeadWrapper.innerHTML = `<p>${subhead}</p>`;
-                                wrapperCol.appendChild(subHeadWrapper);
-                            }
-
-                            // Author & publication details element
-                            if (author || publication || pubDate) {
-                                const authorPubWrapper = document.createElement('div');
-                                authorPubWrapper.classList.add('fr-art-auth-pub');
-                                const authPubPrg = document.createElement('p');
-                                if (author) {
-                                    author = formatStringForHtml(author);
-                                    const authorSpan = document.createElement('span');
-                                    authorSpan.classList.add('fr-art-author');
-                                    authorSpan.innerHTML = author;
-                                    authPubPrg.textContent = 'by ';
-                                    authPubPrg.appendChild(authorSpan);
+                                // Article subheading element
+                                if (subhead) {
+                                    subhead = formatStringForHtml(subhead);
+                                    const subHeadWrapper = document.createElement('div');
+                                    subHeadWrapper.classList.add('fr-art-subhead');
+                                    subHeadWrapper.innerHTML = `<p>${subhead}</p>`;
+                                    wrapperCol.appendChild(subHeadWrapper);
                                 }
-                                if (publication) {
-                                    publication = formatStringForHtml(publication);
-                                    const pubSpan = document.createElement('span');
-                                    pubSpan.classList.add('fr-art-publication');
-                                    pubSpan.innerHTML = ` &#45; ${publication}`;
-                                    authPubPrg.appendChild(pubSpan);
-                                }
-                                if (pubDate) {
-                                    pubDate = formatStringForHtml(pubDate);
-                                    const pubDateSpan = document.createElement('span');
-                                    pubDateSpan.innerHTML = ` &#45; ${pubDate}`;
-                                    authPubPrg.appendChild(pubDateSpan);
-                                }
-                                authorPubWrapper.appendChild(authPubPrg);
-                                wrapperCol.appendChild(authorPubWrapper);
-                            }
 
-                            // Article summary element
-                            const summaryWrapper = document.createElement('div');
-                            summaryWrapper.classList.add('fr-art-summary');
-                            summary = formatStringForHtml(summary);
-                            summaryWrapper.innerHTML = `<p>${summary}</p>`;
-                            wrapperCol.appendChild(summaryWrapper);
-                            
-                            // Primary link element
-                            const articleLinkWrapper = document.createElement('div');
-                            articleLinkWrapper.classList.add('fr-art-link');
-                            const articleLinkPrg = document.createElement('p');
-                            const primaryLink = createExternalLinkElement(primaryUrl, primaryLinkText);
-                            primaryLinkText = formatStringForHtml(primaryLinkText);
-                            primaryLink.innerHTML = primaryLinkText;
-                            articleLinkPrg.appendChild(primaryLink);
-                            articleLinkWrapper.appendChild(articleLinkPrg);
-                            wrapperCol.appendChild(articleLinkWrapper);
+                                // Author & publication details element
+                                if (author || publication || pubDate) {
+                                    const authorPubWrapper = document.createElement('div');
+                                    authorPubWrapper.classList.add('fr-art-auth-pub');
+                                    const authPubPrg = document.createElement('p');
+                                    if (author) {
+                                        author = formatStringForHtml(author);
+                                        const authorSpan = document.createElement('span');
+                                        authorSpan.classList.add('fr-art-author');
+                                        authorSpan.innerHTML = author;
+                                        authPubPrg.textContent = 'by ';
+                                        authPubPrg.appendChild(authorSpan);
+                                    }
+                                    if (publication) {
+                                        publication = formatStringForHtml(publication);
+                                        const pubSpan = document.createElement('span');
+                                        pubSpan.classList.add('fr-art-publication');
+                                        pubSpan.innerHTML = ` &#45; ${publication}`;
+                                        authPubPrg.appendChild(pubSpan);
+                                    }
+                                    if (pubDate) {
+                                        pubDate = formatStringForHtml(pubDate);
+                                        const pubDateSpan = document.createElement('span');
+                                        pubDateSpan.innerHTML = ` &#45; ${pubDate}`;
+                                        authPubPrg.appendChild(pubDateSpan);
+                                    }
+                                    authorPubWrapper.appendChild(authPubPrg);
+                                    wrapperCol.appendChild(authorPubWrapper);
+                                }
 
-                            // Secondary link element
-                            if (secondaryUrl) {
-                                // Secondary link requires link text
-                                if (secondaryLinkText) {
-                                    /* Only create secondary link if secondary
-                                    URL is valid 'https' URL */
-                                    if (isValidUrl(secondaryUrl, 'https:')) {
-                                        const altLinkWrapper = articleLinkWrapper.cloneNode(true);
-                                        const secondaryLink = createExternalLinkElement(secondaryUrl, secondaryLinkText);
-                                        secondaryLinkText = formatStringForHtml(secondaryLinkText);
-                                        secondaryLink.innerHTML = secondaryLinkText;
-                                        altLinkWrapper.firstElementChild.firstElementChild.remove();
-                                        altLinkWrapper.firstElementChild.appendChild(secondaryLink);
-                                        wrapperCol.appendChild(altLinkWrapper);
+                                // Article summary element
+                                const summaryWrapper = document.createElement('div');
+                                summaryWrapper.classList.add('fr-art-summary');
+                                summary = formatStringForHtml(summary);
+                                summaryWrapper.innerHTML = `<p>${summary}</p>`;
+                                wrapperCol.appendChild(summaryWrapper);
+                                
+                                // Primary link element
+                                const articleLinkWrapper = document.createElement('div');
+                                articleLinkWrapper.classList.add('fr-art-link');
+                                const articleLinkPrg = document.createElement('p');
+                                const primaryLink = createExternalLinkElement(primaryUrl, primaryLinkText);
+                                primaryLinkText = formatStringForHtml(primaryLinkText);
+                                primaryLink.innerHTML = primaryLinkText;
+                                articleLinkPrg.appendChild(primaryLink);
+                                articleLinkWrapper.appendChild(articleLinkPrg);
+                                wrapperCol.appendChild(articleLinkWrapper);
+
+                                // Secondary link element
+                                if (secondaryUrl) {
+                                    // Secondary link requires link text
+                                    if (secondaryLinkText) {
+                                        /* Only create secondary link if secondary
+                                        URL is valid 'https' URL */
+                                        if (isValidUrl(secondaryUrl, 'https:')) {
+                                            const altLinkWrapper = articleLinkWrapper.cloneNode(true);
+                                            const secondaryLink = createExternalLinkElement(secondaryUrl, secondaryLinkText);
+                                            secondaryLinkText = formatStringForHtml(secondaryLinkText);
+                                            secondaryLink.innerHTML = secondaryLinkText;
+                                            altLinkWrapper.firstElementChild.firstElementChild.remove();
+                                            altLinkWrapper.firstElementChild.appendChild(secondaryLink);
+                                            wrapperCol.appendChild(altLinkWrapper);
+                                        }
                                     }
                                 }
-                            }
 
-                            wrapperRow.appendChild(wrapperCol);
-                            section.append(wrapperRow);
+                                wrapperRow.appendChild(wrapperCol);
+                                section.appendChild(wrapperRow);
+                            }
                         }
                     }
                 }
             }
         }
+        if (!section.innerHTML) {
+            sheetErrorBackup(section, 'FR Form Data');
+        }
     }
+}
+
+// Google Sheets error handler
+
+/**
+ * Display console error message relevant to type of Google Sheets
+ * error that called this function, incorporating passed-in sheet
+ * name and passed-in custom error message if present.
+ * 
+ * Using passed-in 'section' element as reference, get backup content
+ * container with nextElementSibling method, removing 'hidden' class
+ * name and 'aria-hidden' attribute in order to display it in DOM. 
+ * 
+ * @param {HTMLElement} section - Containing div element for dynamically populated content. 
+ * @param {string} sheetName - Name of sheet from Google spreadsheet that is causing error.
+ * @param {string} noSheet - Custom error message from Google Apps Script endpoint (optional).
+ */
+ function sheetErrorBackup(section, sheetName, noSheet) {
+    let errorMsg;
+    if (noSheet) {
+        errorMsg = `Error! ${noSheet} (${sheetName}). Displaying backup content.`;
+    } else {
+        errorMsg = `Error! No valid data in sheet. (${sheetName}). Displaying backup content.`;
+    }
+    console.error(errorMsg);
+
+    const backupContent = section.nextElementSibling;
+    backupContent.classList.remove('bc-hidden');
+    backupContent.removeAttribute('aria-hidden');
 }
 
 // Format text string for use as HTML content
@@ -1348,8 +1443,8 @@ function isValidUrl(urlString, protocolString) {
  * 
  * Create new anchor element and set attributes from object.
  * 
- * If passed-in aria-label string exists, append the text, '(Opens
- * in a new tab)' and set the attribute.
+ * If aria-label string passed in, append text, '(Opens in a new tab)'
+ * and set attribute.
  * 
  * Return new anchor element.
  * 
