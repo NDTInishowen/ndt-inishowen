@@ -801,13 +801,13 @@ margin: 0;
 
             /************************************/
             /*                                  */
-            /* --------- 'More' page ---------- */
+            /* ------ 'More' menu pages ------- */
             /*                                  */
             /************************************/
 
 /* general styles */
 
-#testimonials, #useful-links, #further-reading {
+.more-container {
     min-height: calc(100vh - 207px);
 }
 
@@ -822,7 +822,7 @@ margin: 0;
     overflow: hidden;
 }
 
-/* testimonials section */
+/* testimonials page */
 
 #testimonials-banner {
     background: url('../images/hands-showing-positive-gesture_1134-313.jpg') no-repeat center center / contain;
@@ -842,7 +842,7 @@ margin: 0;
     text-align: right;
 }
 
-/* useful links section */
+/* useful links page */
 
 #useful-links-banner {
     background: url('../images/links-basic-rgb_53876-37712.jpg') no-repeat center center / cover;
@@ -856,7 +856,7 @@ margin: 0;
     width: 60%;
 }
 
-/* further reading section */
+/* further reading page */
 
 #further-reading-banner {
     background: url('../images/close-up-photo-girl-studying-with-tablettextbooks-cup-coffee-desk-cozy-home_574295-3876.jpg') no-repeat center center / cover;
@@ -1022,7 +1022,7 @@ margin: 0;
 
     /* 'more' page */
 
-    #testimonials, #useful-links, #further-reading {
+    .more-container {
         min-height: calc(100vh - 140px);
     }
 

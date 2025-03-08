@@ -92,9 +92,9 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
-    // ------------------ 'More' page
+    // ---------------- 'More' menu pages
 
-    /* Get 'More' page's <main> element and if found, pass to handler
+    /* Get 'More' menu page's <main> element and if found, pass to handler
        function for content to be dynamically populated from Google Sheets */
 
     const moreMain = document.querySelector('#more-main');
@@ -656,7 +656,7 @@ function handleContactFormEmailJS(contactForm) {
 
 // ------------- Contact Forms & EmailJS functions end
 
-// ---------- 'More' page (dynamically populated) functions
+// ------ 'More' menu pages (dynamically populated) functions
 
 /**
  * Get each element to be dynamically populated from passed-in
@@ -671,7 +671,7 @@ function handleContactFormEmailJS(contactForm) {
  * object array, to respective handler functions. If any errors
  * thrown, display backup content from DOM instead.
  * 
- * @param {HTMLElement} moreMain - 'More' page's 'main' element.
+ * @param {HTMLElement} moreMain - 'More' menu page's 'main' element.
  */
 async function handleMorePageContent(moreMain) {
     const testimonialSection = moreMain.querySelector('#testimonials-content');
@@ -697,10 +697,18 @@ async function handleMorePageContent(moreMain) {
         const webLinksData = spreadsheetData.sitelinksformdata;
         const readingData = spreadsheetData.frformdata;
         // Call handler functions to populate page
-        populateTestimonials(testimonialSection, testimonialsData);
-        populateVideoLinks(videoLinksSection, videoLinksData);
-        populateWebLinks(webLinksSection, webLinksData);
-        populateFurtherReading(furtherReadingSection, readingData);
+        if (testimonialSection) {
+            populateTestimonials(testimonialSection, testimonialsData);
+        }
+        if (videoLinksSection) {
+            populateVideoLinks(videoLinksSection, videoLinksData);
+        }
+        if (webLinksSection) {
+            populateWebLinks(webLinksSection, webLinksData);
+        }
+        if (furtherReadingSection) {
+            populateFurtherReading(furtherReadingSection, readingData);
+        }
     } catch (error) {
         console.error(`${error.message}. Displaying backup data.`);
         // Display all backup content in case of error
@@ -712,7 +720,7 @@ async function handleMorePageContent(moreMain) {
     }
 }
 
-// Client testimonials section
+// Testimonials page
 
 /**
  * Check for custom error message from Google Apps Script endpoint
@@ -783,7 +791,7 @@ function populateTestimonials(section, data) {
     }
 }
 
-// Useful Links: Videos section
+// Useful Links page: Videos section
 
 /**
  * Construct array of trusted video source names.
@@ -1016,7 +1024,7 @@ function createVideoEmbed(embedCode, titleString, sourceArray) {
     } else return null;
 }
 
-//  Useful Links: Websites section
+//  Useful Links page: Websites section
 
 /**
  * Check for custom error message from Google Apps Script endpoint
@@ -1105,7 +1113,7 @@ function populateWebLinks(section, data) {
     }
 }
 
-// Further Reading section
+// Further Reading page
 
 /**
  * Check for custom error message from Google Apps Script endpoint
@@ -1469,7 +1477,7 @@ function createExternalLinkElement(urlString, ariaLabelString) {
     return linkElement;
 }
 
-// ------ 'More' page (dynamically populated) functions end
+// --- 'More' menu pages (dynamically populated) functions end
 
 // ------------------- Miscellaneous functions
 
