@@ -696,18 +696,22 @@ async function handleMorePageContent(moreMain) {
         const videoLinksData = spreadsheetData.videolinksformdata;
         const webLinksData = spreadsheetData.sitelinksformdata;
         const readingData = spreadsheetData.frformdata;
-        // Call handler functions to populate page
+        // Call handler functions to populate page/hide loading screen
         if (testimonialSection) {
             populateTestimonials(testimonialSection, testimonialsData);
+            hideLoadingScreen();
         }
         if (videoLinksSection) {
             populateVideoLinks(videoLinksSection, videoLinksData);
+            hideLoadingScreen();
         }
         if (webLinksSection) {
             populateWebLinks(webLinksSection, webLinksData);
+            hideLoadingScreen();
         }
         if (furtherReadingSection) {
             populateFurtherReading(furtherReadingSection, readingData);
+            hideLoadingScreen();
         }
     } catch (error) {
         console.error(`${error.message}. Displaying backup data.`);
@@ -717,6 +721,7 @@ async function handleMorePageContent(moreMain) {
             backup.classList.remove('bc-hidden');
             backup.removeAttribute('aria-hidden');
         }
+        hideLoadingScreen();
     }
 }
 
@@ -1307,7 +1312,8 @@ function populateFurtherReading(section, data) {
  * 
  * Using passed-in 'section' element as reference, get backup content
  * container with nextElementSibling method, removing 'hidden' class
- * name and 'aria-hidden' attribute in order to display it in DOM. 
+ * name and 'aria-hidden' attribute in order to display it in DOM.
+ * Call function to hide loading screen.
  * 
  * @param {HTMLElement} section - Containing div element for dynamically populated content. 
  * @param {string} sheetName - Name of sheet from Google spreadsheet that is causing error.
@@ -1325,6 +1331,25 @@ function populateFurtherReading(section, data) {
     const backupContent = section.nextElementSibling;
     backupContent.classList.remove('bc-hidden');
     backupContent.removeAttribute('aria-hidden');
+    hideLoadingScreen();
+}
+
+// Hide loading screen
+
+/**
+ * Get loading screen element from DOM and add styling class to
+ * reduce height to 0 in order to facilitate smooth transition on
+ * hide.
+ * 
+ * Set 'aria-hidden' attribute to 'true' and after 1 second,
+ * (transition is set to 0.5s), add class to set display to 'none'
+ * in order to remove it from page layout.
+ */
+function hideLoadingScreen() {
+    const loadScreen = document.querySelector('#loadscreen');
+    loadScreen.classList.add('loader-hidden');
+    loadScreen.setAttribute('aria-hidden', 'true');
+    setTimeout (() => loadScreen.classList.add('loader-gone'), 1000);
 }
 
 // Format text string for use as HTML content
