@@ -807,6 +807,10 @@ margin: 0;
 
 /* general styles */
 
+#testimonials, #useful-links, #further-reading {
+    min-height: calc(100vh - 207px);
+}
+
 .bc-hidden {
     display: none;
 }
@@ -1013,10 +1017,14 @@ margin: 0;
 
     #questionnaire iframe {
         width: 100%;
-        height: calc(100vh - 207px);
+        height: calc(100vh - 140px);
     }
 
     /* 'more' page */
+
+    #testimonials, #useful-links, #further-reading {
+        min-height: calc(100vh - 140px);
+    }
 
     #further-reading-banner {
         height: 200px;
