@@ -817,15 +817,15 @@ margin: 0;
 
 /* animated loading screen */
 
-#loadscreen {
+.loadscreen {
     background-color: #fff;
     width: 100%;
-    height: calc(100vh - 400px);
+    height: calc(100vh - 398px);
     position: absolute;
     top: 0;
     left: 0;
     overflow: hidden;
-    z-index: 5;
+    z-index: 4;
     transition: all 0.5s ease-in;
 }
 
@@ -843,7 +843,6 @@ margin: 0;
     margin: 0 2.5px;
     animation: bounce 1.5s infinite;
 }
-
 .bouncer:nth-child(1) {
     animation-delay: 0s;
 }
@@ -897,6 +896,15 @@ margin: 0;
     background: url('../images/hands-showing-positive-gesture_1134-313.jpg') no-repeat center center / contain;
 }
 
+.testimonial-wrapper:nth-of-type(2n) .testimonial {
+    background-color: rgba(0,0,0,.1);
+}
+
+.testimonial {
+    padding: 1.5rem;
+    border-radius: 50% 20% / 10% 40%;
+}
+
 .testimonial-quote {
     font-style: italic;
 }
@@ -930,6 +938,10 @@ margin: 0;
 #further-reading-banner {
     background: url('../images/close-up-photo-girl-studying-with-tablettextbooks-cup-coffee-desk-cozy-home_574295-3876.jpg') no-repeat center center / cover;
     height: 250px;
+}
+
+#further-reading .loadscreen {
+    height: calc(100vh - 473px);
 }
 
 .fr-art h3 {
@@ -1095,12 +1107,16 @@ margin: 0;
         min-height: calc(100vh - 140px);
     }
 
-    #loadscreen {
-        height: calc(100vh - 315px);
+    .loadscreen {
+        height: calc(100vh - 331px);
     }
 
     #further-reading-banner {
         height: 200px;
+    }
+
+    #further-reading .loadscreen {
+        height: calc(100vh - 356px);
     }
 }
 
@@ -1140,12 +1156,20 @@ margin: 0;
         background-size: cover;
     }
 
+    .bouncer {
+        font-size: 4.5rem;
+    }
+
     .useful-links-video {
         width: 80%;
     }
 
     #further-reading-banner {
         height: 175px;
+    }
+
+    #further-reading .loadscreen {
+        height: calc(100vh - 331px);
     }
 }
 
@@ -1161,6 +1185,10 @@ margin: 0;
     }
 
     /* 'more' menu pages */
+
+    .bouncer {
+        font-size: 3rem;
+    }
 
     .useful-links-video {
         width: 90%;

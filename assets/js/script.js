@@ -97,7 +97,7 @@ document.addEventListener('DOMContentLoaded', function() {
     /* Get 'More' menu page's <main> element and if found, pass to handler
        function for content to be dynamically populated from Google Sheets */
 
-    const moreMain = document.querySelector('#more-main');
+    const moreMain = document.querySelector('.more-main');
 
     if (moreMain) {
         handleMorePageContent(moreMain);
@@ -774,8 +774,11 @@ function populateTestimonials(section, data) {
             if (quote) {
                 quote = formatStringForHtml(quote);
                 // Outer container
+                const testimonialWrapper = document.createElement('div');
+                testimonialWrapper.classList.add('testimonial-wrapper', 'col-12', 'col-md-4', 'mb-3');
+                // Styling container
                 const testimonialDiv = document.createElement('div');
-                testimonialDiv.classList.add('col-12', 'col-md-4', 'mb-3');
+                testimonialDiv.classList.add('testimonial');
                 // Testimonial element
                 const quoteDiv = document.createElement('div');
                 quoteDiv.classList.add('testimonial-quote');
@@ -787,7 +790,8 @@ function populateTestimonials(section, data) {
                 nameDiv.innerHTML = `<p>&#45; ${name}</p>`;
                 testimonialDiv.appendChild(nameDiv);
 
-                section.appendChild(testimonialDiv);
+                testimonialWrapper.appendChild(testimonialDiv);
+                section.appendChild(testimonialWrapper);
             }
         }
         if (!section.innerHTML) {
@@ -1346,7 +1350,7 @@ function populateFurtherReading(section, data) {
  * in order to remove it from page layout.
  */
 function hideLoadingScreen() {
-    const loadScreen = document.querySelector('#loadscreen');
+    const loadScreen = document.querySelector('.loadscreen');
     loadScreen.classList.add('loader-hidden');
     loadScreen.setAttribute('aria-hidden', 'true');
     setTimeout (() => loadScreen.classList.add('loader-gone'), 1000);
