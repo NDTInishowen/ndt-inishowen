@@ -1177,6 +1177,16 @@ margin: 0;
 
 @media screen and (max-width: 430px) {
 
+    /* general styles */
+
+    .longstring {
+        font-size: 0.95rem;
+    }
+
+    .x-longstring {
+        font-size: 0.9rem;
+    }
+
     /* popup modals */
 
     .about-modal-img-wrapper img {
