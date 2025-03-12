@@ -205,10 +205,6 @@ ul {
     display: none;
 }
 
-#main-menu-btn.menu-toggle-btn {
-    width: 110px;
-}
-
 .main-menu-responsive {
     position: absolute;
     top: 140px;
