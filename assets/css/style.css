@@ -181,7 +181,7 @@ ul {
 
 #header-logo {
     height: 140px;
-    margin-left: 20px;
+    margin-right: 10px;
 }
 
 #header-logo img {
@@ -478,10 +478,13 @@ footer .affil-logo-img {
     font-size: 3rem;
 }
 
-.about-modal-img-wrapper img {
+.about-modal-img-container {
+    background: url('../images/Sinead1.jpg') no-repeat center center / cover;
     width: 200px;
+    height: 200px;
     float: left;
     margin: 5px;
+    border-radius: 50%;
 }
 
 .about-section-modal .btn-secondary {
@@ -503,12 +506,14 @@ footer .affil-logo-img {
     height: calc(100vh - 207px);
     background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center / cover;
     /* background: url('../images/mother-playing-with-her-autistic-son-using-toys_23-2150266524.jpg') no-repeat center center / cover; */
+    /* background: url('../images/AILandingImage1.jpg') no-repeat center center / cover; */
+    align-items: start;
 }
 
 /* Jumbotron */
 
 #landing-banner .jumbotron {
-    padding: 100px 0 0;
+    padding: 50px 0 0;
 }
 
 
@@ -745,7 +750,7 @@ footer .affil-logo-img {
 /* general styles */
 
 #contact-banner.banner-container {
-background: url('../images/studio-background-concept-abstract-empty-light-gradient-purple-studio-room-background-product-plain-studio-background_1258-63896.jpg') no-repeat center center / cover;
+background: url('../images/gradient-purple-studio-room-background.jpg') no-repeat center center / cover;
 height: 300px;
 }
 
@@ -1185,9 +1190,9 @@ margin: 0;
 
     /* popup modals */
 
-    .about-modal-img-wrapper img {
+    .about-modal-img-container {
         float: none;
-        width: 100%;
+        margin: 0 auto;
     }
 
     /* 'more' menu pages */

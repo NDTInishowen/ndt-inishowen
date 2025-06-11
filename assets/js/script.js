@@ -866,7 +866,7 @@ function populateTestimonials(section, data) {
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateVideoLinks(section, data) {
-    const sources = ['youtube.com', 'youtu.be', 'amazon.co', 'primevideo.com', 'vimeo.com', 'dailymotion.com', 'facebook.com'];
+    const sources = ['youtube.com', 'youtu.be', 'amazon.co', 'amazon.com', 'amazon.de', 'primevideo.com', 'vimeo.com', 'dailymotion.com', 'facebook.com'];
 
     if (data.error) {
         sheetErrorBackup(section, 'Video Links Form Data', data.error);
