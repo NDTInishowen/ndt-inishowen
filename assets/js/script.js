@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     (function(){
         emailjs.init({
-          publicKey: "7csZIXHjvuV0I0E82",
+          publicKey: "H4tUqmSw0a15UeRcT",
         });
      })();
 
@@ -635,7 +635,7 @@ function handleContactFormEmailJS(contactForm) {
             'message': contactForm.message.value,
         }
         // Call EmailJS send() method to submit form
-        emailjs.send('gmail_mhcp', 'contact-form', templateParams).then(
+        emailjs.send('gmail_ndti', 'contact-form', templateParams).then(
             (response) => {
               console.log('SUCCESS!', response.status, response.text);
               submitBtnSection.classList.add('cf-hidden');
