@@ -527,7 +527,7 @@ footer .affil-logo-img {
     /* background: url('../images/child-with-autism-living-fantasy-world_23-2151248912.jpg') no-repeat center center / cover; */
     /* background: url('../images/mother-playing-with-her-autistic-son-using-toys_23-2150266524.jpg') no-repeat center center / cover; */
     /* background: url('../images/AILandingImage1.jpg') no-repeat center center / cover; */
-    background: url('../images/NDT+Inishowen+2+of+12.jpg') no-repeat top center / cover;
+    background: url('../images/NDT-Inishowen-2-of-12.jpg') no-repeat top center / cover;
     align-items: start;
 }
 
@@ -547,6 +547,11 @@ footer .affil-logo-img {
     position: absolute;
     bottom: 0;
     left: 0;
+}
+
+.quest-btn {
+    padding: 11px 16px !important;
+    font-size: 1rem !important;
 }
 
 
