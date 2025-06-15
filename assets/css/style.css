@@ -358,6 +358,16 @@ main {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+.banner-els-container {
+    position: relative;
+}
+
+.banner-cta-btns {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
 /* Jumbotron */
 
 .jumbotron {
@@ -531,27 +541,17 @@ footer .affil-logo-img {
     align-items: start;
 }
 
-.banner-els-container {
-    position: relative;
-}
-
 /* Jumbotron */
 
 #landing-banner .jumbotron {
     padding: 50px 0 0;
 }
 
-/* call-to-action buttons */
+/* info section */
 
-#landing-cta-btns {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-}
-
-.quest-btn {
-    padding: 11px 16px !important;
-    font-size: 1rem !important;
+#landing-info ul {
+    list-style-type: initial;
+    margin-bottom: 0.25rem;
 }
 
 
@@ -567,11 +567,6 @@ footer .affil-logo-img {
 #overview-banner.banner-container {
     height: 50vh;
     background: url('../images/mom-helping-girl-exercise-ball_23-2148570181.jpg') no-repeat center center / cover;
-}
-
-#overview-banner .jumbotron {
-    width: 100vw;
-    max-width: 1140px;
 }
 
 #overview-banner h1 {
@@ -630,7 +625,7 @@ footer .affil-logo-img {
 
 #faq-accordion ul {
     list-style-type: initial;
-    margin-bottom: 00.5rem;
+    margin-bottom: 0.5rem;
 }
 
 .faq-answer-container {
@@ -1261,5 +1256,11 @@ margin: 0;
 
     #landing-banner .jumbotron-header {
         font-size: 1.05rem;
+    }
+
+    /* overview page */
+
+    #overview-cta-btns a {
+        width: 149px;
     }
 }
