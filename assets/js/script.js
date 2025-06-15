@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
     (function(){
         emailjs.init({
-          publicKey: "H4tUqmSw0a15UeRcT",
+        //   publicKey: "H4tUqmSw0a15UeRcT",
+          publicKey: "7csZIXHjvuV0I0E82",
         });
      })();
 
@@ -625,17 +626,23 @@ function handleContactFormEmailJS(contactForm) {
     contactForm.addEventListener('submit', (e) => {
         // Prevent page from refreshing on form submit
         e.preventDefault();
+        // get Google reCAPTCHA response token
+        let captchaToken = grecaptcha.getResponse();
+        console.log(captchaToken);
         // Set parameters to be sent to EmailJS template
         // **Key values MUST match variable names in EmailJS template
+        // 'g-recaptcha-response' is the default name for the token
         let templateParams = {
             'first_name': contactForm.firstname.value,
             'last_name': contactForm.surname.value,
             'email_addr': contactForm.email.value,
             'phone_no': contactForm.phone.value,
             'message': contactForm.message.value,
+            "g-recaptcha-response": captchaToken,
         }
         // Call EmailJS send() method to submit form
-        emailjs.send('gmail_ndti', 'contact-form', templateParams).then(
+        // emailjs.send('gmail_ndti', 'contact-form', templateParams).then(
+        emailjs.send('gmail_mhcp', 'contact-form', templateParams).then(
             (response) => {
               console.log('SUCCESS!', response.status, response.text);
               submitBtnSection.classList.add('cf-hidden');

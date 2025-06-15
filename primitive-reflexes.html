@@ -16,6 +16,9 @@
 
     <!-- EmailJS CDN -->
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
+    <!-- Google reCAPTCHA API -->
+    <script type="text/javascript"  src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 <body>
     
@@ -460,7 +463,9 @@
                                         or refresh the page to try again.
                                     </p>
                                 </div>
-                                <div class="col-12 text-center contact-btn-wrapper">
+                                <div class="col-12 text-center p-0 contact-btn-wrapper">
+                                    <div class="g-recaptcha" data-sitekey="6Lf02mErAAAAAEt3x20QMuB3VPm2M9e0mYvGUFF9"></div>
+                                    <br>
                                     <button type="submit" class="btn btn-cta btn-blu btn-effect">Get in Touch</button>
                                 </div>
                             </form>
