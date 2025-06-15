@@ -627,7 +627,7 @@ function handleContactFormEmailJS(contactForm) {
         // Prevent page from refreshing on form submit
         e.preventDefault();
         // get Google reCAPTCHA response token
-        let captchaToken = grecaptcha.getResponse();
+        let captchaToken = grecaptcha.enterprise.getResponse();
         console.log(captchaToken);
         // Set parameters to be sent to EmailJS template
         // **Key values MUST match variable names in EmailJS template
