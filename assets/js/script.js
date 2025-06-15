@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     (function(){
         emailjs.init({
-        //   publicKey: "H4tUqmSw0a15UeRcT",
-          publicKey: "7csZIXHjvuV0I0E82",
+          publicKey: "H4tUqmSw0a15UeRcT",
         });
      })();
 
@@ -628,7 +627,6 @@ function handleContactFormEmailJS(contactForm) {
         e.preventDefault();
         // get Google reCAPTCHA response token
         let captchaToken = grecaptcha.enterprise.getResponse();
-        console.log(captchaToken);
         // Set parameters to be sent to EmailJS template
         // **Key values MUST match variable names in EmailJS template
         // 'g-recaptcha-response' is the default name for the token
@@ -641,8 +639,7 @@ function handleContactFormEmailJS(contactForm) {
             "g-recaptcha-response": captchaToken,
         }
         // Call EmailJS send() method to submit form
-        // emailjs.send('gmail_ndti', 'contact-form', templateParams).then(
-        emailjs.send('gmail_mhcp', 'contact-form', templateParams).then(
+        emailjs.send('gmail_ndti', 'contact-form', templateParams).then(
             (response) => {
               console.log('SUCCESS!', response.status, response.text);
               submitBtnSection.classList.add('cf-hidden');
