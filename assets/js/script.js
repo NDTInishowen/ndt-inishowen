@@ -25,6 +25,16 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // ---------------------- Modals
+
+    const modals = document.querySelectorAll('.modal');
+
+    if (modals.length > 0) {
+        for (let modal of modals) {
+            trapKeyNavFocus(modal);
+        }
+    }
+
     // -------------------- Main menu
 
     /* Get main menu from the DOM and pass to handler functions if
@@ -1504,6 +1514,47 @@ function createExternalLinkElement(urlString, ariaLabelString) {
 // --- 'More' menu pages (dynamically populated) functions end
 
 // ------------------- Miscellaneous functions
+
+// Trapping focus inside elements for keyboard navigation accessibility (e.g. modals)
+
+/**
+ * Get all focusable elements within passed in element and find
+ * the first and last.
+ * 
+ * Listen for 'tab' or 'shift + tab' keypresses to signify keyboard
+ * navigation and if the active element is first in the list on 
+ * 'shift + tab' (backwards navigation), set focus to the first (and
+ * vice-versa).
+ *  
+ * @param {HTMLElement} element - Element (modal, etc) in which focus is to be trapped
+ */
+function trapKeyNavFocus(element) {
+    const focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+    const firstFocusableEl = focusableEls[0];  
+    const lastFocusableEl = focusableEls[focusableEls.length - 1];
+  
+    element.addEventListener('keydown', (e) => {
+        let isTabPressed = (e.key === 'Tab');
+    
+        if (!isTabPressed) { 
+            return; 
+        }
+    
+        if ( e.shiftKey ) {
+        // Shift + Tab
+            if (document.activeElement === firstFocusableEl) {
+                lastFocusableEl.focus();
+                e.preventDefault();
+            }
+        } else {
+        // Tab
+            if (document.activeElement === lastFocusableEl) {
+                firstFocusableEl.focus();
+                e.preventDefault();
+            }
+        }
+    });
+}
 
 // Applying 'active' class to navigation links when associated page section in view
 
