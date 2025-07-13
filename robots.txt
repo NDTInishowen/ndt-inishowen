@@ -1,0 +1,13 @@
+# Disallowed and allowed directories and files
+
+User-agent: *
+Disallow: /assets/images/
+Allow: /assets/images/NDTILogoNoHandsSameSixeText.jpg
+Disallow: /assets/docs/
+Allow: /assets/docs/Sinead_O_Toole-Neuro_Developmental_Therapy_Inishowen-Screening_Questionnaire.pdf
+
+# Define website sitemaps
+
+Sitemap: https://ndtinishowen.ie/sitemap.xml
+# Define seperate sitemap for subdomain???
+Sitemap: https://www.ndtinishowen.ie/sitemap.xml
