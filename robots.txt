@@ -2,7 +2,9 @@
 
 User-agent: *
 Disallow: /assets/images/
+Allow: /assets/images/icons/
 Allow: /assets/images/NDTILogoNoHandsSameSixeText.jpg
+Allow: /assets/images/Sinead1.jpg
 Disallow: /assets/docs/
 Allow: /assets/docs/Sinead_O_Toole-Neuro_Developmental_Therapy_Inishowen-Screening_Questionnaire.pdf
 
