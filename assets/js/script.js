@@ -793,7 +793,7 @@ function handleContactFormSecurityPermission(contactForm) {
             captchaContainer.innerHTML = '<div id="' + captchaContainerID + '" class="captcha-container"></div>';
             grecaptcha.enterprise.render(captchaContainerID, {
                 'sitekey': '6Lf02mErAAAAAEt3x20QMuB3VPm2M9e0mYvGUFF9',
-                'theme': 'dark',
+                'theme': 'light',
             });
             submitBtnSection.querySelector('button').removeAttribute('disabled');
             submitBtnSection.classList.remove('cf-hidden');
