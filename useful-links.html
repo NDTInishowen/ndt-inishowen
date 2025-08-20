@@ -7,12 +7,17 @@
     <meta name="description" content="NDT Inishowen, Neuro Developmental Therapist, based in Buncrana, County Donegal. Ireland">
     <meta name="keywords" content="neuro developmental therapist, Neuro Developmental Therapy for Children in Inishowen, NDT Inishowen, Buncrana therapy services, Donegal therapy services, Co Donegal neurodevelopment, Ireland developmental therapy, developmental therapy, Donegal developmental therapy, Buncrana developmental therapy, retained primitive reflexes, developmental delay treatment, non-invasive therapy, drug-free therapy, movement therapy Ireland, primitive reflex integration, child development support, therapy for learning difficulties Buncrana, therapy for learning difficulties Donegal, sensory processing therapy, ADHD support Ireland, autism therapy Donegal, neurological rehabilitation, holistic child development, reflex integration therapy, motor skills development, brain-body connection, non-medical developmental therapy, tailored movement programmes, neuroplasticity therapy, early intervention therapy, postural reflex development, cognitive development support, therapy for dyspraxia, delayed milestones therapy, school readiness therapy, neurodevelopmental assessment, occupational therapy alternative, movement-based therapy, Buncrana developmental therapist, Donegal reflex therapy, primitive reflex testing, coordination and balance therapy, child behavior support, learning support therapy, holistic neurotherapy, special needs therapy, Down syndrome support, tailored brain training, developmental movement programs, developmental movement programmes, tailored developmental movement programs, tailored developmental movement programmes, tailored developmental movement programs Buncrana, tailored developmental movement programmes Buncrana, gentle therapy for children, motor coordination therapy, attention and focus improvement, emotional regulation therapy, alternative therapy for children, sensory-motor therapy, Buncrana child therapy, Donegal family support, therapy for struggling learners">
 
-    <!-- Bootstrap css link -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Bootstrap css -->
+    <link rel="stylesheet" href="assets/bootstrap-4.3.1-dist/css/bootstrap.min.css" type="text/css">
+
+    <!-- Font Awesome css -->
+    <link rel="stylesheet" href="assets/fontawesome-6.7.2/css/fontawesome.min.css" type="text/css">
+    <link rel="stylesheet" href="assets/fontawesome-6.7.2/css/all.min.css" type="text/css">
 
     <!-- Custom css -->
     <link rel="stylesheet" href="assets/css/style.css" type="text/css">
-    <title>NDT Inishowen - Neuro Developmental Therapy: Useful Links</title>
+
+    <title>NDT Inishowen - Neuro Developmental Therapy</title>
 
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="/assets/images/icons/favicon-96x96.png" sizes="96x96">
@@ -22,11 +27,11 @@
     <meta name="apple-mobile-web-app-title" content="NDT Inishowen - Neuro Develomental Therapy">
     <link rel="manifest" href="/assets/images/icons/site.webmanifest">
 
-    <!-- EmailJS CDN -->
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+    <!-- EmailJS script -->
+    <script src="assets/emailjs/js/email.min.js"></script>
 
-    <!-- Google reCAPTCHA API -->
-    <script type="text/javascript"  src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
+    <!-- Google reCAPTCHA API (callback function in script.js) -->
+    <script type="text/javascript" src="https://www.google.com/recaptcha/enterprise.js?onload=grecaptchaOnloadCallback&render=explicit" async defer></script>
 </head>
 <body>
     
@@ -114,7 +119,7 @@
         <!-- Useful links section -->
         <div class="container-wrapper">
             <div class="container content-container more-container">
-                <section id="useful-links" class="useful-links-section my-3">
+                <section id="useful-links" class="useful-links-section my-3 consent-reqd">
                     <div class="row">
                         <div class="col-12 section-header text-center">
                             <!-- Mini banner with jumbotron heading -->
@@ -158,15 +163,11 @@
                                         <p>All links open in a new tab</p>
                                     </div>
                                     <div id="video-links-content"></div>
-                                    <div class="backup-content bc-hidden" aria-hidden="true">
+                                    <div class="backup-content video-links-backup bc-hidden">
                                         <div class="useful-link-wrapper text-center mb-4">
                                             <h4 class="h5 mb-0"><a href="https://www.youtube.com/watch?v=p9ZJheYZazs" target="_blank" rel="noopener" aria-label="Watch 'An introduction to INPP' - Video available on YouTube here. (Opens in a new tab)">An introduction to INPP</a></h4>
                                             <p>Can an INPP movement programme help my child&#63; &#45; Sally Goddard</p>
-                                            <div class="useful-links-video-wrapper d-flex justify-content-center my-3">
-                                                <div class="useful-links-video embed-responsive embed-responsive-16by9">
-                                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/p9ZJheYZazs?si=zeImtp_cLeSsM2Q0" title="YouTube video player - Can you help my Child? by Sally Goddard" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>
-                                                </div>
-                                            </div>
+                                            <div class="useful-links-video-wrapper d-flex justify-content-center my-3"></div>
                                             <p><a href="https://www.youtube.com/watch?v=p9ZJheYZazs" target="_blank" rel="noopener" aria-label="Watch 'An introduction to INPP' - Video available on YouTube here. (Opens in a new tab)">Video available on YouTube here.</a></p>
                                         </div>
                                         <div class="useful-link-wrapper text-center mb-4">
@@ -180,11 +181,7 @@
                                         <div class="useful-link-wrapper text-center mb-4">
                                             <h4 class="h5 mb-0"><a href="https://www.youtube.com/watch?v=aISXCw0Pi94&amp;t=218s" target="_blank" rel="noopener" aria-label="Watch 'How Every Child Can Thrive by Five - Molly Wright | TED' - Video available on YouTube here. (Opens in a new tab)">How Every Child Can Thrive by Five - Molly Wright | TED</a></h4>
                                             <p>&#34;What if I was to tell you that a game of peek-a-boo could change the world&#63;&#34; asks seven-year-old Molly Wright, one of the youngest-ever TED speakers. Breaking down the research-backed ways parents and caregivers can support children's healthy brain development, Wright highlights the benefits of play on lifelong learning, behavior and well-being, sharing effective strategies to help all kids thrive by the age of five.</p>
-                                            <div class="useful-links-video-wrapper d-flex justify-content-center my-3">
-                                                <div class="useful-links-video embed-responsive embed-responsive-16by9">
-                                                    <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/aISXCw0Pi94?si=B5kTOL6bbxTVE0Is" title="YouTube video player - Molly Wright: How every Child Can Thrive by Five - TED" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>
-                                                </div>
-                                            </div>
+                                            <div class="useful-links-video-wrapper d-flex justify-content-center my-3"></div>
                                             <p><a href="https://www.youtube.com/watch?v=aISXCw0Pi94&amp;t=218s" target="_blank" rel="noopener" aria-label="Watch 'How Every Child Can Thrive by Five - Molly Wright | TED' - Video available on YouTube here. (Opens in a new tab)">Video available on YouTube here.</a></p>
                                         </div>
                                     </div>
@@ -195,7 +192,7 @@
                                         <p>All links open in a new tab</p>
                                     </div>
                                     <div id="website-links-content"></div>
-                                    <div class="backup-content bc-hidden" aria-hidden="true">
+                                    <div class="backup-content bc-hidden">
                                         <div class="useful-link-wrapper text-center mb-4">
                                             <p>Special Needs Parents Network Donegal</p>
                                             <p>
@@ -309,6 +306,10 @@
         </div>
 
         <hr>
+        <!-- privacy page link -->
+        <div id="privacy-page-link">
+            <a href="privacy.html">Privacy and Cookie Policy</a>
+        </div>
         <!-- copyright statement -->
         <div id="copyright-statement">
             &copy; <span class="copyright-year"></span> NDT Inishowen: all rights reserved
@@ -322,11 +323,11 @@
 
     <!-- Popup modals for phone and email links in footer -->
 
-    <div id="phone-info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="phone-info-title" aria-describedby="phone-info-description" aria-hidden="true">
+    <div id="phone-info-modal" class="modal fade focus-trap" tabindex="-1" role="dialog" aria-labelledby="phone-info-title" aria-describedby="phone-info-description" aria-hidden="true">
         <div class="modal-dialog footer-contact-link-modal" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h4 id="phone-info-title" class="modal-title p-3">Call Us</h5>
+                    <h4 id="phone-info-title" class="modal-title p-3">Call Us</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -352,27 +353,38 @@
         </div>
     </div>
 
-    <div id="email-info-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="email-info-title" aria-describedby="email-info-description" aria-hidden="true">
+    <div id="email-info-modal" class="modal fade focus-trap" tabindex="-1" role="dialog" aria-labelledby="email-info-title" aria-describedby="email-info-description" aria-hidden="true">
         <div class="modal-dialog footer-contact-link-modal" role="document">
             <div class="modal-content">
                 <div class="modal-header border-0">
-                    <h4 id="email-info-title" class="modal-title p-3">Contact Us</h5>
+                    <h4 id="email-info-title" class="modal-title p-3">Contact Us</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body pt-0">
                     <div class="modal-body-content text-center pb-0">
+                        <!-- ARIA description -->
                         <p id="email-info-description" class="aria-modal-description sr-only">
-                            Fill out the form below, or use the link to send a direct email to: info at n d t inishowen.ie
+                            Fill out the form below, or use the email link to send a direct email to: info at n d t inishowen dot ie.
+                            Privacy Notice:
+                            By submitting this form, you agree to the processing of your data through EmailJS for email forwarding and Google reCAPTCHA for spam protection. Your information will not be shared with third parties and is used solely for the purpose of responding to you. Please note that Google reCAPTCHA may collect data as part of its service.
+                            For more details on how your data is handled, please refer to our Privacy Policy at the link below.
                         </p>
-                        <p id="email-modal-description" class="text-left ml-3">
+                        <!-- Main description & privacy notice -->
+                        <p class="text-left mx-3">
                             Fill out the form below, or send a direct email to: 
                             <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a>
                         </p>
+                        <p class="cf-privacy-notice text-left mx-3">
+                            <strong>Privacy Notice:</strong><br>
+                            By submitting this form, you agree to the processing of your data through EmailJS for email forwarding and Google reCAPTCHA for spam protection. Your information will not be shared with third parties and is used solely for the purpose of responding to you. Please note that Google reCAPTCHA may collect data as part of its service.
+                            For more details on how your data is handled, please refer to our <a href="privacy.html">Privacy Policy</a>.
+                        </p>
                         <p aria-hidden="true">Fields marked with &#42; are required.</p>
                         <div id="modal-email-form">
-                            <form id="modal-contact-form" class="contact-form">
+                            
+                            <form id="modal-contact-form" class="contact-form consent-reqd">
                                 <div class="form-row">
                                     <div class="form-group col-12 col-sm-6">
                                         <label for="modal-cf-first-name" class="sr-only">First Name (required)</label>
@@ -397,44 +409,94 @@
                                     <label for="modal-cf-message">Your Message (required)</label>
                                     <textarea rows="5" id="modal-cf-message" name="message" class="form-control" placeholder="Enter Your Message&#42;" required></textarea>
                                 </div>
-                                <div class="cf-success-message cf-hidden text-center" aria-hidden="true">
+                                <!-- Message sent -->
+                                <div class="cf-success-message cf-hidden text-center">
                                     <p>Your message was sent successfully&#33;</p>
                                     <p>
                                         Thank you for reaching out. <br>
                                         We'll be in touch as soon as possible.
                                     </p>
                                 </div>
-                                <div class="cf-failure-message cf-hidden text-center" aria-hidden="true">
+                                <!-- Message not sent -->
+                                <div class="cf-failure-message cf-hidden text-center">
                                     <p>
                                         Unfortunately, your message was not sent <br>
-                                        due to either a system error or a failed reCAPTCHA response.
+                                        due to a system error.
                                     </p>
                                     <p>
                                         Instead, please send a direct email to <br>
-                                        <a href="mailto:info@ndtinishowen.ie" aria-label="email N D T Inishowen">info&#64;ndtinishowen.ie</a> <br>
+                                        <!-- Use of the 'disabled' attribute on anchor tags is soleley for the purpose of excluding them from the script.js trapKeyNavFocus function's list of focusable elements.
+                                        Functionality is addressed by CSS. -->
+                                        <a href="mailto:info@ndtinishowen.ie" class="failure-email-link" aria-label="email N D T Inishowen" aria-disabled="true" disabled>info&#64;ndtinishowen.ie</a> <br>
                                         or refresh the page to try again.
                                     </p>
                                 </div>
-                                <div class="col-12 text-center p-0 contact-btn-wrapper">
-                                    <div class="g-recaptcha" data-sitekey="6Lf02mErAAAAAEt3x20QMuB3VPm2M9e0mYvGUFF9"></div>
+                                <!-- Google reCAPTCHA (dynamically added) & submit button: hidden by default -->
+                                <div class="col-12 text-center p-0 contact-btn-wrapper cf-hidden">
+                                    <div class="captcha-outer-container"></div>
                                     <br>
-                                    <button type="submit" class="btn btn-cta btn-blu btn-effect">Get in Touch</button>
+                                    <button type="submit" class="btn btn-cta btn-blu btn-effect" disabled>Get in Touch</button>
                                 </div>
                             </form>
+                            <!-- 'No cookie for reCAPTCHA' message: hidden by default -->
+                            <div class="col-12 text-center p-0 cf-cookie-disclaimer-wrapper cf-hidden">
+                                <div class="cf-cookie-disclaimer">
+                                    <p class="mb-0">This form requires your consent to our use of Security Cookies, which we currently do not have, in order to work properly. Please, either update your cookie settings or send us a direct email to the address at the top of this form.</p>
+                                </div>
+                                <br>
+                                <button class="cf-cookiebanner-btn--show-banner btn btn-cta btn-blu btn-effect show-cookiebanner-btn" disabled>Manage Settings</button>
+                            </div>
+                            <!-- reCAPTCHA load failure message: displayed by default & hidden programatically by reCAPTCHA onload callback function -->
+                            <div class="col-12 text-center p-0 cf-captcha-load-fail-msg-wrapper">
+                                <div class="cf-captcha-load-fail-msg">
+                                    <p class="mb-1"><i class="fa-solid fa-triangle-exclamation"></i> <strong>Oops&#33;</strong> <i class="fa-solid fa-triangle-exclamation"></i></p>
+                                    <p class="mb-1">An essential component has failed to load, possibly due to a slow or faulty internet connection.</p>
+                                    <p class="mb-0">Please try refreshing the page or send us a direct email to the address at the top of this form.</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-   
-    <!-- Bootstrap scripts -->
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 
-    <!-- Font Awesome script -->
-    <script src="https://kit.fontawesome.com/e5bba26aba.js" crossorigin="anonymous"></script>
+    <!-- Cookie consent banner -->
+
+    <div id="clearcookiehwd" class="clearcookiehwd-wrapper focus-trap clearcookiehwd--hide" tabindex="-1" role="dialog" aria-labelledby="clearcookiehwd-heading" aria-describedby="clearcookiehwd-description">
+        <div class="clearcookiehwd__inner">
+            <div id="clearcookiehwd-heading" class="clearcookiehwd__inner__header">
+                <h6 id="clearcookiehwd-heading" class="h4 mb-0">Privacy Settings</h6>
+            </div>
+            <div class="clearcookiehwd__inner__body">
+                <div id="clearcookiehwd-description" class="clearcookiehwd__inner__body__main">
+                    <p class="mb-0">This website uses cookies to&#58;</p>
+                    <ul class="mb-0">
+                        <li>Provide functionality and enhance your experience</li>
+                        <li>Protect us from spam, fraud and abuse &#40;Google reCAPTCHA&#41;</li>
+                        <li>Display embedded content &#40;Google Forms, YouTube&#41;</li>
+                    </ul>
+                    <p>You can choose how we use your data by clicking the buttons below.</p>
+                    <p>For more information and to change your settings at any time, please see our<br>
+                        <a href="privacy.html">Privacy and Cookie Policy</a>.
+                    </p>
+                </div>
+                <div class="clearcookiehwd__inner__body__settings clearcookiehwd--hide"></div>
+            </div>
+            <div class="clearcookiehwd__inner__footer">
+                <button class="clearcookiehwd__inner__footer__button--accept btn btn-cta btn-darkgrey btn-effect">Accept All</button>
+                <button class="clearcookiehwd__inner__footer__button--hide-settings btn btn-cta btn-darkgrey btn-effect clearcookiehwd--hide" disabled>Hide Settings</button>
+                <button class="clearcookiehwd__inner__footer__button--refuse btn btn-cta btn-darkgrey btn-effect">Essential Only</button>
+                <button class="clearcookiehwd__inner__footer__button--show-settings btn btn-cta btn-blu btn-effect">Manage Settings</button>
+                <button class="clearcookiehwd__inner__footer__button--save btn btn-cta btn-blu btn-effect clearcookiehwd--hide" disabled>Save and Exit</button>
+            </div>
+        </div>
+    </div>
+   
+    <!-- Offline Bootstrap scripts -->
+    <script src="assets/bootstrap-4.3.1-dist/dependencies/jquery.js@3.3.1/jquery-3.3.1.slim.min.js"></script>
+    <script src="assets/bootstrap-4.3.1-dist/dependencies/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+    <script src="assets/bootstrap-4.3.1-dist/js/bootstrap.min.js"></script>
 
     <!-- Custom scripts -->
     <script src="assets/js/script.js"></script>

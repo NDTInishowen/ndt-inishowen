@@ -14,28 +14,45 @@ document.addEventListener('DOMContentLoaded', function() {
 
     //  ------------------ Contact forms
 
-    /* Get contact form(s) from the page and if found, pass to handler
-       function */
+    /* Get contact form(s) from the page and if found: first define Google
+       reCAPTCHA's onload callback function (called by API in HTML 'head'
+       element), passing each form to security cookie permission handler
+       function; then pass each form to main contact form handler */
 
     const contactForms = document.querySelectorAll('.contact-form');
 
     if (contactForms.length > 0) {
+        /* Has to be defined globally (on window object) so that reCAPTCHA API can
+           find it */
+        window.grecaptchaOnloadCallback = function() {
+            console.log("reCAPTCHA has loaded!");
+            for (let form of contactForms) {
+                handleContactFormSecurityPermission(form);
+            }
+        };
+
         for (let form of contactForms) {
             handleContactFormEmailJS(form);
         }
     }
 
-    // ---------------------- Modals
+    // -----------------  Bootstrap modals
+
+    /* Get all Bootstrap modals from the page and if found, add Bootstrap's
+       native jQuery 'shown' event listener to each one, passing to handler
+       function to trap keyboard navigation inside modal */
 
     const modals = document.querySelectorAll('.modal');
 
     if (modals.length > 0) {
         for (let modal of modals) {
-            trapKeyNavFocus(modal);
+            /* have to use jquery '.on' instead of 'addEventListener'
+               for Bootstrap 4.3 modal events compatability */
+            $(modal).on('shown.bs.modal', () => trapKeyNavFocus(modal));
         }
     }
 
-    // -------------------- Main menu
+    // ---------------------- Main menu
 
     /* Get main menu from the DOM and pass to handler functions if
        found */
@@ -102,6 +119,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     }
 
+    // -------------- Screening questionnaire
+
+    /* Get screening questionnaire section element and if found, pass to
+       embedded content cookie permission handler function */
+
+    const questionnaireSection = document.querySelector('#questionnaire');
+
+    if (questionnaireSection) {
+        handleQuestionnaireEmbContPermission(questionnaireSection);
+    }
+
     // ---------------- 'More' menu pages
 
     /* Get 'More' menu page's <main> element and if found, pass to handler
@@ -111,6 +139,30 @@ document.addEventListener('DOMContentLoaded', function() {
 
     if (moreMain) {
         handleMorePageContent(moreMain);
+    }
+
+    // -------------- Cookie consent banner
+
+    /* Get cookie consent banner from the page and if found, call its
+       associated init() method */
+    
+    const cookieBanner = document.querySelector('#clearcookiehwd');
+
+    if (cookieBanner) {
+        clearCookieHWD.init();
+    }
+
+    // --------------- 'Back to Top' links
+
+    /* Get all 'Back to Top' links/buttons from the page and, if found,
+       pass each one to handler function */
+    
+    const topLinks = document.querySelectorAll('.top-link');
+
+    if (topLinks.length > 0) {
+        for (let link of topLinks) {
+            handleBackToTopLink(link);
+        }
     }
     
 });
@@ -610,20 +662,25 @@ function handleBootstrapAccordionPageBreach(accordion) {
 
 /**
  * Get passed-in form element's child 'success' and 'failure' message
- * div elements and submit button's container div element.
+ * div elements and submit button's container div element. Get form's
+ * parent pop-up modal element, if any.
  * 
  * Add 'submit' event listener to passed-in form element.
  * 
  * On submit, set template parameters object to be passed to EmailJS
- * send() method with keys matching EmailJS template variable names
- * and values populated from corresponding field in form element.
+ * send() method with keys matching EmailJS template variable names,
+ * values populated from corresponding field in form element and Google
+ * reCAPTCHA response token (if API script has loaded).
  * 
  * Call send() method to submit form details to EmailJS, passing in
  * EmailJS service ID, EmailJS template ID and template parameters
  * object, then await response. On 'success' response, display
  * 'success' message and hide submit button. On 'error' response,
- * display 'failure' message and hide submit button. Change each
- * element's 'aria-hidden' attribute accordingly.
+ * display 'failure' message and hide submit button. On either
+ * response, disable/enable other hidden, focusable elements & set
+ * focus as appropriate.
+ * 
+ * If parent modal element exists, pass to trapKeyNavFocus() function.
  * 
  * @param {HTMLElement} contactForm - Contact form from 'Contact Us' page or footer email modal: form element.
  */
@@ -631,12 +688,15 @@ function handleContactFormEmailJS(contactForm) {
     const successMsg = contactForm.querySelector('.cf-success-message');
     const failureMsg = contactForm.querySelector('.cf-failure-message');
     const submitBtnSection = contactForm.querySelector('.contact-btn-wrapper');
+    const modal = contactForm.closest('.modal');
 
     contactForm.addEventListener('submit', (e) => {
         // Prevent page from refreshing on form submit
         e.preventDefault();
         // get Google reCAPTCHA response token
-        let captchaToken = grecaptcha.enterprise.getResponse();
+        let captchaToken = null;
+        if (!(typeof grecaptcha === 'undefined'))
+            captchaToken = grecaptcha.enterprise.getResponse();
         // Set parameters to be sent to EmailJS template
         // **Key values MUST match variable names in EmailJS template
         // 'g-recaptcha-response' is the default name for the token
@@ -651,24 +711,138 @@ function handleContactFormEmailJS(contactForm) {
         // Call EmailJS send() method to submit form
         emailjs.send('gmail_ndti', 'contact-form', templateParams).then(
             (response) => {
-              console.log('SUCCESS!', response.status, response.text);
-              submitBtnSection.classList.add('cf-hidden');
-              submitBtnSection.setAttribute('aria-hidden', true);
-              successMsg.classList.remove('cf-hidden');
-              successMsg.setAttribute('aria-hidden', false);
+                console.log('SUCCESS!', response.status, response.text);
+                submitBtnSection.classList.add('shrink-hide');
+                submitBtnSection.setAttribute('aria-hidden', 'true');
+                submitBtnSection.querySelector('button').setAttribute('disabled', ''); // hidden submit button
+                submitBtnSection.querySelector('textarea').setAttribute('disabled', ''); // hidden Google reCAPTCHA
+                /* Use of the 'disabled' attribute on anchor tags is
+                   soleley for the purpose of excluding them from the
+                   trapKeyNavFocus() function's list of focusable elements.
+                   Functionality is addressed by CSS. */
+                contactForm.querySelector('.failure-email-link').setAttribute('disabled', ''); // hidden link in failure message
+                contactForm.querySelector('.failure-email-link').setAttribute('aria-disabled', 'true'); // hidden link in failure message
+                successMsg.classList.remove('cf-hidden');
+                if (modal) {
+                    // set focus to modal close button
+                    contactForm.querySelector('.close').focus();
+                    // resubmit modal, if any, to trapKeyNavFocus() function
+                    trapKeyNavFocus(modal);
+                }
             },
             (error) => {
-              console.log('FAILED...', error);
-              submitBtnSection.classList.add('cf-hidden');
-              submitBtnSection.setAttribute('aria-hidden', true);
-              failureMsg.classList.remove('cf-hidden');
-              failureMsg.setAttribute('aria-hidden', false);
+                console.log('FAILED...', error);
+                submitBtnSection.classList.add('shrink-hide');
+                submitBtnSection.setAttribute('aria-hidden', 'true');
+                submitBtnSection.querySelector('button').setAttribute('disabled', ''); // hidden submit button
+                submitBtnSection.querySelector('textarea').setAttribute('disabled', ''); // hidden Google reCAPTCHA
+                contactForm.querySelector('.failure-email-link').removeAttribute('disabled'); // link in failure message
+                contactForm.querySelector('.failure-email-link').removeAttribute('aria-disabled'); // link in failure message
+                failureMsg.classList.remove('cf-hidden');
+                // set focus to failure message email link
+                contactForm.querySelector('.failure-email-link').focus();
+                // resubmit modal, if any, to trapKeyNavFocus() function
+                if (modal) 
+                    trapKeyNavFocus(modal);
             },
         );
     });
 }
 
+/**
+ * Get passed-in form element's 'submit' section (containing submit
+ * button and Google reCAPTCHA), security cookie disclaimer section
+ * (containing 'Manage Settings' button) and reCAPTCHA load error
+ * message. Check for security cookies permission setting and set state.
+ * 
+ * If reCAPTCHA script has loaded, hide load error message (displayed
+ * by default).
+ * 
+ * If security cookie permission state is true, render reCAPTCHA and
+ * display 'submit' section (hidden by default), enabling submit button.
+ * Hide cookie disclaimer section, disabling 'Manage Settings' button.
+ * 
+ * If security cookie state is false, delete reCAPTCHA (and thus any
+ * associated cookies, local storage, etc), hide 'submit' section,
+ * disabling button and display cookie disclaimer section, enabling
+ * button.
+ * 
+ * @param {HTMLElement} contactForm - Contact form from 'Contact Us' page or footer email modal: form element. 
+ */
+function handleContactFormSecurityPermission(contactForm) {
+    const submitBtnSection = contactForm.querySelector('.contact-btn-wrapper');
+    const captchaContainer = submitBtnSection.querySelector('.captcha-outer-container');
+    const cookieDisclaimer = contactForm.nextElementSibling;
+    const captchaLoadErrorMsg = cookieDisclaimer.nextElementSibling;
+    let securityCookiePermission;
+
+    if (clearCookieHWD.consentSettingsStored())
+        securityCookiePermission = clearCookieHWD.getUserConsentSettings().consent.security;
+
+    if (!(typeof grecaptcha === 'undefined') && grecaptcha.enterprise.ready) {
+        captchaLoadErrorMsg.classList.add('cf-hidden');
+
+        if (securityCookiePermission) {
+            let captchaContainerID = '';
+            // Set unique captcha container id for each form
+            if (contactForm.id === 'contact-page-form')
+                captchaContainerID = 'g-recaptcha-container--contact-page';
+            else if (contactForm.id === 'modal-contact-form')
+                captchaContainerID = 'g-recaptcha-container--modal-form'
+
+            captchaContainer.innerHTML = '<div id="' + captchaContainerID + '" class="captcha-container"></div>';
+            grecaptcha.enterprise.render(captchaContainerID, {
+                'sitekey': '6Lf02mErAAAAAEt3x20QMuB3VPm2M9e0mYvGUFF9',
+                'theme': 'dark',
+            });
+            submitBtnSection.querySelector('button').removeAttribute('disabled');
+            submitBtnSection.classList.remove('cf-hidden');
+            cookieDisclaimer.querySelector('button').setAttribute('disabled', '');
+            cookieDisclaimer.classList.add('cf-hidden');
+        } else {
+            captchaContainer.innerHTML = '';
+            submitBtnSection.querySelector('button').setAttribute('disabled', '');
+            submitBtnSection.classList.add('cf-hidden');
+            cookieDisclaimer.querySelector('button').removeAttribute('disabled');
+            cookieDisclaimer.classList.remove('cf-hidden');
+        }
+    }
+}
+
 // ------------- Contact Forms & EmailJS functions end
+
+// ------ Embedded Google Forms screening questionnaire functions
+
+/**
+ * Get container element for embedded Google Form and cookie disclaimer
+ * element from passed-in section element.
+ * 
+ * Check for embedded content cookies permission setting. If cookie
+ * consent given, hide cookie disclaimer and render iframe element for
+ * embedded Google form. If consent not given, delete iframe (and thus
+ * any associated cookies, local storage, etc) and display cookie
+ * disclaimer. 
+ * 
+ * @param {HTMLElement} section - Section element to contain embedded Google Forms screening questionnaire.
+ */
+function handleQuestionnaireEmbContPermission(section) {
+    const iframeContainer = section.querySelector('#questionnaire-iframe-container');
+    const cookieDisclaimer = section.querySelector('.questionnaire-cookie-disclaimer-wrapper');
+    let embContCookiePermission;
+
+    if (clearCookieHWD.consentSettingsStored())
+        embContCookiePermission = clearCookieHWD.getUserConsentSettings().consent['embedded-content'];
+
+    if (embContCookiePermission) {
+        cookieDisclaimer.classList.add('q-hidden');
+        iframeContainer.innerHTML = `<iframe id="questionnaire-iframe" src="https://docs.google.com/forms/d/118qCKE5v6TD4X_THQz0oz--rGnaRdm9whLhMYaHQ4P0/viewform?pli=1&ts=678e4390&pli=1&edit_requested=true&fbzx=765514001506525119" title="NDP Inishowen's screening questionnaire on Google Forms, embedded here in an iframe" name="screening-questionnaire" loading="lazy"></iframe>`;
+    } else {
+        iframeContainer.innerHTML = '';
+        cookieDisclaimer.classList.remove('q-hidden');
+    }
+}
+
+// ---- Embedded Google Forms screening questionnaire functions end
 
 // ------ 'More' menu pages (dynamically populated) functions
 
@@ -732,8 +906,11 @@ async function handleMorePageContent(moreMain) {
         // Display all backup content in case of error
         const backupContent = document.querySelectorAll('.backup-content');
         for (let backup of backupContent) {
+            // If backup content contains embedded video, pass to handler
+            if (backup.classList.contains('video-links-backup'))
+                handleBackupEmbVidCookiePermission(backup);
+
             backup.classList.remove('bc-hidden');
-            backup.removeAttribute('aria-hidden');
         }
         hideLoadingScreen();
     }
@@ -849,9 +1026,10 @@ function populateTestimonials(section, data) {
  * to create primary video link element. Add formatted/sanitised
  * video title as link text for video heading link.
  * 
- * - For any video embed code: Pass video embed code with video title
- * and 'sources' array to createVideoEmbed() function in attempt to
- * create embedded video iframe element. If video embed code
+ * - For any video embed code: First check for 'Embedded Content' cookies
+ * permission and only continue if allowed. Pass video embed code with
+ * video title and 'sources' array to createVideoEmbed() function in
+ * attempt to create embedded video iframe element. If video embed code
  * (not 'required') is an empty string/null or contains an invalid
  * 'src' URL, function will return null. If iframe element returned,
  * add Bootstrap responsive embed classes to it and its container
@@ -880,7 +1058,7 @@ function populateTestimonials(section, data) {
  * @param {Array.<Object>} data - Array of objects containing data from Google Sheets custom CMS.
  */
 function populateVideoLinks(section, data) {
-    const sources = ['youtube.com', 'youtu.be', 'amazon.co', 'amazon.com', 'amazon.de', 'primevideo.com', 'vimeo.com', 'dailymotion.com', 'facebook.com'];
+    const sources = ['youtube-nocookie.com', 'youtube.com', 'youtu.be', 'amazon.co', 'amazon.com', 'amazon.de', 'primevideo.com', 'vimeo.com', 'dailymotion.com', 'facebook.com'];
 
     if (data.error) {
         sheetErrorBackup(section, 'Video Links Form Data', data.error);
@@ -927,16 +1105,23 @@ function populateVideoLinks(section, data) {
                     wrapperDiv.appendChild(descriptionDiv);
                     
                     // Embedded video
-                    embedCode = createVideoEmbed(embedCode, title, sources);
-                    if (embedCode) {
-                        embedCode.classList.add('embed-responsive-item');
-                        const videoDiv = document.createElement('div');
-                        videoDiv.classList.add('useful-links-video-wrapper', 'd-flex', 'justify-content-center', 'my-3');
-                        const iframeDiv = document.createElement('div');
-                        iframeDiv.classList.add('useful-links-video', 'embed-responsive', 'embed-responsive-16by9');
-                        iframeDiv.appendChild(embedCode);
-                        videoDiv.appendChild(iframeDiv);
-                        wrapperDiv.appendChild(videoDiv);
+                    let embContCookiePermission;
+                    // Only continue if embedded content cookies allowed
+                    if (clearCookieHWD.consentSettingsStored())
+                        embContCookiePermission = clearCookieHWD.getUserConsentSettings().consent['embedded-content'];
+
+                    if (embContCookiePermission) {
+                        embedCode = createVideoEmbed(embedCode, title, sources);
+                        if (embedCode) {
+                            embedCode.classList.add('embed-responsive-item');
+                            const videoDiv = document.createElement('div');
+                            videoDiv.classList.add('useful-links-video-wrapper', 'd-flex', 'justify-content-center', 'my-3');
+                            const iframeDiv = document.createElement('div');
+                            iframeDiv.classList.add('useful-links-video', 'embed-responsive', 'embed-responsive-16by9');
+                            iframeDiv.appendChild(embedCode);
+                            videoDiv.appendChild(iframeDiv);
+                            wrapperDiv.appendChild(videoDiv);
+                        }
                     }
                     
                     // Primary video link element
@@ -1138,6 +1323,36 @@ function populateWebLinks(section, data) {
     }
 }
 
+// Useful Links page: cookie consent (embedded videos)
+
+/**
+ * Get passed-in section element's parent 'main' element, 'backup
+ * content' section, loading screen and dynamically populated 'Videos'
+ * and 'Websites' sections.
+ * 
+ * Delete all content from dynamically populated sections. Hide
+ * backup content if not already hidden. Display loading screen. Pass
+ * 'main' element to handleMorePageContent() function in order to
+ * repopulate page based on new cookie consent settings.
+ * 
+ * @param {HTMLElement} section - 'Useful Links' section element.
+ */
+function handleUsefulLinksEmbContPermission (section) {
+    const main = section.closest('main');
+    const backupContent = section.querySelectorAll('.backup-content');
+    const loadScreen = section.querySelector('.loadscreen');
+    const videoSection = section.querySelector('#video-links-content');
+    const webSection = section.querySelector('#website-links-content');
+
+    videoSection.innerHTML = '';
+    webSection.innerHTML = '';
+    for (let backup of backupContent) {
+        backup.classList.add('bc-hidden');
+    }
+    loadScreen.classList.remove('loader-hidden', 'loader-gone');
+    handleMorePageContent(main);
+}
+
 // Further Reading page
 
 /**
@@ -1325,8 +1540,8 @@ function populateFurtherReading(section, data) {
  * 
  * Using passed-in 'section' element as reference, get backup content
  * container with nextElementSibling method, removing 'hidden' class
- * name and 'aria-hidden' attribute in order to display it in DOM.
- * Call function to hide loading screen.
+ * name in order to display it in DOM. Call function to hide loading
+ * screen.
  * 
  * @param {HTMLElement} section - Containing div element for dynamically populated content. 
  * @param {string} sheetName - Name of sheet from Google spreadsheet that is causing error.
@@ -1342,9 +1557,53 @@ function populateFurtherReading(section, data) {
     console.error(errorMsg);
 
     const backupContent = section.nextElementSibling;
+    // If backup content contains embedded video, pass to handler
+    if (backupContent.classList.contains('video-links-backup'))
+        handleBackupEmbVidCookiePermission(backupContent);
+
     backupContent.classList.remove('bc-hidden');
-    backupContent.removeAttribute('aria-hidden');
     hideLoadingScreen();
+}
+
+// Handle backup embedded videos based on cookie consent
+
+/**
+ * Get all 'useful link' sections from passed-in container element.
+ * Get each section's heading element and embedded video wrapper
+ * element.
+ * 
+ * Check for embedded content cookies permission setting. If embedded
+ * video wrapper exists and if cookie consent given, render embedded
+ * video HTML based on heading element's text content. If consent not
+ * given, delete embedded video HTML (and thus any associated cookies,
+ * local storage, etc).
+ * 
+ * @param {HTMLElement} backupContent - Element containing backup content for 'Videos' section of 'Useful Links' page which may contain embedded videos.
+ */
+function handleBackupEmbVidCookiePermission(backupContent) {
+    const videoLinksSections = backupContent.querySelectorAll('.useful-link-wrapper');
+    
+    for (let section of videoLinksSections) {
+        const title = section.querySelector('h4');
+        const videoEmbedWrap = section.querySelector('.useful-links-video-wrapper');
+        let embContCookiePermission;
+
+        if (clearCookieHWD.consentSettingsStored())
+            embContCookiePermission = clearCookieHWD.getUserConsentSettings().consent['embedded-content'];
+
+        if (videoEmbedWrap) {
+            if (embContCookiePermission) {
+                if (title.innerText.includes('INPP'))
+                    videoEmbedWrap.innerHTML = `<div class="useful-links-video embed-responsive embed-responsive-16by9">\
+                                                    <iframe class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/p9ZJheYZazs?si=zeImtp_cLeSsM2Q0" title="YouTube video player - Can you help my Child? by Sally Goddard" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>\
+                                                </div>`;
+                else if (title.innerText.includes('Molly Wright'))
+                    videoEmbedWrap.innerHTML = `<div class="useful-links-video embed-responsive embed-responsive-16by9">\
+                                                    <iframe class="embed-responsive-item" src="https://www.youtube-nocookie.com/embed/aISXCw0Pi94?si=B5kTOL6bbxTVE0Is" title="YouTube video player - Molly Wright: How every Child Can Thrive by Five - TED" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" loading="lazy" allowfullscreen></iframe>\
+                                                </div>`;
+            } else videoEmbedWrap.innerHTML = '';
+        }
+    }
 }
 
 // Hide loading screen
@@ -1513,47 +1772,581 @@ function createExternalLinkElement(urlString, ariaLabelString) {
 
 // --- 'More' menu pages (dynamically populated) functions end
 
+// ------------ Cookie consent banner object & methods
+
+/* Mostly written in es5 in case compatability with Google Tag
+   Manager is required. There are a few exceptions, such as
+   classList methods, the 'closest' method & some unavoidable
+   use of jQuery in order to deal with Bootstrap 4 modals.
+   These can be corrected/replaced with polyfills if conflicts
+   arise if/when it's integrated with GTM.
+   This code was created while following a series of YouTube
+   videos by Leon Korteweg, customising as necessary. Find part
+   1 here: https://www.youtube.com/watch?v=pQdHOhRtkUg 
+   Any discrepancies in naming conventions (e.g. class names)
+   are mainly a result of conflicts between his & my own
+   personally preferred standards. But also, to a large extent,
+   inconsistency in his own naming standards, due to the fact
+   that he's developed this over a number of weeks. I will fix
+   this in my own code when I can. */
+
+var clearCookieHWD = {
+    // Cookie settings
+    cookieName: 'clearcookiehwd',
+    consentVersion: 1,
+    cookieExpirationDays: 365,
+    categories: [
+        {
+            name: 'Essential',
+            required: true,
+            description: 'Required for site functionality &#40;always active&#41;.'
+        },
+        {
+            name: 'Security',
+            required: false,
+            description: 'Protect us from spam, fraud and abuse &#40;Google reCAPTCHA&#41;.'
+        },
+        {
+            name: 'Performance',
+            required: false,
+            description: 'Optional. Help us with analytics in order to understand how visitors interact with the site &#40;used anonymously&#41;.'
+        },
+        {
+            name: 'Embedded Content',
+            required: false,
+            description: 'Optional. Enables third-party services such as YouTube and Google Forms to deliver embedded content. May collect user interaction data.'
+        }
+    ],
+    labels: {
+        required: 'Required',
+        accepted: 'Accepted',
+        refused: 'Refused'
+    },
+    /* Setting (in seconds) to delay banner display if negatively
+       affecting page load speed */
+    bannerDisplayOnLoadDelay: 1.5,
+    // Main cookie banner element
+    banner: document.querySelector('#clearcookiehwd'),
+    // Privacy page settings (user preferences) element
+    privacyPageSettingsPanel: document.querySelector('#privacy-settings'),
+    /* Banner initialisation state (to prevent adding multiple click
+       handlers) */
+    initHasRun: false,
+    // Banner settings control panel display state
+    bannerSettingsHidden: true,
+    // Container object for user preferences read from cookie
+    consentSettings: {},
+
+    // Methods
+
+    init: function() {
+        /* Add identifiers to categories objects (slugified
+           version of category name for use in class names,
+           object keys, etc.) */
+        this.addCategoryID();
+
+        // Read user preferences from cookie if stored
+        this.consentSettings = this.getUserConsentSettings();
+
+        // Build settings controls
+        if (this.banner)
+            this.generateSettingsControlPanelHTML();
+        
+        /* Renew consent if needed. Included in case of changes made
+           requiring version number to be bumped. In which case
+           request user to update settings by ensuring banner is
+           displayed again since previous settings erased. */
+        if (this.renewConsent())
+            this.eraseCookie(this.cookieName);
+        
+        // Show cookie banner
+        if (this.banner && !this.consentSettingsStored() && !this.isOnPrivacyPage()) {
+            var delayMs = this.bannerDisplayOnLoadDelay * 1000;
+
+            setTimeout(this.showBanner.bind(this), delayMs);
+        }
+        
+        /* Show current settings above Privacy & Cookie Policy
+           (privacy page) */
+        if (this.privacyPageSettingsPanel && this.isOnPrivacyPage())
+            this.generatePrivacySettingsHTML();
+
+        // Event Listeners
+        if (!this.initHasRun) {
+            var buttons = document.querySelectorAll('.clearcookiehwd__inner__footer button, #privacy-settings .section-footer button, .show-cookiebanner-btn');
+
+            for (var i = 0; i < buttons.length; i++) {
+                buttons[i].addEventListener('click', this.buttonClickHandler.bind(this));
+            }
+        }
+
+        // Data layer call for potential GTM integration
+        this.dataLayerCall('loaded');
+
+        // Set initialisation state
+        this.initHasRun = true;
+    },
+
+    renewConsent: function() {
+        if (this.consentSettings && (this.consentVersion > this.consentSettings.consentVersion))
+            return true;
+
+        return false;
+    },
+
+    buttonClickHandler: function(e) {
+        if(e.target.className.indexOf('accept') != -1)
+            this.saveConsentSettings('accept-all');
+
+        else if(e.target.className.indexOf('refuse') != -1)
+            this.saveConsentSettings('essential-only');
+
+        else if(e.target.className.indexOf('save') != -1)
+            this.saveConsentSettings('settings');
+
+        else if(e.target.className.indexOf('show-settings') != -1)
+            this.toggleBannerSettings();
+
+        else if(e.target.className.indexOf('hide-settings') != -1)
+            this.toggleBannerSettings();
+
+        else if(e.target.className.indexOf('show-banner') != -1) {
+            var showButtons = document.querySelectorAll('.show-cookiebanner-btn');
+            // Used to return focus to this button when banner closed
+            for (let button of showButtons) 
+                button.dataset.lastClicked = false;
+            e.target.dataset.lastClicked = true;
+            this.showBanner();
+        }
+    },
+
+    consentSettingsStored: function() {
+        if (this.readCookie(this.cookieName))
+            return true;
+
+        return false;
+    },
+
+    getUserConsentSettings: function() {
+        /* Read user preferences from cookie (if stored) &
+           convert from JSON string */
+        var settings = JSON.parse(this.readCookie(this.cookieName));
+        
+        if (settings)
+            return settings;
+    },
+
+    isOnPrivacyPage: function() {
+        var privacyPageLink = this.banner.querySelector('.clearcookiehwd__inner__body__main a');
+
+        if (privacyPageLink && (window.location.href.indexOf(privacyPageLink.href) != -1))
+            return true;
+
+        return false;
+    },
+
+    show: function(el) {
+        el.classList.remove('clearcookiehwd--hide');
+    },
+
+    hide: function(el) {
+        el.classList.add('clearcookiehwd--hide');
+    },
+
+    showBanner: function() {
+        var privacyPageLink = this.banner.querySelector('.clearcookiehwd__inner__body__main a');
+        var acceptBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--accept');
+        var settingsBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--show-settings');
+        var hideBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--hide-settings');
+        var saveBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--save');
+        var openBsModal = document.querySelector('.modal.show');
+
+        // In case banner opened from inside Bootstrap modal
+        if (openBsModal) {
+            /* have to use jquery for Bootstrap 4.3 modal
+               compatability */
+            $(openBsModal).modal('hide');
+            $(openBsModal).on('hidden.bs.modal', () => this.banner.focus());
+        }
+
+        this.show(this.banner);
+        // Prevent scrolling of background page
+        document.querySelector('body').classList.add('clearcookiehwd--active');
+        // Set focus on main banner element
+        this.banner.focus();
+        /* Toggle link & buttons' disabled states based on visible
+           panel to ensure correct focusable elements available to
+           trapKeyNavFocus() function */
+        if(this.bannerSettingsHidden) {
+            privacyPageLink.removeAttribute('disabled');
+            hideBtn.setAttribute('disabled', '');
+            saveBtn.setAttribute('disabled', '');
+            acceptBtn.removeAttribute('disabled');
+            settingsBtn.removeAttribute('disabled');
+        } else {
+            privacyPageLink.setAttribute('disabled', '');
+            acceptBtn.setAttribute('disabled', '');
+            settingsBtn.setAttribute('disabled', '');
+            hideBtn.removeAttribute('disabled');
+            saveBtn.removeAttribute('disabled');
+        }
+        // Trap keyboard navigation focus inside banner when open
+        trapKeyNavFocus(this.banner);
+    },
+
+    hideBanner: function() {
+        var showBannerButton = document.querySelector('.show-cookiebanner-btn[data-last-clicked="true"]');
+
+        this.hide(this.banner);
+        // Allow scrolling of background page
+        document.querySelector('body').classList.remove('clearcookiehwd--active');
+        // Set focus on button that opened banner, if any
+        if (showBannerButton) {
+            showBannerButton.focus();
+            var showBtnBsModal = showBannerButton.closest('.modal');
+            // In case banner opened from inside Bootstrap modal
+            if (showBtnBsModal) {
+                /* have to use jquery for Bootstrap 4.3 modal
+                   compatability */
+                $(showBtnBsModal).modal('show');
+            }
+        }
+    },
+
+    toggleBannerSettings: function() {
+        var mainContent = this.banner.querySelector('.clearcookiehwd__inner__body__main');
+        var settingsContent = this.banner.querySelector('.clearcookiehwd__inner__body__settings');
+        var privacyPageLink = this.banner.querySelector('.clearcookiehwd__inner__body__main a');
+        var acceptBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--accept');
+        var settingsBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--show-settings');
+        var hideBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--hide-settings');
+        var saveBtn = this.banner.querySelector('.clearcookiehwd__inner__footer__button--save');
+
+        // Set focus on main banner element
+        this.banner.focus();
+
+        /* Could use ternary operators for all below but need
+           to check es5 support & consider readability */
+        if(this.bannerSettingsHidden) {
+            /* Hide banner's main body content & show banner's
+               settings body content */
+            this.hide(mainContent);
+            privacyPageLink.setAttribute('disabled', '');
+            this.show(settingsContent);
+            // Switch out buttons
+            this.hide(acceptBtn);
+            acceptBtn.setAttribute('disabled', '');
+            this.hide(settingsBtn);
+            settingsBtn.setAttribute('disabled', '');
+            this.show(hideBtn);
+            hideBtn.removeAttribute('disabled');
+            this.show(saveBtn);
+            saveBtn.removeAttribute('disabled');
+        } else {
+            /* Show banner's main body content & hide banner's
+               settings body content */
+            this.hide(settingsContent);
+            this.show(mainContent);
+            privacyPageLink.removeAttribute('disabled');
+            // Switch out buttons
+            this.hide(hideBtn);
+            hideBtn.setAttribute('disabled', '');
+            this.hide(saveBtn);
+            saveBtn.setAttribute('disabled', '');
+            this.show(acceptBtn);
+            acceptBtn.removeAttribute('disabled');
+            this.show(settingsBtn);
+            settingsBtn.removeAttribute('disabled');
+        }
+        
+        this.bannerSettingsHidden = !this.bannerSettingsHidden;
+    },
+
+    saveConsentSettings: function(command) {
+        var consent = {};
+
+            for (var i = 0; i < this.categories.length; i++) {
+                var category = this.categories[i];
+
+                if (command === 'settings') {
+                    var setting = document.querySelector('.clearcookiehwd__inner__body__settings__setting--' + category.identifier);
+                    var consentGiven = setting.querySelector('input[type=checkbox]').checked;
+
+                    consent[category.identifier] = consentGiven;
+                }
+                else if (command === 'accept-all')
+                    consent[category.identifier] = true;
+                else if (command === 'essential-only')  
+                    consent[category.identifier] = category.required || false;
+            }
+
+            this.storeConsentSettings(consent);
+            // Refresh banner and privacy page settings
+            this.init();
+            // Data layer call for potential GTM integration
+            this.dataLayerCall('save_preferences');
+            // Reset page elements based on new settings
+            handleCookieConsentSettingsReset();
+    },
+
+    storeConsentSettings: function(consent) {
+        // Construct object
+        var cookieContent = {
+            consent: consent,
+            consentVersion: this.consentVersion,
+            consentID: this.getConsentID()
+        };
+        // Convert to JSON string
+        cookieContent = JSON.stringify(cookieContent);
+        // Store as cookie
+        this.createCookie(this.cookieName, cookieContent, this.cookieExpirationDays);
+        // Close banner
+        this.hideBanner();
+        // this.hide(this.banner);
+    },
+
+    addCategoryID: function() {
+        /* Add class-name/object-key-appropriate identifier to
+           each category */
+        for (var i = 0; i < this.categories.length; i++) {
+            var category = this.categories[i];
+
+            category.identifier = this.slugify(category.name);
+        }
+    },
+
+    generateSettingsControlPanelHTML: function() {
+        var settingsWrapper = this.banner.querySelector('.clearcookiehwd__inner__body__settings');
+        var settingsHTML = '';
+        
+        /* Generate banner settings control panel from
+           'categories' array */
+        for (var i=0; i < this.categories.length; i++) {
+            var category = this.categories[i];
+
+            settingsHTML += '<label class="clearcookiehwd__inner__body__settings__setting clearcookiehwd__inner__body__settings__setting--';
+            settingsHTML += category.identifier;
+
+            if (category.required )
+                settingsHTML += ' clearcookiehwd__inner__body__settings__setting--required';
+
+            settingsHTML +=' mb-0">\
+                            <div class="clearcookiehwd__inner__body__settings__setting__input">';
+            
+            if (category.required)
+                settingsHTML += '<input type="checkbox" class="accessible-hide" aria-labelledby="clearcookiehwd__setting__name--' + category.identifier + '" aria-describedby="clearcookiehwd__setting__description--' + category.identifier + '" checked disabled>';
+            else if (this.consentSettingsStored() && this.consentSettings.consent[category.identifier])
+                settingsHTML += '<input type="checkbox" class="accessible-hide" aria-labelledby="clearcookiehwd__setting__name--' + category.identifier + '" aria-describedby="clearcookiehwd__setting__description--' + category.identifier + '" checked>';
+            else
+                settingsHTML += '<input type="checkbox" class="accessible-hide" aria-labelledby="clearcookiehwd__setting__name--' + category.identifier + '" aria-describedby="clearcookiehwd__setting__description--' + category.identifier + '">';
+            
+            settingsHTML += '<div class="clearcookiehwd__inner__body__settings__setting__input__toggle"></div>\
+                            </div>\
+                            <div class="clearcookiehwd__inner__body__settings__setting__name">\
+                                <p id="clearcookiehwd__setting__name--' + category.identifier + '" class="mb-0"><strong>' + category.name + '</strong></p>\
+                            </div>\
+                            <div class="clearcookiehwd__inner__body__settings__setting__description">\
+                                <p id="clearcookiehwd__setting__description--' + category.identifier + '" class="mb-0">' + category.description + '</p>\
+                            </div>\
+                        </label>';
+        }
+        // Render control panel
+        settingsWrapper.innerHTML = settingsHTML;
+    },
+
+    generatePrivacySettingsHTML: function() {
+        var settingsMain = this.privacyPageSettingsPanel.querySelector('.section-content');
+        var settingsFooterBtn = this.privacyPageSettingsPanel.querySelector('.section-footer button');
+
+        if (this.consentSettingsStored()) {
+            /* Generate user's consent settings table from
+               'consentSettings' data and 'categories' array */
+            var mainHTML = '<table class="clearcookiehwd-settings__body__table">\
+                                <tbody>';
+
+            for (var i = 0; i < this.categories.length; i++) {
+                var category = this.categories[i];
+                var isRequired = category.required;
+                var isAccepted = this.consentSettings.consent[category.identifier];
+                var status = '';
+
+                if (isRequired)
+                    status = 'required';
+                else if (isAccepted)
+                    status = 'accepted';
+                else
+                    status = 'refused';
+
+                mainHTML += '<tr class="clearcookiehwd-settings__body__table__row">';
+                mainHTML += '<td class="clearcookiehwd-settings__body__table__row__td" colspan="100%">\
+                                <p class="clearcookiehwd-settings__body__table__row__td--name mb-0">\
+                                    <strong>' + category.name + '</strong>\
+                                </p>\
+                            </td>\
+                        </tr>';
+                mainHTML += '<tr class="clearcookiehwd-settings__body__table__row">\
+                                <td class="clearcookiehwd-settings__body__table__row__td">\
+                                    <p class="clearcookiehwd-settings__body__table__row__td--description mb-0">' + category.description + '</p>\
+                            </td>';
+                mainHTML += '<td class="clearcookiehwd-settings__body__table__row__td__consent-status clearcookiehwd-settings__body__table__row__td__consent-status--';
+                mainHTML += status + '">\
+                                    <p class="mb-0">' + this.labels[status] + '</p>\
+                                </td>';
+                mainHTML += '</tr>';
+            }
+
+            mainHTML += '</tbody>\
+                    </table>';
+            
+            mainHTML += '<p class="clearcookiehwd-settings__body__consent-id mb-0">Your consent ID is&#58; <strong>' + this.consentSettings.consentID + '</strong></p>';
+            // Render user's consent settings
+            settingsMain.innerHTML = mainHTML;
+            // Change button text
+            settingsFooterBtn.innerHTML = 'Change Settings';
+        } else {
+            // Render 'no preferences' message
+            settingsMain.innerHTML = '<p class="clearcookiehwd-settings__body__unset mb-0">\
+                <strong>No preferences set.</strong> Please set your cookie preferences to continue using our website.\
+            </p>';
+            // Change button text
+            settingsFooterBtn.innerHTML = 'Manage Settings';
+        }
+        // Unhide element
+        this.show(this.privacyPageSettingsPanel);
+    },
+
+    getConsentID: function() {
+        var timestamp = Date.now();
+        var random = Math.floor(Math.random() * 100000000000);
+
+        return timestamp + '-' + random;
+    },
+
+    /* Cookie scripts from https://www.quirksmode.org/js/cookies.html
+       Using cookie rather than local storage is so that cookie
+       settings can be read by a server if necessary. Code adapted to
+       fit 'Object > Method' structure. */
+
+    createCookie: function(name, value, days) {
+        if (days) {
+            var date = new Date();
+            date.setTime(date.getTime()+(days*24*60*60*1000));
+            var expires = "; expires="+date.toGMTString();
+        }
+        else var expires = "";
+        document.cookie = name+"="+value+expires+"; path=/";
+    },
+
+    readCookie: function(name) {
+        var nameEQ = name + "=";
+        var ca = document.cookie.split(';');
+        for(var i=0;i < ca.length;i++) {
+            var c = ca[i];
+            while (c.charAt(0)==' ') c = c.substring(1,c.length);
+            if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+        }
+        return null;
+    },
+
+    eraseCookie: function(name) {
+        this.createCookie(name,"",-1);
+    },
+
+    slugify: function (input) {
+        /* Got this handy little function from Jason Watmore here:
+           https://jasonwatmore.com/vanilla-js-slugify-a-string-in-javascript */
+        if (!input)
+            return '';
+
+        // make lower case and trim
+        var slug = input.toLowerCase().trim();
+        // remove accents from charaters
+        slug = slug.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+        // replace invalid chars with spaces
+        slug = slug.replace(/[^a-z0-9\s-]/g, ' ').trim();
+        // replace multiple spaces or hyphens with a single hyphen
+        slug = slug.replace(/[\s-]+/g, '-');
+
+        return slug;
+    },
+
+    dataLayerCall: function(eventName) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+            'event': 'clearcookiehwd_' + eventName,
+            'clearcookiehwd_preferences': this.consentSettings
+        });
+    }
+
+};
+
+// ---------- Cookie consent banner object & methods end
+
 // ------------------- Miscellaneous functions
 
 // Trapping focus inside elements for keyboard navigation accessibility (e.g. modals)
 
 /**
- * Get all focusable elements within passed in element and find
- * the first and last.
+ * Add 'keydown' event listener to passed-in element & call handler
+ * function.
  * 
- * Listen for 'tab' or 'shift + tab' keypresses to signify keyboard
- * navigation and if the active element is first in the list on 
- * 'shift + tab' (backwards navigation), set focus to the first (and
- * vice-versa).
- *  
  * @param {HTMLElement} element - Element (modal, etc) in which focus is to be trapped
  */
 function trapKeyNavFocus(element) {
-    const focusableEls = element.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+    /* Remove any instances of this event listener that may have been
+       previously added to same element */
+    element.removeEventListener('keydown', trapKeyNavFocusHandler);
+    // Add fresh event listener
+    element.addEventListener('keydown', trapKeyNavFocusHandler);
+}
+
+/**
+ * Set conditional variable to check if key pressed is tab key
+ * (signifying keyboard navigation). If not, exit function.
+ * 
+ * Set variable representing main parent/container element.
+ * 
+ * On each tab key press, get all focusable elements within parent
+ * element and find the first and last. If currently active element
+ * is first in the list on 'shift + tab' (backward navigation), set
+ * focus to the last. Vice-versa on 'tab' (forward navigation).
+ * 
+ * @param {KeyboardEvent} e - 'keydown' event object
+ * @returns {void} exit function if key tab key not pressed
+ */
+function trapKeyNavFocusHandler(e) {
+    let isTabPressed = (e.key === 'Tab');
+
+    if (!isTabPressed) { 
+        return;
+    }
+    
+    let focusTrap;
+
+    if (e.target.classList.contains('.focus-trap')) {
+        focusTrap = e.target;
+    } else {
+        focusTrap = e.target.closest('.focus-trap');
+    }
+
+    const focusableEls = focusTrap.querySelectorAll('a[href]:not([disabled]), button:not([disabled]), textarea:not([disabled]), input[type="text"]:not([disabled]), input[type="email"]:not([disabled]), input[type="radio"]:not([disabled]), input[type="checkbox"]:not([disabled]), select:not([disabled])');
+
     const firstFocusableEl = focusableEls[0];  
     const lastFocusableEl = focusableEls[focusableEls.length - 1];
-  
-    element.addEventListener('keydown', (e) => {
-        let isTabPressed = (e.key === 'Tab');
-    
-        if (!isTabPressed) { 
-            return; 
+
+    if (e.shiftKey) {
+    // Shift + Tab
+        if ((document.activeElement === firstFocusableEl) || (document.activeElement === focusTrap)) {
+            lastFocusableEl.focus();
+            e.preventDefault();
         }
-    
-        if ( e.shiftKey ) {
-        // Shift + Tab
-            if (document.activeElement === firstFocusableEl) {
-                lastFocusableEl.focus();
-                e.preventDefault();
-            }
-        } else {
-        // Tab
-            if (document.activeElement === lastFocusableEl) {
-                firstFocusableEl.focus();
-                e.preventDefault();
-            }
+    } else {
+    // Tab
+        if (document.activeElement === lastFocusableEl) {
+            firstFocusableEl.focus();
+            e.preventDefault();
         }
-    });
+    }
 }
 
 // Applying 'active' class to navigation links when associated page section in view
@@ -1634,6 +2427,31 @@ function handleActiveLinkStyleOnScroll(navLinkEls, linkedSectionEls, activeClass
 
 }
 
+/* Reset page elements (create/delete) that require cookie consent when
+   consent settings saved */
+
+/**
+ * Get all elements from the page containing elements that require
+ * user's consent for use of cookies. If found, check each for
+ * class name or id indicating type of cookie used and pass to
+ * relevant handler function.
+ */
+function handleCookieConsentSettingsReset() {
+    const consentReqdEls = document.querySelectorAll('.consent-reqd');
+
+    if (consentReqdEls.length > 0) {
+        for (let el of consentReqdEls) {
+            if (el.classList.contains('contact-form')) {
+                handleContactFormSecurityPermission(el);
+            } else if (el.id === 'questionnaire') {
+                handleQuestionnaireEmbContPermission(el);
+            } else if (el.id === 'useful-links') {
+                handleUsefulLinksEmbContPermission(el);
+            }
+        }
+    }
+}
+
 // Throttling
 
 /**
@@ -1667,6 +2485,28 @@ function handleActiveLinkStyleOnScroll(navLinkEls, linkedSectionEls, activeClass
         // Set control flag to true after passed-in interval
         setTimeout(() => enableEvent = true, interval);
     }
+}
+
+// 'Back to Top' links
+
+/**
+ * Handle 'Back to Top' links without adding '#' to the URL or history.
+ * 
+ * Add 'click' event listener to passed-in anchor element. On click,
+ * prevent default behaviour and smoothly scroll viewport window to
+ * top and left of page.
+ * 
+ * @param {HTMLElement} link - Anchor element linking to top of page
+ */
+function handleBackToTopLink(link) {
+    link.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
+    });
 }
 
 // ----------------- Miscellaneous functions end
