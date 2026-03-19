@@ -764,6 +764,10 @@ footer hr {
     margin: auto;
 }
 
+footer .section-content.d-flex {
+    align-items: center;
+}
+
 footer .affil-logo-img {
     width: 200px;
 }
