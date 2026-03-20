@@ -948,6 +948,12 @@ footer .affil-logo-img {
     margin-bottom: 0.5rem;
 }
 
+/* Johansen IAS section */
+
+.johansen-section-logo {
+    width: 200px;
+}
+
 /* FAQ section */
 
 .faq-section {
