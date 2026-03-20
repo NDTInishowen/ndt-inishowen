@@ -611,8 +611,23 @@ ul {
     overflow: hidden;
 }
 
+#navbar-services-menu {
+    width: 275px;
+}
+
+#info-dropdown-btn {
+    padding: 0;
+}
+
+#info-dropdown-btn .menu-btn-text {
+    padding: 0;
+    font-size: 1.125rem;
+}
+
 #navbar-info-menu {
     width: 275px;
+    position: relative;
+    top: 0;
 }
 
 .navbar-dropdown-menu ul {

@@ -61,27 +61,37 @@
                         <a href="index.html" class="main-menu-item">Home</a>
                     </li>
 
-                    <!-- Information dropdown list -->
-                    <li class="navbar-dropdown-menu-container">
-                        <button id="info-dropdown-btn" class="active-link main-menu-item navbar-dropdown-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-info-menu">
-                            <span class="menu-btn-text">Neuro Developmental Therapy</span>
+                    <!-- Sevices dropdown list -->
+                    <li class="navbar-dropdown-menu-container contains-navbar-submenu">
+                        <button id="services-dropdown-btn" class="active-link main-menu-item navbar-dropdown-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-services-menu">
+                            <span class="menu-btn-text">Services</span>
                         </button>
-                        <div id="navbar-info-menu" class="navbar-dropdown-menu">
+                        <div id="navbar-services-menu" class="navbar-dropdown-menu has-navbar-submenu">
                             <ul>
-                                <li>
-                                    <a href="overview-faq.html" class="navbar-dropdown-item">What to Expect</a>
+                                <!-- Information dropdown list (submenu) -->
+                                <li class="navbar-dropdown-menu-container">
+                                    <button id="info-dropdown-btn" class="active-link navbar-dropdown-item navbar-dropdown-btn navbar-submenu-btn menu-toggle-btn toggle-btn" aria-expanded="false" aria-controls="navbar-info-menu">
+                                        <span class="menu-btn-text">Neuro Developmental Therapy</span>
+                                    </button>
+                                    <div id="navbar-info-menu" class="navbar-dropdown-menu navbar-submenu">
+                                        <ul class="pb-2">
+                                            <li>
+                                                <a href="overview-faq.html" class="navbar-dropdown-item navbar-submenu-item">What to Expect</a>
+                                            </li>
+                                            <li>
+                                                <a href="overview-faq.html#faq" class="navbar-dropdown-item navbar-submenu-item">Frequently Asked Questions</a>
+                                            </li>
+                                            <li>
+                                                <a href="primitive-reflexes.html" class="active-link navbar-dropdown-item navbar-submenu-item">Primitive Reflexes</a>
+                                            </li>
+                                            <li>
+                                                <a href="process.html" class="navbar-dropdown-item navbar-submenu-item">The Process</a>
+                                            </li>
+                                        </ul>
+                                    </div>
                                 </li>
                                 <li>
                                     <a href="overview-faq.html#johansen-ias" class="navbar-dropdown-item">Johansen IAS Sound Therapy</a>
-                                </li>
-                                <li>
-                                    <a href="overview-faq.html#faq" class="navbar-dropdown-item">Frequently Asked Questions</a>
-                                </li>
-                                <li>
-                                    <a href="primitive-reflexes.html" class="active-link navbar-dropdown-item">Primitive Reflexes</a>
-                                </li>
-                                <li>
-                                    <a href="process.html" class="navbar-dropdown-item">The Process</a>
                                 </li>
                             </ul>
                         </div>

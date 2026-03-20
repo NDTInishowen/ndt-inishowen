@@ -292,6 +292,10 @@ function handleMainMenuDropdown(menu) {
                         mainMenuButton.classList.remove(buttonActiveClass);
                         handlePopupAria(mainMenuButton, mainMenuOpenClass);
                     } else {
+                        // Close any submenus
+                        if (dropdown.classList.contains('contains-navbar-submenu')) {
+                            handleCloseNestedDropdowns(dropdown, buttonActiveClass);
+                        }
                         handleCloseNavdDropdown(dropdown, buttonActiveClass);
                     }
                 }, 300);
@@ -477,8 +481,9 @@ function handlePopup(toggleButton, togglerActiveClass, popupOpenClass) {
                 toggleButton.classList.add(togglerActiveClass);
             }
         /* Specific handling of main menu's nested navigation
-           dropdown menus when it's in dropdown mode itself */
-        } else if (popup.classList.contains('main-menu-responsive') && popup.classList.contains(popupOpenClass)) {
+           dropdown menus when it's in dropdown mode itself
+           and those of navbar menus with submenus in all cases. */
+        } else if ((popup.classList.contains('main-menu-responsive') || popup.classList.contains('has-navbar-submenu')) && popup.classList.contains(popupOpenClass)) {
             handleCloseNestedDropdowns(popup, togglerActiveClass);
             popup.classList.remove(popupOpenClass);
             toggleButton.classList.remove(togglerActiveClass);
@@ -498,13 +503,14 @@ function handlePopup(toggleButton, togglerActiveClass, popupOpenClass) {
         /* Exempt navigation dropdown menus from being passed to 
            external event handler if main menu is in dropdown mode - 
            will be handled along with main menu. Exempt news & events
-           page articles from closing on external events in all cases. */
+           page articles and navbar submenus (handled with parent
+           menu) from closing on external events in all cases. */
         if (window.innerWidth <= 768) {
             if (!(toggleButton.classList.contains('navbar-dropdown-btn') || toggleButton.classList.contains('article-toggle-btn'))) {
                 handlePopupExternalEvent(toggleButton, togglerActiveClass, popupOpenClass);
             }
         } else {
-            if (!(toggleButton.classList.contains('article-toggle-btn'))) {
+            if (!(toggleButton.classList.contains('article-toggle-btn') || toggleButton.classList.contains('navbar-submenu-btn'))) {
                 handlePopupExternalEvent(toggleButton, togglerActiveClass, popupOpenClass);
             }
         }
@@ -529,7 +535,8 @@ function handlePopup(toggleButton, togglerActiveClass, popupOpenClass) {
  * If main menu is in dropdown mode, (screen <= 768px), navigation
  * dropdown menus won't have been passed in here, (see handlePopup
  * function), so they are dealt with along with the main menu (i.e.
- * passed to handleCloseNestedDropdowns function).
+ * passed to handleCloseNestedDropdowns function). Handle navbar
+ * menus with submenus in same manner.
  * 
  * Remove event listeners from window. If appropriate, set focus to
  * toggle button.
@@ -547,8 +554,8 @@ function handlePopupExternalEvent(toggleButton, togglerActiveClass, popupOpenCla
     // Handler function for event listeners
     const close = e => {
         if (!popup.contains(e.target) && !toggleButton.contains(e.target)) {
-
-            if (popup.classList.contains('main-menu-responsive')) {
+            // Handle dropdown menus with submenus
+            if (popup.classList.contains('main-menu-responsive') || popup.classList.contains('has-navbar-submenu')) {
                 handleCloseNestedDropdowns(popup, togglerActiveClass);
             }
 
@@ -2374,6 +2381,13 @@ function trapKeyNavFocusHandler(e) {
  * If no 'current' section id (undefined), set default 'active' link
  * as 'active link;
  * 
+ * If 'active' link is a submenu item, find that submenu's toggle
+ * button and remove 'active' class from it, if present;
+ * 
+ * If 'active' link is not a submenu item, find any and all submenu
+ * toggle buttons in link's parent menu and remove 'active' class
+ * from each;
+ * 
  * Add 'active' class to 'active' link. 
  * 
  * @param {NodeList} navLinkEls - Navigation link elements that could potentially be subject to style change on scroll event.
@@ -2422,6 +2436,24 @@ function handleActiveLinkStyleOnScroll(navLinkEls, linkedSectionEls, activeClass
             }
         }
 
+        if (activeLink.classList.contains('navbar-submenu-item')) {
+            const menuContainer = activeLink.closest('.navbar-dropdown-menu-container');
+            const menuButton = menuContainer.querySelector('.navbar-submenu-btn');
+
+            if (menuButton) {
+                menuButton.classList.add(activeClass);
+            }
+        } else {
+            const parentMenuContainer = activeLink.closest('.navbar-dropdown-menu-container');
+            const submenuButtons = parentMenuContainer.querySelectorAll('.navbar-submenu-btn');
+
+            if (submenuButtons.length > 0) {
+                for (let button of submenuButtons) {
+                    button.classList.remove(activeClass);
+                }
+            }
+        }
+        
         activeLink.classList.add(activeClass);
     });
 
