@@ -817,6 +817,10 @@ footer .affil-logo-img {
     }
 }
 
+.footer-disclaimer {
+    font-size: 0.75rem;
+}
+
 #privacy-page-link {
     margin-top: 10px;
     text-align: center;
